@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Cheng Yin / 尹诚的个人主页，聚焦具身智能、Vision-Language-Action、机器人学习、强化学习与开源研究系统。"
+      content="Cheng Yin's personal homepage: embodied AI, Vision-Language-Action models, robot learning, reinforcement learning, open-source systems, and life beyond research."
     />
-    <meta name="theme-color" content="#111111" />
+    <meta name="theme-color" content="#fbfbfd" />
     <meta property="og:title" content="Cheng Yin - Embodied AI & VLA" />
     <meta
       property="og:description"
@@ -26,156 +26,205 @@
         <span class="brand-mark">CY</span>
         <span>
           <strong>Cheng Yin</strong>
-          <small>Embodied AI</small>
+          <small data-en="Embodied AI" data-zh="具身智能">Embodied AI</small>
         </span>
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
-        <a href="#research">研究</a>
-        <a href="#work">项目</a>
-        <a href="#opensource">开源</a>
-        <a href="#papers">论文</a>
-        <a href="#contact">联系</a>
+        <a href="#research" data-en="Research" data-zh="研究">Research</a>
+        <a href="#work" data-en="Work" data-zh="项目">Work</a>
+        <a href="#opensource" data-en="Open Source" data-zh="开源">Open Source</a>
+        <a href="#papers" data-en="Papers" data-zh="论文">Papers</a>
+        <a href="#life" data-en="Life" data-zh="生活">Life</a>
       </nav>
-      <a class="header-link" href="https://github.com/wadeKeith" target="_blank" rel="noreferrer">
-        GitHub
-      </a>
+      <div class="header-actions">
+        <div class="language-switch" role="group" aria-label="Language switch">
+          <button class="is-active" type="button" data-lang-switch="en">EN</button>
+          <button type="button" data-lang-switch="zh">中</button>
+        </div>
+        <a class="header-link" href="https://github.com/wadeKeith" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="hero-grid" aria-hidden="true"></div>
-        <div class="hero-inner">
-          <div class="hero-copy">
-            <p class="eyebrow">Huazhong University of Science and Technology · THUNLP</p>
-            <h1>Cheng Yin / 尹诚</h1>
-            <p class="hero-lede">
-              我关注具身智能、Vision-Language-Action 模型、机器人学习与强化学习，正在构建能把视觉理解、推理过程和真实动作连接起来的研究系统。
-            </p>
-            <div class="hero-actions" aria-label="Profile links">
-              <a class="button primary" href="#work">查看代表项目</a>
-              <a class="button" href="https://scholar.google.com/citations?user=Qc0js-IAAAAJ&hl=en" target="_blank" rel="noreferrer">
-                Google Scholar
-              </a>
-              <a class="button" href="https://huggingface.co/yinchenghust" target="_blank" rel="noreferrer">
-                Hugging Face
-              </a>
-            </div>
+      <section class="hero" aria-label="Introduction">
+        <img class="hero-photo" src="assets/life/architecture-sky.jpg" alt="Cheng Yin traveling under a blue sky" />
+        <div class="hero-scrim" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow" data-en="HUST · Tsinghua THUNLP · Beijing" data-zh="华中科技大学 · 清华 THUNLP · 北京">
+            HUST · Tsinghua THUNLP · Beijing
+          </p>
+          <h1>Cheng Yin</h1>
+          <p class="name-cn">尹诚</p>
+          <p
+            class="hero-lede"
+            data-en="I build research systems for embodied intelligence: models that see the world, reason before acting, and turn decisions into robot behavior."
+            data-zh="我构建面向具身智能的研究系统：让模型看懂世界、在行动前推理，并把决策转化为机器人行为。"
+          >
+            I build research systems for embodied intelligence: models that see the world, reason before acting, and turn decisions into robot behavior.
+          </p>
+          <div class="hero-actions" aria-label="Profile links">
+            <a class="button primary" href="#work" data-en="Explore work" data-zh="查看项目">Explore work</a>
+            <a class="button" href="https://scholar.google.com/citations?user=Qc0js-IAAAAJ&hl=en" target="_blank" rel="noreferrer">
+              Google Scholar
+            </a>
+            <a class="button" href="https://huggingface.co/yinchenghust" target="_blank" rel="noreferrer">Hugging Face</a>
           </div>
-          <aside class="profile-panel" aria-label="Profile summary">
-            <img
-              class="avatar"
-              src="https://avatars.githubusercontent.com/u/34277382?v=4"
-              alt="Cheng Yin profile avatar"
-              width="160"
-              height="160"
-            />
-            <div>
-              <h2>Ph.D. Student</h2>
-              <p>HUST, China · Joint training with Tsinghua University THUNLP · Beijing</p>
-            </div>
-            <dl class="quick-stats">
-              <div>
-                <dt>GitHub</dt>
-                <dd>50 repos · 400+ stars</dd>
-              </div>
-              <div>
-                <dt>Scholar</dt>
-                <dd>Embodied AI · VLM · RL · Robotics</dd>
-              </div>
-              <div>
-                <dt>Open Source</dt>
-                <dd>29 HF models · 9 datasets</dd>
-              </div>
-            </dl>
-          </aside>
         </div>
       </section>
 
-      <section class="section intro-band" id="research">
-        <div class="section-heading">
-          <p class="eyebrow">Research Direction</p>
-          <h2>让模型在真实任务中看懂、想清楚、再行动。</h2>
+      <section class="snapshot">
+        <div class="snapshot-inner">
+          <article>
+            <span data-en="Current role" data-zh="当前身份">Current role</span>
+            <strong data-en="Ph.D. student at HUST; joint training with Tsinghua THUNLP." data-zh="华中科技大学博士生，清华 THUNLP 联合培养。">
+              Ph.D. student at HUST; joint training with Tsinghua THUNLP.
+            </strong>
+          </article>
+          <article>
+            <span data-en="Research focus" data-zh="研究方向">Research focus</span>
+            <strong data-en="Embodied AI, VLA, robot learning, reinforcement learning." data-zh="具身智能、VLA、机器人学习、强化学习。">
+              Embodied AI, VLA, robot learning, reinforcement learning.
+            </strong>
+          </article>
+          <article>
+            <span data-en="Open-source footprint" data-zh="开源积累">Open-source footprint</span>
+            <strong data-en="50 GitHub repos, 400+ stars, 29 HF models, 9 datasets." data-zh="50 个 GitHub 仓库、400+ stars、29 个 HF 模型、9 个数据集。">
+              50 GitHub repos, 400+ stars, 29 HF models, 9 datasets.
+            </strong>
+          </article>
         </div>
-        <div class="focus-grid">
+      </section>
+
+      <section class="section research-section" id="research">
+        <div class="section-heading centered">
+          <p class="eyebrow" data-en="Research" data-zh="研究">Research</p>
+          <h2
+            data-en="A practical route from visual understanding to real-world action."
+            data-zh="从视觉理解到真实行动的一条务实路径。"
+          >
+            A practical route from visual understanding to real-world action.
+          </h2>
+        </div>
+        <div class="research-grid">
           <article>
             <span>01</span>
-            <h3>Vision-Language-Action</h3>
-            <p>研究视觉语言模型到动作策略的接口，关注混合解码、动作头、跨具身泛化与机器人评测。</p>
+            <h3 data-en="Vision-Language-Action" data-zh="Vision-Language-Action">Vision-Language-Action</h3>
+            <p
+              data-en="Interfaces between multimodal backbones and action policies, including action heads, decoding strategies, and cross-embodiment evaluation."
+              data-zh="研究多模态 backbone 与动作策略之间的接口，包括动作头、解码策略与跨具身评测。"
+            >
+              Interfaces between multimodal backbones and action policies, including action heads, decoding strategies, and cross-embodiment evaluation.
+            </p>
           </article>
           <article>
             <span>02</span>
-            <h3>Reasoning for Robots</h3>
-            <p>探索 Chain-of-Thought 如何与机器人动作因果对齐，让推理不只是文本解释，而能影响任务成功率。</p>
+            <h3 data-en="Reasoning for Robots" data-zh="机器人推理">Reasoning for Robots</h3>
+            <p
+              data-en="Making chain-of-thought useful for action by aligning reasoning with success signals, not just generating explanations."
+              data-zh="把 Chain-of-Thought 与任务成功信号对齐，让推理真正影响机器人动作，而不只是生成解释。"
+            >
+              Making chain-of-thought useful for action by aligning reasoning with success signals, not just generating explanations.
+            </p>
           </article>
           <article>
             <span>03</span>
-            <h3>Reinforcement Learning</h3>
-            <p>用任务成功奖励、策略优化与可靠评测，把监督学习得到的行为进一步对齐到真实目标。</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3>Research Automation</h3>
-            <p>构建自动研究、训练与评测工具，让模型开发流程更可复现、更容易比较、更快迭代。</p>
+            <h3 data-en="Research Automation" data-zh="研究自动化">Research Automation</h3>
+            <p
+              data-en="Benchmark-driven tooling for faster training, evaluation, comparison, and reproducible iteration."
+              data-zh="围绕 benchmark 构建训练、评测、比较和可复现实验工具，让研究迭代更快。"
+            >
+              Benchmark-driven tooling for faster training, evaluation, comparison, and reproducible iteration.
+            </p>
           </article>
         </div>
       </section>
 
-      <section class="section work-section" id="work">
-        <div class="section-heading wide">
-          <p class="eyebrow">Selected Work</p>
-          <h2>代表项目</h2>
-        </div>
-        <div class="project-feature">
-          <div class="project-kicker">Core Project</div>
-          <h3>DeepThinkVLA</h3>
-          <p>
-            DeepThinkVLA 研究 VLA 模型如何在行动前进行有效推理：通过混合注意力解码器区分语言推理与并行动作解码，并用 SFT + RL 将完整的 reasoning-action chain 与任务成功奖励对齐。
+      <section class="signature-project" id="work">
+        <div class="signature-copy">
+          <p class="eyebrow" data-en="Signature Project" data-zh="代表项目">Signature Project</p>
+          <h2>DeepThinkVLA</h2>
+          <p
+            data-en="DeepThinkVLA studies when reasoning actually helps Vision-Language-Action models. It separates language reasoning from parallel action decoding, then aligns the full reasoning-action chain with task success through SFT and RL."
+            data-zh="DeepThinkVLA 研究推理何时真正帮助 Vision-Language-Action 模型。它区分语言推理与并行动作解码，并通过 SFT 与 RL 将完整 reasoning-action chain 对齐到任务成功。"
+          >
+            DeepThinkVLA studies when reasoning actually helps Vision-Language-Action models. It separates language reasoning from parallel action decoding, then aligns the full reasoning-action chain with task success through SFT and RL.
           </p>
-          <div class="metric-row" aria-label="DeepThinkVLA metrics">
-            <span><strong>97.0%</strong> LIBERO success</span>
-            <span><strong>79.0%</strong> LIBERO-Plus robustness</span>
-            <span><strong>59.3%</strong> RoboTwin 2.0 success</span>
-          </div>
-          <div class="link-row">
+          <div class="project-links">
             <a href="https://github.com/OpenBMB/DeepThinkVLA" target="_blank" rel="noreferrer">GitHub</a>
             <a href="https://arxiv.org/abs/2511.15669" target="_blank" rel="noreferrer">arXiv</a>
             <a href="https://huggingface.co/collections/yinchenghust/deepthinkvla-enhancing-reasoning-capability-of-vision-language-action-models-682138f03777b2962cb80ac1" target="_blank" rel="noreferrer">HF Collection</a>
           </div>
         </div>
-        <div class="project-grid">
+        <div class="metric-wall" aria-label="DeepThinkVLA metrics">
+          <div><strong>97.0%</strong><span>LIBERO success</span></div>
+          <div><strong>79.0%</strong><span>LIBERO-Plus robustness</span></div>
+          <div><strong>59.3%</strong><span>RoboTwin 2.0 success</span></div>
+        </div>
+      </section>
+
+      <section class="section work-grid-section">
+        <div class="section-heading">
+          <p class="eyebrow" data-en="Selected Work" data-zh="精选项目">Selected Work</p>
+          <h2 data-en="Research systems, resources, and agent tooling." data-zh="研究系统、资源图谱与 Agent 工具。">
+            Research systems, resources, and agent tooling.
+          </h2>
+        </div>
+        <div class="work-grid">
           <article>
-            <span class="tag">Open Source Map</span>
+            <span>Open Source Map</span>
             <h3>Awesome-Embodied-AI</h3>
-            <p>面向具身智能的持续维护资源图谱，整理 survey、VLA、数据集、仿真器、人形机器人、机器人学习与安全资源。</p>
-            <a href="https://github.com/wadeKeith/Awesome-Embodied-AI" target="_blank" rel="noreferrer">打开项目</a>
+            <p
+              data-en="A maintained map of embodied AI resources: surveys, VLA models, datasets, simulators, humanoids, robot learning, and safety."
+              data-zh="持续维护的具身智能资源图谱，覆盖 survey、VLA、数据集、仿真器、人形机器人、机器人学习与安全。"
+            >
+              A maintained map of embodied AI resources: surveys, VLA models, datasets, simulators, humanoids, robot learning, and safety.
+            </p>
+            <a href="https://github.com/wadeKeith/Awesome-Embodied-AI" target="_blank" rel="noreferrer" data-en="Open project" data-zh="打开项目">Open project</a>
           </article>
           <article>
-            <span class="tag">AutoResearch</span>
+            <span>AutoResearch</span>
             <h3>autoresearch-qwen</h3>
-            <p>围绕 Qwen3-VL 与 DocVQA 的自动研究训练代码，覆盖 NVIDIA 多卡与 Apple Silicon/MPS 路线。</p>
-            <a href="https://github.com/wadeKeith/autoresearch-qwen" target="_blank" rel="noreferrer">打开项目</a>
+            <p
+              data-en="Autonomous Qwen3-VL training-code research on the official DocVQA benchmark, with NVIDIA multi-GPU and Apple Silicon paths."
+              data-zh="围绕官方 DocVQA benchmark 的 Qwen3-VL 自动研究训练代码，覆盖 NVIDIA 多卡与 Apple Silicon 路线。"
+            >
+              Autonomous Qwen3-VL training-code research on the official DocVQA benchmark, with NVIDIA multi-GPU and Apple Silicon paths.
+            </p>
+            <a href="https://github.com/wadeKeith/autoresearch-qwen" target="_blank" rel="noreferrer" data-en="Open project" data-zh="打开项目">Open project</a>
           </article>
           <article>
-            <span class="tag">Vision Product</span>
-            <h3>Vision Intelligence / 微瞬智能</h3>
-            <p>围绕视觉智能、空间理解、取景决策与现实设备执行的项目站点，探索从视觉感知到行动的产品化链路。</p>
-            <a href="http://vision-intelligence-feishu-ai.top" target="_blank" rel="noreferrer">访问站点</a>
+            <span>Vision Product</span>
+            <h3>Vision Intelligence</h3>
+            <p
+              data-en="A project site exploring visual perception, spatial understanding, framing decisions, and real-world device execution."
+              data-zh="围绕视觉感知、空间理解、取景决策与现实设备执行的项目站点。"
+            >
+              A project site exploring visual perception, spatial understanding, framing decisions, and real-world device execution.
+            </p>
+            <a href="http://vision-intelligence-feishu-ai.top" target="_blank" rel="noreferrer" data-en="Visit site" data-zh="访问站点">Visit site</a>
           </article>
           <article>
-            <span class="tag">Agent Safety</span>
+            <span>Agent Safety</span>
             <h3>dualkey-agent</h3>
-            <p>为 AI agent action 加入审批、确定性策略与签名回执，关注 agent 执行动作时的边界与审计。</p>
-            <a href="https://github.com/wadeKeith/dualkey-agent" target="_blank" rel="noreferrer">打开项目</a>
+            <p
+              data-en="Approvals, deterministic policy, and signed receipts for AI agent actions."
+              data-zh="为 AI agent action 加入审批、确定性策略与签名回执。"
+            >
+              Approvals, deterministic policy, and signed receipts for AI agent actions.
+            </p>
+            <a href="https://github.com/wadeKeith/dualkey-agent" target="_blank" rel="noreferrer" data-en="Open project" data-zh="打开项目">Open project</a>
           </article>
         </div>
       </section>
 
       <section class="section open-section" id="opensource">
-        <div class="section-heading">
-          <p class="eyebrow">Open Source</p>
-          <h2>模型、数据与平台入口</h2>
+        <div class="section-heading centered">
+          <p class="eyebrow" data-en="Open Source" data-zh="开源">Open Source</p>
+          <h2 data-en="Models, datasets, and code that others can build on." data-zh="可复用的模型、数据与代码。">
+            Models, datasets, and code that others can build on.
+          </h2>
         </div>
-        <div class="platform-tabs" role="tablist" aria-label="Open source platforms">
+        <div class="platform-tabs" role="tablist" aria-label="Open-source platforms">
           <button class="tab is-active" type="button" data-platform="hf" role="tab" aria-selected="true">Hugging Face</button>
           <button class="tab" type="button" data-platform="github" role="tab" aria-selected="false">GitHub</button>
           <button class="tab" type="button" data-platform="modelscope" role="tab" aria-selected="false">ModelScope</button>
@@ -184,7 +233,12 @@
           <article class="platform-panel is-active" data-panel="hf">
             <div>
               <h3>yinchenghust</h3>
-              <p>DeepThinkVLA 系列模型、LIBERO CoT 数据集与机器人学习数据资产集中发布在 Hugging Face。</p>
+              <p
+                data-en="DeepThinkVLA checkpoints, LIBERO CoT data, and robot-learning assets are published on Hugging Face."
+                data-zh="DeepThinkVLA checkpoint、LIBERO CoT 数据与机器人学习资产集中发布在 Hugging Face。"
+              >
+                DeepThinkVLA checkpoints, LIBERO CoT data, and robot-learning assets are published on Hugging Face.
+              </p>
             </div>
             <ul class="repo-list">
               <li><a href="https://huggingface.co/yinchenghust/deepthinkvla_base" target="_blank" rel="noreferrer">deepthinkvla_base</a><span>Robotics · 3B</span></li>
@@ -196,7 +250,12 @@
           <article class="platform-panel" data-panel="github">
             <div>
               <h3>wadeKeith</h3>
-              <p>主要开源代码在 GitHub 维护，覆盖 VLA、具身智能资源图谱、自动研究和 agent safety。</p>
+              <p
+                data-en="Code repositories cover VLA, embodied AI curation, autonomous research, robot evaluation, and agent governance."
+                data-zh="代码仓库覆盖 VLA、具身智能资源整理、自动研究、机器人评测与 agent governance。"
+              >
+                Code repositories cover VLA, embodied AI curation, autonomous research, robot evaluation, and agent governance.
+              </p>
             </div>
             <ul class="repo-list">
               <li><a href="https://github.com/OpenBMB/DeepThinkVLA" target="_blank" rel="noreferrer">OpenBMB/DeepThinkVLA</a><span>515 stars</span></li>
@@ -208,12 +267,17 @@
           <article class="platform-panel" data-panel="modelscope">
             <div>
               <h3>keithyc</h3>
-              <p>面向国内开发者同步展示开源内容与模型生态入口，便于在 ModelScope 社区交流与分发。</p>
+              <p
+                data-en="A ModelScope profile keeps the work discoverable for Chinese developers and the domestic model community."
+                data-zh="ModelScope 主页便于国内开发者与中文模型社区发现、交流和分发开源内容。"
+              >
+                A ModelScope profile keeps the work discoverable for Chinese developers and the domestic model community.
+              </p>
             </div>
             <ul class="repo-list">
               <li><a href="https://modelscope.cn/profile/keithyc" target="_blank" rel="noreferrer">ModelScope Profile</a><span>keithyc</span></li>
               <li><a href="https://modelscope.cn" target="_blank" rel="noreferrer">ModelScope Community</a><span>中文模型社区</span></li>
-              <li><a href="https://huggingface.co/yinchenghust" target="_blank" rel="noreferrer">Mirror reference</a><span>HF profile</span></li>
+              <li><a href="https://huggingface.co/yinchenghust" target="_blank" rel="noreferrer">Hugging Face Profile</a><span>yinchenghust</span></li>
             </ul>
           </article>
         </div>
@@ -221,8 +285,8 @@
 
       <section class="section papers-section" id="papers">
         <div class="section-heading">
-          <p class="eyebrow">Publications</p>
-          <h2>论文与学术资料</h2>
+          <p class="eyebrow" data-en="Publications" data-zh="论文">Publications</p>
+          <h2 data-en="Selected papers and academic profiles." data-zh="论文与学术主页。">Selected papers and academic profiles.</h2>
         </div>
         <div class="paper-list">
           <article>
@@ -249,16 +313,66 @@
         </div>
       </section>
 
+      <section class="life-section" id="life">
+        <div class="life-intro">
+          <p class="eyebrow" data-en="Life" data-zh="生活">Life</p>
+          <h2
+            data-en="Curiosity does not stop at the lab door."
+            data-zh="好奇心不止停留在实验室。"
+          >
+            Curiosity does not stop at the lab door.
+          </h2>
+          <p
+            data-en="Travel, architecture, light, water, and long walks keep me sensitive to the physical world I want intelligent systems to understand."
+            data-zh="旅行、建筑、光线、水面和长距离行走，让我持续感受真实世界的尺度、材料与秩序。"
+          >
+            Travel, architecture, light, water, and long walks keep me sensitive to the physical world I want intelligent systems to understand.
+          </p>
+        </div>
+        <div class="photo-wall" aria-label="Life photo gallery">
+          <figure class="photo-large">
+            <img src="assets/life/san-francisco-street.jpg" alt="Sunny street with flowers" />
+            <figcaption data-en="Walking through cities." data-zh="在城市中行走。">Walking through cities.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/life/desert-overlook.jpg" alt="Desert overlook" />
+            <figcaption data-en="Chasing open horizons." data-zh="追逐开阔的地平线。">Chasing open horizons.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/life/white-mosque.jpg" alt="White architecture and sky" />
+            <figcaption data-en="Finding calm in geometry." data-zh="在几何与光影里获得平静。">Finding calm in geometry.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/life/waterfront.jpg" alt="Waterfront travel moment" />
+            <figcaption data-en="Blue water, bright days." data-zh="蓝色水面与明亮日子。">Blue water, bright days.</figcaption>
+          </figure>
+        </div>
+        <div class="life-video">
+          <video src="assets/life/travel-clip.mp4" controls muted playsinline preload="metadata"></video>
+          <p
+            data-en="A short travel clip from the same photo collection."
+            data-zh="来自同一组生活素材的旅行短片。"
+          >
+            A short travel clip from the same photo collection.
+          </p>
+        </div>
+      </section>
+
       <section class="contact-section" id="contact">
         <div class="contact-inner">
           <div>
-            <p class="eyebrow">Contact</p>
-            <h2>欢迎围绕具身智能、VLA、机器人学习、端侧视觉模型与研究自动化交流。</h2>
+            <p class="eyebrow" data-en="Contact" data-zh="联系">Contact</p>
+            <h2
+              data-en="Open to conversations around embodied intelligence, VLA, robot learning, edge vision models, and research automation."
+              data-zh="欢迎围绕具身智能、VLA、机器人学习、端侧视觉模型与研究自动化交流。"
+            >
+              Open to conversations around embodied intelligence, VLA, robot learning, edge vision models, and research automation.
+            </h2>
           </div>
           <div class="contact-links">
             <a href="https://github.com/wadeKeith" target="_blank" rel="noreferrer">GitHub</a>
             <a href="https://scholar.google.com/citations?user=Qc0js-IAAAAJ&hl=en" target="_blank" rel="noreferrer">Google Scholar</a>
-            <a href="https://www.zhihu.com/people/keith-80-24" target="_blank" rel="noreferrer">知乎</a>
+            <a href="https://www.zhihu.com/people/keith-80-24" target="_blank" rel="noreferrer">Zhihu</a>
             <a href="https://orcid.org/0009-0001-7171-3257" target="_blank" rel="noreferrer">ORCID</a>
           </div>
         </div>

@@ -1,6 +1,8 @@
 # Cheng Yin Personal Homepage
 
-Static personal homepage for `yincheng429.cn`, designed for GitHub Pages.
+Static bilingual personal homepage for `yincheng429.cn`, designed for GitHub Pages.
+
+The page defaults to English and includes a top-right Chinese/English switch. It uses the `assets/life/` media files for the life/travel section; the raw `assets/personal-photo/` source folder is ignored by git.
 
 ## Local preview
 
