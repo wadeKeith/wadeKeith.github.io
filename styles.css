@@ -276,6 +276,106 @@ section[id] {
   background: var(--blue);
 }
 
+.hero-callout {
+  position: relative;
+  display: inline-grid;
+  width: min(100%, 438px);
+  margin-top: 28px;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 18px 20px 19px;
+  border: 1px solid rgba(255, 231, 119, 0.72);
+  color: #161100;
+  background:
+    linear-gradient(135deg, rgba(255, 244, 165, 0.96), rgba(255, 192, 35, 0.97) 46%, rgba(255, 128, 32, 0.94)),
+    #ffc423;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56);
+  transform: rotate(-1.2deg);
+  transform-origin: left center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-callout::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -36px;
+  background:
+    repeating-linear-gradient(
+      108deg,
+      rgba(22, 17, 0, 0.13) 0 1px,
+      transparent 1px 18px
+    );
+  opacity: 0.52;
+}
+
+.hero-callout::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgba(22, 17, 0, 0.86);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 8px rgba(255, 248, 188, 0.42);
+}
+
+.hero-callout:hover {
+  transform: translateY(-2px) rotate(-1.2deg);
+  box-shadow:
+    0 34px 98px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.64);
+}
+
+.callout-kicker,
+.callout-meta {
+  color: rgba(22, 17, 0, 0.72);
+  font-size: 11px;
+  font-weight: 820;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.hero-callout strong {
+  display: block;
+  max-width: min(340px, calc(100% - 52px));
+  margin-top: 10px;
+  font-size: clamp(30px, 3.2vw, 46px);
+  font-weight: 860;
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.callout-alias {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 9px;
+  padding: 5px 8px;
+  border: 1px solid rgba(22, 17, 0, 0.52);
+  color: rgba(22, 17, 0, 0.86);
+  background: rgba(255, 248, 188, 0.36);
+  font-size: 11px;
+  font-weight: 860;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.callout-copy {
+  max-width: min(330px, calc(100% - 20px));
+  margin-top: 12px;
+  color: rgba(22, 17, 0, 0.82);
+  font-size: 15px;
+  font-weight: 640;
+  line-height: 1.45;
+}
+
+.callout-meta {
+  margin-top: 16px;
+}
+
 .snapshot {
   background: #000000;
 }
@@ -1065,6 +1165,16 @@ section[id] {
 
   .button {
     width: 100%;
+  }
+
+  .hero-callout {
+    width: 100%;
+    margin-top: 24px;
+    transform: rotate(-0.6deg);
+  }
+
+  .hero-callout:hover {
+    transform: translateY(-2px) rotate(-0.6deg);
   }
 
   .snapshot article {
