@@ -4,6 +4,8 @@ Static bilingual personal homepage for `yincheng429.cn`, designed for GitHub Pag
 
 The page defaults to English and includes a top-right Chinese/English switch. It uses the `assets/life/` media files for the life/travel section; the raw `assets/personal-photo/` source folder is ignored by git. The Zhihu section summarizes public profile stats and pinned-note themes without copying long post bodies.
 
+Profile copy highlights Ph.D. training across HUST, Tsinghua THUNLP, and Beijing Zhongguancun Academy / National Academy of Artificial Intelligence. GitHub impact counts `OpenBMB/DeepThinkVLA` as Cheng Yin's repository after its transfer to OpenBMB, so total public GitHub stars are shown as 900+.
+
 ## Local preview
 
 ```bash

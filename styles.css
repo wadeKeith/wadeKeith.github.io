@@ -49,7 +49,7 @@ video {
 }
 
 section[id] {
-  scroll-margin-top: 78px;
+  scroll-margin-top: 96px;
 }
 
 .site-header {
@@ -59,11 +59,11 @@ section[id] {
   left: 0;
   right: 0;
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 24px;
+  grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto;
+  gap: clamp(16px, 2.2vw, 34px);
   align-items: center;
-  min-height: 52px;
-  padding: 8px max(18px, calc((100vw - var(--max)) / 2));
+  min-height: 72px;
+  padding: 10px max(18px, calc((100vw - var(--max)) / 2));
   color: rgba(245, 245, 247, 0.86);
   background: rgba(22, 22, 23, 0.72);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -77,38 +77,16 @@ section[id] {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-width: 168px;
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 760;
-}
-
-.brand strong,
-.brand small {
-  display: block;
-  line-height: 1.12;
+  width: fit-content;
+  min-width: 220px;
 }
 
 .brand strong {
+  display: block;
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 720;
-}
-
-.brand small {
-  color: rgba(245, 245, 247, 0.58);
-  font-size: 10px;
-  text-transform: uppercase;
+  font-size: clamp(24px, 2.35vw, 36px);
+  font-weight: 790;
+  line-height: 0.94;
 }
 
 .site-nav {
@@ -201,11 +179,27 @@ section[id] {
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   align-self: end;
   width: min(100% - 40px, var(--max));
   margin: 0 auto;
   padding: 150px 0 80px;
+}
+
+.hero-manifest {
+  position: absolute;
+  z-index: 1;
+  top: 92px;
+  right: max(18px, calc((100vw - var(--wide)) / 2));
+  display: grid;
+  justify-items: end;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.34);
+  font-size: clamp(62px, 11vw, 170px);
+  font-weight: 820;
+  line-height: 0.82;
+  opacity: 0.64;
+  pointer-events: none;
 }
 
 .eyebrow {
@@ -283,24 +277,38 @@ section[id] {
 }
 
 .snapshot {
-  background: var(--paper);
+  background: #000000;
 }
 
 .snapshot-inner {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-  width: min(100%, var(--max));
+  grid-template-columns: 1.18fr 0.82fr 1fr;
+  gap: 1px;
+  width: min(100%, var(--wide));
   margin: 0 auto;
-  border-left: 1px solid var(--line);
+  background: rgba(245, 245, 247, 0.18);
 }
 
 .snapshot article {
   display: grid;
   align-content: center;
-  min-height: 168px;
-  padding: 28px;
-  border-right: 1px solid var(--line);
+  min-height: 242px;
+  padding: clamp(30px, 4vw, 58px);
+  background: #fbfbfd;
+}
+
+.snapshot article:first-child {
+  color: #ffffff;
+  background: #000000;
+}
+
+.snapshot article:nth-child(2) {
+  background: #f5f5f7;
+}
+
+.snapshot article:nth-child(3) {
+  color: #ffffff;
+  background: #111113;
 }
 
 .snapshot span,
@@ -313,9 +321,20 @@ section[id] {
 
 .snapshot strong {
   margin-top: 14px;
-  font-size: clamp(20px, 2.1vw, 28px);
-  font-weight: 700;
-  line-height: 1.22;
+  color: var(--ink);
+  font-size: clamp(25px, 3vw, 46px);
+  font-weight: 760;
+  line-height: 1.08;
+}
+
+.snapshot article:first-child span,
+.snapshot article:nth-child(3) span {
+  color: #ff9f0a;
+}
+
+.snapshot article:first-child strong,
+.snapshot article:nth-child(3) strong {
+  color: #ffffff;
 }
 
 .section {
@@ -882,7 +901,7 @@ section[id] {
 
 @media (max-width: 680px) {
   .site-header {
-    min-height: 50px;
+    min-height: 58px;
     padding-inline: 12px;
   }
 
@@ -890,7 +909,10 @@ section[id] {
     min-width: 0;
   }
 
-  .brand small,
+  .brand strong {
+    font-size: 22px;
+  }
+
   .header-link {
     display: none;
   }
@@ -911,6 +933,13 @@ section[id] {
     background:
       linear-gradient(180deg, rgba(0, 0, 0, 0.54), rgba(0, 0, 0, 0.18) 38%, rgba(0, 0, 0, 0.78)),
       linear-gradient(90deg, rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.24));
+  }
+
+  .hero-manifest {
+    top: 72px;
+    right: 12px;
+    font-size: 62px;
+    opacity: 0.32;
   }
 
   .hero-content {
@@ -935,7 +964,12 @@ section[id] {
   }
 
   .snapshot article {
-    min-height: auto;
+    min-height: 188px;
+    padding-inline: 20px;
+  }
+
+  .snapshot strong {
+    font-size: 28px;
   }
 
   .section,
