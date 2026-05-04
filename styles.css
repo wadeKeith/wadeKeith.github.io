@@ -202,6 +202,22 @@ section[id] {
   pointer-events: none;
 }
 
+.hero-manifest span {
+  white-space: nowrap;
+}
+
+body[data-lang="zh"] .hero-manifest {
+  top: 96px;
+  display: flex;
+  gap: clamp(12px, 2.2vw, 28px);
+  align-items: center;
+  justify-content: flex-end;
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.28);
+  font-size: clamp(34px, 5.2vw, 76px);
+  line-height: 0.95;
+  opacity: 0.34;
+}
+
 .eyebrow {
   margin: 0 0 16px;
   color: var(--orange);
@@ -1145,6 +1161,17 @@ section[id] {
     right: 12px;
     font-size: 62px;
     opacity: 0.32;
+  }
+
+  body[data-lang="zh"] .hero-manifest {
+    top: 70px;
+    right: 12px;
+    left: 12px;
+    gap: clamp(10px, 4vw, 16px);
+    justify-content: flex-end;
+    font-size: clamp(30px, 10vw, 40px);
+    line-height: 1;
+    opacity: 0.22;
   }
 
   .hero-content {
