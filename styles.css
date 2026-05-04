@@ -371,30 +371,67 @@ section[id] {
 
 .research-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 12px;
   width: min(100%, var(--max));
   margin: 0 auto;
-  background: var(--line);
+  background: transparent;
 }
 
 .research-grid article {
-  min-height: 390px;
-  padding: clamp(26px, 3vw, 42px);
+  position: relative;
+  display: grid;
+  align-content: end;
+  min-height: 244px;
+  overflow: hidden;
+  padding: clamp(28px, 3.6vw, 48px);
+  border: 1px solid var(--line);
   background: #ffffff;
 }
 
+.research-grid article:first-child {
+  grid-row: span 2;
+  min-height: 520px;
+  color: #f5f5f7;
+  background: #050505;
+}
+
+.research-grid article::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid transparent;
+  pointer-events: none;
+}
+
+.research-grid article:first-child::before {
+  border-color: rgba(245, 245, 247, 0.18);
+}
+
 .research-grid span {
-  color: var(--blue);
-  font-size: 13px;
-  font-weight: 800;
+  position: absolute;
+  top: 24px;
+  right: 26px;
+  color: rgba(0, 102, 204, 0.22);
+  font-size: clamp(54px, 7vw, 96px);
+  font-weight: 820;
+  line-height: 0.78;
+}
+
+.research-grid article:first-child span {
+  color: rgba(255, 159, 10, 0.36);
 }
 
 .research-grid h3,
 .work-grid h3 {
-  margin: 96px 0 16px;
-  font-size: clamp(25px, 2.4vw, 34px);
+  margin: 0 0 16px;
+  font-size: clamp(26px, 2.7vw, 40px);
   line-height: 1.12;
+}
+
+.research-grid article:first-child h3 {
+  font-size: clamp(40px, 5.4vw, 72px);
+  line-height: 1;
 }
 
 .research-grid p,
@@ -406,6 +443,12 @@ section[id] {
   color: var(--muted);
   font-size: 17px;
   line-height: 1.72;
+}
+
+.research-grid article:first-child p {
+  max-width: 620px;
+  color: rgba(245, 245, 247, 0.68);
+  font-size: clamp(17px, 1.8vw, 22px);
 }
 
 .work-index {
@@ -599,9 +642,19 @@ section[id] {
 }
 
 .platform-panel h3 {
+  max-width: 520px;
   margin: 0 0 16px;
-  font-size: clamp(36px, 5vw, 64px);
-  line-height: 1;
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.04;
+}
+
+.platform-handle {
+  margin: 0 0 18px;
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .repo-list {
@@ -1051,7 +1104,14 @@ section[id] {
     min-height: auto;
   }
 
-  .research-grid h3,
+  .research-grid article:first-child {
+    min-height: 380px;
+  }
+
+  .research-grid h3 {
+    margin-top: 0;
+  }
+
   .work-grid h3 {
     margin-top: 62px;
   }
