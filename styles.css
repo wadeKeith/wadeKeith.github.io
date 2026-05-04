@@ -594,6 +594,142 @@ section[id] {
   line-height: 1.6;
 }
 
+.zhihu-section {
+  padding: clamp(88px, 10vw, 148px) 24px;
+  color: #f5f5f7;
+  background: #000000;
+}
+
+.zhihu-shell {
+  display: grid;
+  gap: clamp(26px, 4vw, 48px);
+  width: min(100%, var(--max));
+  margin: 0 auto;
+}
+
+.zhihu-profile {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: end;
+  padding-bottom: clamp(34px, 5vw, 66px);
+  border-bottom: 1px solid rgba(245, 245, 247, 0.18);
+}
+
+.zhihu-profile img {
+  width: 190px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: #151516;
+}
+
+.zhihu-profile h2 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(40px, 6vw, 78px);
+  font-weight: 760;
+  line-height: 1.04;
+}
+
+.zhihu-profile p:not(.eyebrow) {
+  max-width: 780px;
+  margin: 22px 0 0;
+  color: rgba(245, 245, 247, 0.7);
+  font-size: clamp(18px, 2vw, 23px);
+  line-height: 1.64;
+}
+
+.zhihu-profile a {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 28px;
+  color: #2997ff;
+  font-size: 16px;
+  font-weight: 680;
+}
+
+.zhihu-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(245, 245, 247, 0.18);
+}
+
+.zhihu-stats div {
+  display: grid;
+  gap: 10px;
+  min-height: 132px;
+  padding: 24px;
+  background: #151516;
+}
+
+.zhihu-stats strong {
+  color: #ffffff;
+  font-size: clamp(34px, 4vw, 54px);
+  line-height: 1;
+}
+
+.zhihu-stats span {
+  color: rgba(245, 245, 247, 0.62);
+  font-size: 13px;
+  font-weight: 720;
+  text-transform: uppercase;
+}
+
+.zhihu-pins {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(245, 245, 247, 0.18);
+}
+
+.zhihu-pins article {
+  display: grid;
+  align-content: start;
+  min-height: 340px;
+  padding: clamp(26px, 4vw, 44px);
+  background: #151516;
+}
+
+.zhihu-pins article > span {
+  color: #ff9f0a;
+  font-size: 12px;
+  font-weight: 780;
+  text-transform: uppercase;
+}
+
+.zhihu-pins h3 {
+  margin: 74px 0 16px;
+  color: #ffffff;
+  font-size: clamp(26px, 3vw, 42px);
+  line-height: 1.1;
+}
+
+.zhihu-pins p {
+  margin: 0;
+  color: rgba(245, 245, 247, 0.7);
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.zhihu-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.zhihu-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(245, 245, 247, 0.18);
+  color: rgba(245, 245, 247, 0.78);
+  font-size: 12px;
+  font-weight: 650;
+}
+
 .life-section {
   padding: clamp(90px, 10vw, 150px) 24px;
   color: #f5f5f7;
@@ -803,12 +939,14 @@ section[id] {
   }
 
   .section,
+  .zhihu-section,
   .life-section,
   .contact-section {
     padding-inline: 16px;
   }
 
   .section-heading h2,
+  .zhihu-profile h2,
   .life-intro h2,
   .contact-inner h2 {
     font-size: 38px;
@@ -816,7 +954,10 @@ section[id] {
   }
 
   .research-grid,
-  .work-grid {
+  .work-grid,
+  .zhihu-profile,
+  .zhihu-pins,
+  .zhihu-stats {
     grid-template-columns: 1fr;
   }
 
@@ -836,6 +977,18 @@ section[id] {
 
   .signature-copy h2 {
     font-size: 52px;
+  }
+
+  .zhihu-profile img {
+    width: 132px;
+  }
+
+  .zhihu-pins article {
+    min-height: auto;
+  }
+
+  .zhihu-pins h3 {
+    margin-top: 56px;
   }
 
   .repo-list li,
