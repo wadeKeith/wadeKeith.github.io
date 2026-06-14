@@ -711,6 +711,10 @@ body[data-lang="zh"] .hero-manifest {
   margin-top: 22px;
 }
 
+.work-grid .project-links a {
+  margin-top: 0;
+}
+
 .platform-tabs {
   display: flex;
   justify-content: center;

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: http://yincheng429.cn/sitemap.xml
