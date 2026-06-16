@@ -390,6 +390,7 @@ p {
 .global-course-map {
   display: grid;
   gap: 14px;
+  scroll-margin-top: 118px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -398,7 +399,7 @@ p {
 
 .global-course-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
 }
 
@@ -406,7 +407,7 @@ p {
   display: grid;
   gap: 14px;
   align-content: space-between;
-  min-height: 210px;
+  min-height: 190px;
   padding: 16px;
   border: 1px solid #dce3de;
   border-radius: 8px;
@@ -449,6 +450,7 @@ p {
 
 .roadmap-panel {
   display: grid;
+  scroll-margin-top: 118px;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
   gap: 12px;
 }
@@ -708,6 +710,7 @@ p {
 .deep-lecture {
   display: grid;
   gap: 14px;
+  scroll-margin-top: 118px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -716,7 +719,7 @@ p {
 
 .lecture-notes-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 }
 
@@ -742,9 +745,90 @@ p {
   line-height: 1.7;
 }
 
+.professor-session {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.session-timeline {
+  display: grid;
+  gap: 10px;
+}
+
+.session-step {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.session-step > span {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border-radius: 7px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.session-step h4 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.session-step p {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.65;
+}
+
+.session-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.session-artifacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.artifact-card {
+  padding: 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.artifact-card strong {
+  display: block;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+
+.artifact-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .course-studio {
   display: grid;
   gap: 14px;
+  scroll-margin-top: 118px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1483,6 +1567,8 @@ p {
   .seminar-panel,
   .roadmap-panel,
   .lecture-notes-grid,
+  .session-step,
+  .session-artifacts,
   .lens-card,
   .ladder-step,
   .workbench-grid,

@@ -794,7 +794,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616v")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616w")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -882,6 +882,51 @@ function seminarFor(module, bp, pack) {
     ],
     evidenceQuery: module.queries.slice(0, 4).join(" ") || module.title,
     askPrompt: `请像人工智能前沿课程教授一样，围绕「${module.title}」讲一节课。\n\n核心问题：${guide.question}\n黑板框架：${guide.board.join(" / ")}\n本章项目：${module.project}\n\n请按：直觉、机制、工程实验、论文阅读、常见误区来讲。`,
+  };
+}
+
+function sessionFor(module, bp, pack, seminar) {
+  const concepts = bp.concepts || [];
+  const queries = module.queries || [];
+  const anchor = (COURSE_ANCHORS[module.id] || COURSE_ANCHORS.orientation)[0] || "国际一线课程视角";
+  const evidenceQuery = seminar.evidenceQuery || queries.slice(0, 3).join(" ") || module.title;
+  return {
+    timeline: [
+      {
+        time: "0-15",
+        title: "问题设定",
+        body: `先回答「为什么现在必须学这一章」：${bp.thesis} 对齐 ${anchor}，把本章放进完整大模型栈。`,
+        query: concepts[0] || module.title,
+        ask: `请用研究生课堂开场方式讲清楚「${module.title}」为什么重要，并给出一个真实研究或工程场景。`,
+      },
+      {
+        time: "15-40",
+        title: "机制推导",
+        body: `${pack.mechanisms[0]} 把它拆成输入、变换、约束、瓶颈和失败模式五栏，避免只背术语。`,
+        query: concepts.slice(0, 2).join(" ") || module.title,
+        ask: `请按“输入、变换、约束、瓶颈、失败模式”五栏推导「${module.title}」的核心机制。`,
+      },
+      {
+        time: "40-65",
+        title: "证据诊断",
+        body: `从本地资料库取 2-3 条证据，判断它们分别支持概念、机制还是实验结论。优先检索：${evidenceQuery}。`,
+        query: evidenceQuery,
+        ask: `请帮我把「${module.title}」的证据分成概念证据、机制证据和实验证据，并说明每类应如何阅读。`,
+      },
+      {
+        time: "65-90",
+        title: "作品落地",
+        body: `把课堂收束到可检查产物：${module.project} 交付物必须包含假设、来源、最小实验和失败复盘。`,
+        query: queries.slice(-2).join(" ") || module.project,
+        ask: `请把「${module.project}」拆成 90 分钟后能开始执行的产出模板：目标、步骤、数据、指标、风险。`,
+      },
+    ],
+    artifacts: [
+      ["一句话定理", `用一句话写出本章最重要判断：${bp.thesis}`],
+      ["机制表", "至少填满“输入 / 变换 / 约束 / 瓶颈 / 失败模式”五列。"],
+      ["证据卡", "保存 2 条来源：一条支持机制，一条支持实验或评测。"],
+      ["小作品", module.project],
+    ],
   };
 }
 
@@ -1025,6 +1070,7 @@ function renderTeach() {
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   const seminar = seminarFor(state.active, bp, pack);
+  const session = sessionFor(state.active, bp, pack, seminar);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -1105,6 +1151,33 @@ function renderTeach() {
   el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("sessionTimeline").innerHTML = session.timeline
+    .map(
+      (item) => `
+        <article class="session-step">
+          <span>${escapeHtml(item.time)}</span>
+          <div>
+            <h4>${escapeHtml(item.title)}</h4>
+            <p>${escapeHtml(item.body)}</p>
+          </div>
+          <div class="session-actions">
+            <button class="text-button" type="button" data-session-search="${escapeHtml(item.query)}">检索</button>
+            <button class="text-button" type="button" data-session-ask="${escapeHtml(item.ask)}">追问</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("sessionArtifacts").innerHTML = session.artifacts
+    .map(
+      ([title, body]) => `
+        <article class="artifact-card">
+          <strong>${escapeHtml(title)}</strong>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
   el("lensSwitch").innerHTML = TEACHING_LENSES.map(
     (item) => `
       <button class="lens-btn${item.id === state.activeLens ? " active" : ""}" type="button" data-lens="${escapeHtml(item.id)}">
@@ -1766,20 +1839,21 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search]");
+  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.lensSearch ||
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
-      searchBtn.dataset.courseMapSearch;
+      searchBtn.dataset.courseMapSearch ||
+      searchBtn.dataset.sessionSearch;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask], [data-seminar-ask]");
+  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
   if (askBtn) {
-    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk || askBtn.dataset.seminarAsk;
+    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk || askBtn.dataset.seminarAsk || askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }
 });
