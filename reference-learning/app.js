@@ -26,6 +26,9 @@ const state = {
   searchMode: "fts",
   lesson: null,
   lessonRequest: 0,
+  visibleEvidence: [],
+  searchCache: new Map(),
+  lessonCache: new Map(),
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
   mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
@@ -627,6 +630,89 @@ const LECTURE_PACKS = {
   },
 };
 
+const SEMINAR_GUIDES = {
+  orientation: {
+    question: "如何把 83 万知识片段变成一套可持续学习的研究系统？",
+    model: "目录给边界，FTS 给定位，证据篮给可追踪来源，笔记给长期迁移。",
+    board: ["资料库不是答案机，而是实验室。", "学习闭环：定位 -> 精读 -> 解释 -> 产出 -> 复盘。", "每次问导师前，先给它一条可引用证据。"],
+  },
+  math_pytorch_nlp: {
+    question: "为什么大模型学习必须从张量、优化和语言建模目标开始？",
+    model: "文本先变成 token，token 进入 embedding，训练循环用 loss 和梯度不断移动表示空间。",
+    board: ["形状是第一种调试语言。", "Tokenizer 决定上下文预算。", "训练循环最小闭环：batch -> logits -> loss -> backward -> step。"],
+  },
+  transformer_gpt_llama: {
+    question: "Decoder-only Transformer 如何把上下文变成下一个 token 的分布？",
+    model: "Q/K 做内容寻址，V 承载被混合的信息，causal mask 保证自回归，MLP 与残差层累积可组合特征。",
+    board: ["Attention = 内容寻址，不是神秘注意力。", "Mask 保护训练/推理一致性。", "LLaMA 改动要放进稳定性、上下文和推理效率里理解。"],
+  },
+  llm_training_scaling_data: {
+    question: "现代 LLM 预训练如何在数据、模型、算力和架构之间分配预算？",
+    model: "Scaling law 给预算直觉，数据治理给有效 token，MoE/MLA/长上下文设计给效率边界。",
+    board: ["好数据会改变每单位 compute 的价值。", "MoE 是容量效率，不是免费扩参。", "每个 checkpoint 都应该服务一个评测问题。"],
+  },
+  sft_peft_lora: {
+    question: "如何把预训练模型变成遵循任务格式和人类偏好的助手？",
+    model: "SFT 教格式和行为，LoRA/QLoRA 控制更新成本，偏好优化再调整回答取舍。",
+    board: ["后训练不是灌知识。", "Loss mask 决定模型应该学谁的话。", "LoRA 的 rank、target module 和数据质量同样关键。"],
+  },
+  inference_systems: {
+    question: "为什么大模型推理常常慢在内存、调度和 KV cache，而不是只慢在算力？",
+    model: "Prefill 像并行矩阵计算，decode 像逐 token 服务系统；FlashAttention、PagedAttention、batching 都是在管 IO 和状态。",
+    board: ["区分 prefill 与 decode。", "FlashAttention 是 exact attention 的 IO-aware 实现。", "吞吐、延迟、显存必须一起算。"],
+  },
+  alignment_rlhf_eval: {
+    question: "对齐、偏好优化和评测如何共同约束模型行为？",
+    model: "偏好数据定义取舍，优化目标改变策略，评测和安全回归决定能否上线。",
+    board: ["Benchmark 分数不是部署许可。", "DPO 直接优化偏好对。", "能力、安全、回归测试要分开。"],
+  },
+  rag_agents: {
+    question: "怎样让模型从闭卷生成变成有证据、有工具、有行动边界的系统？",
+    model: "RAG 管证据，rerank 管上下文预算，Agent 管工具行动和状态恢复。",
+    board: ["RAG 难在资料治理和引用约束。", "ReAct = 推理与行动交替。", "Agent 权限必须可审计。"],
+  },
+  vlm_multimodal: {
+    question: "视觉表示如何进入语言模型，并变成可解释的图文推理？",
+    model: "ViT 提供视觉 token，CLIP 建立图文空间，连接器把视觉特征映射到 LLM 可使用的语义接口。",
+    board: ["图文对齐决定能不能用。", "连接器不是小细节。", "OCR、空间关系、细粒度定位是常见短板。"],
+  },
+  streaming_video_vlm: {
+    question: "在线视频理解为什么不能只靠把更多帧塞进上下文？",
+    model: "流式系统必须选择帧、压缩记忆、更新状态，并在延迟预算内回答时间和因果问题。",
+    board: ["长视频的核心是事件抽象。", "记忆分短期缓存和长期摘要。", "在线评测要看过程更新。"],
+  },
+  vla_robotics: {
+    question: "当输出从文本变成动作，VLM 会变成怎样的机器人策略？",
+    model: "VLA 把视觉、语言指令和动作空间接到同一个策略接口，评测标准从答得对变成做得成。",
+    board: ["动作空间定义决定模型接口。", "数据分布比模型名字更关键。", "成功率必须结合失败轨迹。"],
+  },
+  robot_sim_data: {
+    question: "机器人学习为什么离不开仿真、数据协议和可复现实验？",
+    model: "模拟器定义任务和物理近似，数据集定义分布覆盖，评测协议定义结果是否可信。",
+    board: ["仿真成功不等于真实成功。", "报告成功率要带种子和任务分布。", "失败案例是数据资产。"],
+  },
+  world_models: {
+    question: "世界模型如何让智能体在潜空间里想象、规划和学习？",
+    model: "表征把观察压成状态，动力学预测未来，策略在想象 rollout 中学习或在搜索中评估动作。",
+    board: ["像素逼真不等于可规划。", "Dreamer 用想象训练策略。", "MuZero 用模型辅助搜索。"],
+  },
+  driving_world_models: {
+    question: "自动驾驶 world model 如何同时服务场景生成、规划和安全评测？",
+    model: "驾驶世界模型必须保持道路、交通参与者、相机几何和动作后果一致，闭环评测比像素质量更重要。",
+    board: ["驾驶不是普通视频生成。", "动作会改变未来。", "闭环指标暴露累积风险。"],
+  },
+  diffusion_video_3d: {
+    question: "扩散、flow matching、视频生成和 3D 表示如何组成空间智能工具箱？",
+    model: "扩散/flow 学生成路径，视频模型学习时序，NeRF/3DGS 提供可渲染空间结构。",
+    board: ["生成质量要和速度、控制性一起看。", "Latent diffusion 把生成搬到压缩空间。", "3D 表示提供几何一致性。"],
+  },
+  omni_audio_capstone: {
+    question: "如何把整条学习路径收束成一个可评测的全模态研究项目？",
+    model: "Capstone 要把问题、数据、模态、模型、baseline、评测和风险写成可执行研究计划。",
+    board: ["不要写模型名清单。", "每个模态都要证明增量。", "Proposal 必须有可验证假设。"],
+  },
+};
+
 const el = (id) => document.getElementById(id);
 
 async function api(path, options = {}) {
@@ -690,6 +776,27 @@ function blueprintFor(module) {
     labSteps: ["定位本章三条证据。", "写下一个机制解释。", "完成项目的最小版本。"],
   };
   return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
+}
+
+function seminarFor(module, bp, pack) {
+  const guide = SEMINAR_GUIDES[module.id] || {
+    question: `怎样系统掌握「${module.title}」？`,
+    model: bp.frame,
+    board: [bp.thesis, pack.mechanisms[0], module.project],
+  };
+  const anchors = COURSE_ANCHORS[module.id] || COURSE_ANCHORS.orientation;
+  const paragraphs = [
+    `这章的核心问题是：${guide.question} 先不要急着查零散名词，而要把它放进整条“大模型学习之路”的位置里：${bp.frame}`,
+    `从机制上看，${pack.principles.join(" ")} ${pack.mechanisms.join(" ")} 读任何论文或代码时，都用“输入是什么、变换是什么、瓶颈是什么、如何评测”这四个问题压住细节。`,
+    `对齐名课的读法是：${anchors.slice(0, 2).join(" ")} 本网页把这些公开名课的学习方式压缩成本章的讲义、证据精读、练习闭环和研究工作台。`,
+    `完成本章的标准不是“看懂了”，而是能交付一个可检查产物：${module.project} 如果这个产物做不出来，就回到证据精读保存来源，再请导师只解释卡住的那一段。`,
+  ];
+  return {
+    ...guide,
+    paragraphs,
+    evidenceQuery: module.queries.slice(0, 4).join(" ") || module.title,
+    askPrompt: `请像人工智能前沿课程教授一样，围绕「${module.title}」讲一节课。\n\n核心问题：${guide.question}\n黑板框架：${guide.board.join(" / ")}\n本章项目：${module.project}\n\n请按：直觉、机制、工程实验、论文阅读、常见误区来讲。`,
+  };
 }
 
 function trackFor(moduleId) {
@@ -813,6 +920,7 @@ function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
+  const seminar = seminarFor(state.active, bp, pack);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -856,6 +964,26 @@ function renderTeach() {
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
   el("deliverableText").textContent = state.active.project || bp.labSteps[0] || "";
+  el("seminarQuestion").textContent = seminar.question;
+  el("seminarBody").innerHTML = seminar.paragraphs.map((item) => `<p>${escapeHtml(item)}</p>`).join("");
+  el("seminarBoard").innerHTML = `
+    <div class="seminar-model">
+      <strong>心智模型</strong>
+      <p>${escapeHtml(seminar.model)}</p>
+    </div>
+    ${seminar.board
+      .map(
+        (item, idx) => `
+          <div class="board-row">
+            <span>${String(idx + 1).padStart(2, "0")}</span>
+            <p>${escapeHtml(item)}</p>
+          </div>
+        `
+      )
+      .join("")}
+  `;
+  el("seminarSearchBtn").dataset.seminarSearch = seminar.evidenceQuery;
+  el("seminarAskBtn").dataset.seminarAsk = seminar.askPrompt;
   el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
@@ -1007,13 +1135,16 @@ function sourcePathLabel(path) {
 function renderEvidence(results, message = "") {
   const box = el("evidenceResults");
   if (message) {
+    state.visibleEvidence = [];
     box.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
     return;
   }
   if (!results || !results.length) {
+    state.visibleEvidence = [];
     box.innerHTML = `<div class="empty-state">没有检索到足够相关的片段。换一个更具体的术语试试。</div>`;
     return;
   }
+  state.visibleEvidence = results;
   box.innerHTML = results
     .map(
       (item, idx) => `
@@ -1062,8 +1193,8 @@ function renderPinnedSources() {
 }
 
 function pinSource(idx) {
-  if (!state.active || !state.lesson || !state.lesson.evidence) return;
-  const source = state.lesson.evidence[idx];
+  if (!state.active) return;
+  const source = state.visibleEvidence[idx];
   if (!source) return;
   const pinned = currentPinnedSources();
   const key = `${source.title || ""}::${source.path || ""}`;
@@ -1141,12 +1272,18 @@ function renderAll() {
 
 async function loadLesson(moduleId) {
   const requestId = ++state.lessonRequest;
+  if (state.lessonCache.has(moduleId)) {
+    state.lesson = state.lessonCache.get(moduleId);
+    renderRead();
+    return;
+  }
   state.lesson = null;
   renderRead();
   try {
     const lesson = await api(`lesson?module=${encodeURIComponent(moduleId)}`);
     if (requestId !== state.lessonRequest) return;
     state.lesson = lesson;
+    state.lessonCache.set(moduleId, lesson);
     renderRead();
   } catch (err) {
     if (requestId !== state.lessonRequest) return;
@@ -1173,10 +1310,24 @@ async function runSearch(queryOverride = "") {
   if (!q) return;
   el("searchInput").value = q;
   const semantic = state.searchMode === "semantic" ? "1" : "0";
+  const moduleId = state.active ? state.active.id : "";
+  const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
+  if (state.searchCache.has(cacheKey)) {
+    const cached = state.searchCache.get(cacheKey);
+    el("retrievalHint").textContent =
+      cached.retrieval_mode === "semantic"
+        ? "已从本机页面缓存复用语义重排结果。"
+        : "已从本机页面缓存复用极速 FTS 结果。";
+    renderEvidence(cached.results || []);
+    showTab("read");
+    return;
+  }
   renderEvidence([], state.searchMode === "semantic" ? "正在语义重排本地证据..." : "正在查询本地极速索引...");
-  const module = state.active ? `&module=${encodeURIComponent(state.active.id)}` : "";
+  const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
   try {
     const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=${semantic}${module}`);
+    state.searchCache.set(cacheKey, data);
+    if (state.searchCache.size > 80) state.searchCache.delete(state.searchCache.keys().next().value);
     el("retrievalHint").textContent =
       data.retrieval_mode === "semantic"
         ? "已使用语义重排：适合解释型问题，但会比极速 FTS 慢。"
@@ -1206,7 +1357,7 @@ async function ask() {
 }
 
 function askAboutSource(idx) {
-  const source = state.lesson && state.lesson.evidence ? state.lesson.evidence[idx] : null;
+  const source = state.visibleEvidence[idx];
   if (!source) return;
   const prompt = `我读不懂这段资料，请像教授一样解释关键概念、背景和学习顺序：\n\n标题：${source.title}\n路径：${sourcePathLabel(source.path)}\n片段：${source.excerpt}`;
   setQuestion(prompt, true);
@@ -1296,16 +1447,16 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search]");
+  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search]");
   if (searchBtn) {
-    const query = searchBtn.dataset.lensSearch || searchBtn.dataset.ladderSearch;
+    const query = searchBtn.dataset.lensSearch || searchBtn.dataset.ladderSearch || searchBtn.dataset.seminarSearch;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask]");
+  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask], [data-seminar-ask]");
   if (askBtn) {
-    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk;
+    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk || askBtn.dataset.seminarAsk;
     setQuestion(prompt, true);
   }
 });

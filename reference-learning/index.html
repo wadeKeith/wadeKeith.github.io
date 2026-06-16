@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616p" />
+    <link rel="stylesheet" href="./styles.css?v=20260616q" />
   </head>
   <body>
     <header class="topbar">
@@ -92,6 +92,23 @@
               <p id="deliverableText"></p>
             </article>
           </div>
+          <section class="seminar-panel">
+            <article class="seminar-lecture">
+              <div class="section-title">
+                <p class="eyebrow">教授讲义</p>
+                <h3 id="seminarQuestion">本章要解决的核心问题</h3>
+              </div>
+              <div id="seminarBody" class="seminar-body"></div>
+              <div class="seminar-actions">
+                <button id="seminarSearchBtn" class="secondary" type="button">检索讲义证据</button>
+                <button id="seminarAskBtn" type="button">请导师讲这章</button>
+              </div>
+            </article>
+            <aside class="seminar-board">
+              <p class="eyebrow">黑板框架</p>
+              <div id="seminarBoard"></div>
+            </aside>
+          </section>
           <section class="deep-lecture">
             <div class="section-title">
               <p class="eyebrow">核心讲义</p>
@@ -271,6 +288,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616p"></script>
+    <script src="./app.js?v=20260616q"></script>
   </body>
 </html>

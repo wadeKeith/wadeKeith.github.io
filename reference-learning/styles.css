@@ -510,6 +510,104 @@ p {
   line-height: 1.65;
 }
 
+.seminar-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.55fr);
+  gap: 12px;
+}
+
+.seminar-lecture,
+.seminar-board {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.seminar-lecture {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+.seminar-lecture h3 {
+  margin: 0;
+  max-width: 920px;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.2;
+}
+
+.seminar-body {
+  display: grid;
+  gap: 12px;
+  max-width: 980px;
+}
+
+.seminar-body p {
+  margin: 0;
+  color: #33403c;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.seminar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.seminar-board {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 18px;
+  background: var(--paper);
+}
+
+.seminar-model {
+  padding: 14px;
+  border: 1px solid #d7e0da;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.seminar-model strong {
+  color: var(--blue);
+}
+
+.seminar-model p {
+  margin: 8px 0 0;
+  color: #43504d;
+  line-height: 1.65;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px 0;
+  border-top: 1px solid #e1e5df;
+}
+
+.board-row span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.board-row p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .teaching-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -1279,6 +1377,7 @@ p {
 
   .app-grid,
   .syllabus-grid,
+  .seminar-panel,
   .roadmap-panel,
   .lecture-notes-grid,
   .lens-card,
@@ -1334,6 +1433,8 @@ p {
 
   .lesson-hero,
   .lecture-card,
+  .seminar-lecture,
+  .seminar-board,
   .concept-board,
   .reading-toolbar,
   .lab-card,
