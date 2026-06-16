@@ -765,17 +765,22 @@ const SEMINAR_GUIDES = {
 const el = (id) => document.getElementById(id);
 
 async function api(path, options = {}) {
-  const headers = options.body ? { "Content-Type": "application/json", ...(options.headers || {}) } : options.headers || {};
+  const { timeoutMs = 0, ...fetchOptions } = options;
+  const headers = fetchOptions.body ? { "Content-Type": "application/json", ...(fetchOptions.headers || {}) } : fetchOptions.headers || {};
   const bases = [activeApiBase, ...API_CANDIDATES.filter((base) => base !== activeApiBase)];
   const failures = [];
   for (const base of bases) {
+    const controller = timeoutMs > 0 ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
     try {
-      const res = await fetch(`${base}/${path}`, { ...options, headers });
+      const res = await fetch(`${base}/${path}`, { ...fetchOptions, headers, signal: controller ? controller.signal : fetchOptions.signal });
       if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
       activeApiBase = base;
       return res.json();
     } catch (err) {
-      failures.push(`${base}: ${err.message}`);
+      failures.push(`${base}: ${err.name === "AbortError" ? "timeout" : err.message}`);
+    } finally {
+      if (timer) clearTimeout(timer);
     }
   }
   throw new Error(failures.join("；"));
@@ -794,7 +799,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616z")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616aa")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -984,6 +989,36 @@ function lectureManuscriptFor(module, bp, pack) {
     checkpoints,
     searchQuery: module.queries.slice(0, 4).join(" ") || module.title,
     askPrompt: `请作为“大模型学习之路”的课程教授，围绕本章主讲义答疑。\n章节：${module.title}\n核心论断：${bp.thesis}\n黑板式：${blackboard.formula}\n我的问题是：`,
+  };
+}
+
+function workedExampleFor(module, bp, pack, manuscript) {
+  const main = bp.concepts[0] || module.title;
+  const supporting = bp.concepts[1] || main;
+  const failure = bp.misconceptions[0] || "只看平均结果，忽略失败样例和边界条件。";
+  const mechanism = pack.mechanisms[0] || bp.frame;
+  return {
+    title: `${module.stage}｜Worked Example：把 ${main} 学成一个可复现实验`,
+    problem: `给定一个围绕「${main}」的小研究问题：如何证明它真的解决了「${supporting}」相关瓶颈，而不是只在术语上看起来合理？`,
+    steps: [
+      ["定义对象", `先写清输入、状态、输出和约束。黑板式是：${manuscript.blackboard.formula}`],
+      ["拆机制", `把机制拆成可检查链路：${mechanism} 每一步都要能指出它读写什么信息。`],
+      ["设 baseline", `至少设置一个朴素 baseline：不用 ${main}、替换 ${supporting}，或把关键组件关掉。`],
+      ["找反例", `主动构造失败场景：${failure} 反例不是扣分项，而是判断你是否真的理解边界。`],
+    ],
+    experiment: [
+      ["输入", `选 3 个代表性样例：一个简单样例、一个长上下文/复杂样例、一个故意困难的反例。`],
+      ["变量", `只改变一个变量：${main} 是否启用，或 ${supporting} 的实现方式。`],
+      ["指标", "记录准确性/延迟/显存/成功率/引用质量中的一个主指标，再保存 2 个失败样例。"],
+      ["结论", `用一句话解释结果是否支持本章判断：${bp.thesis}`],
+    ],
+    rubric: [
+      ["A", "有变量、有 baseline、有失败样例，并能把结果连接回机制。"],
+      ["B", "能跑出结果，但 baseline 或失败分析不够清楚。"],
+      ["Redo", "只复述概念，没有可检查输入、指标或反例。"],
+    ],
+    searchQuery: `${main} ${supporting} baseline ablation evaluation`,
+    askPrompt: `请像 CS336/研究生课程助教一样审这个 worked example。\n章节：${module.title}\n示范题：围绕 ${main} 证明它如何解决 ${supporting} 相关瓶颈。\n黑板式：${manuscript.blackboard.formula}\n请检查：变量定义、baseline、指标、失败样例和结论是否充分。`,
   };
 }
 
@@ -1289,6 +1324,7 @@ function renderTeach() {
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   const manuscript = lectureManuscriptFor(state.active, bp, pack);
+  const worked = workedExampleFor(state.active, bp, pack, manuscript);
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
@@ -1402,6 +1438,29 @@ function renderTeach() {
   el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("workedExampleTitle").textContent = worked.title;
+  el("workedExampleProblem").textContent = worked.problem;
+  el("workedExampleSteps").innerHTML = worked.steps
+    .map(
+      ([label, body], idx) => `
+        <article>
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <div>
+            <strong>${escapeHtml(label)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("workedExampleExperiment").innerHTML = worked.experiment
+    .map(([label, body]) => `<div><strong>${escapeHtml(label)}</strong><p>${escapeHtml(body)}</p></div>`)
+    .join("");
+  el("workedExampleRubric").innerHTML = worked.rubric
+    .map(([label, body]) => `<div><span>${escapeHtml(label)}</span><p>${escapeHtml(body)}</p></div>`)
+    .join("");
+  el("workedSearchBtn").dataset.workedSearch = worked.searchQuery;
+  el("workedAskBtn").dataset.workedAsk = worked.askPrompt;
   el("sessionTimeline").innerHTML = session.timeline
     .map(
       (item) => `
@@ -2013,7 +2072,8 @@ async function runSearch(queryOverride = "", options = {}) {
   });
   const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
   try {
-    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=${semantic}${module}`);
+    const timeoutMs = state.searchMode === "semantic" ? 8000 : 3500;
+    const data = await api(`search?q=${encodeURIComponent(q)}&limit=8&semantic=${semantic}${module}`, { timeoutMs });
     state.searchCache.set(cacheKey, data);
     if (state.searchCache.size > 80) state.searchCache.delete(state.searchCache.keys().next().value);
     el("retrievalHint").textContent =
@@ -2022,7 +2082,10 @@ async function runSearch(queryOverride = "", options = {}) {
         : "已使用极速 FTS：关键词召回优先，适合快速定位原始证据。";
     renderEvidence(data.results || []);
   } catch (err) {
-    renderEvidence(instantSearchPreview(q, moduleId), `公网数据库检索失败，保留浏览器静态证据库和课程索引：${err.message}`);
+    renderEvidence(
+      instantSearchPreview(q, moduleId),
+      `公网全库检索超过等待预算，已保留浏览器即时证据。需要更深召回时可再次点“全库检索”：${err.message}`
+    );
   }
 }
 
@@ -2136,10 +2199,11 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
+      searchBtn.dataset.workedSearch ||
       searchBtn.dataset.lensSearch ||
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
@@ -2150,10 +2214,11 @@ el("teachTab").addEventListener("click", (event) => {
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
+      askBtn.dataset.workedAsk ||
       askBtn.dataset.lensAsk ||
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||

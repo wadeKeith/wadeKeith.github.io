@@ -890,6 +890,111 @@ p {
   line-height: 1.7;
 }
 
+.worked-example {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.worked-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+  gap: 14px;
+}
+
+.worked-problem,
+.worked-lab {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 16px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.worked-problem h4 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.worked-steps {
+  display: grid;
+  gap: 10px;
+}
+
+.worked-steps article {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e0e6e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.worked-steps span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.worked-steps strong,
+.worked-experiment strong {
+  color: var(--green);
+}
+
+.worked-steps p,
+.worked-experiment p,
+.worked-rubric p {
+  margin: 4px 0 0;
+  color: #43504d;
+  line-height: 1.62;
+}
+
+.worked-experiment,
+.worked-rubric {
+  display: grid;
+  gap: 8px;
+}
+
+.worked-experiment div,
+.worked-rubric div {
+  padding: 11px 12px;
+  border: 1px solid #e0e6e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.worked-rubric span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 42px;
+  min-height: 26px;
+  border-radius: 7px;
+  background: #f5ebdc;
+  color: var(--amber);
+  font-weight: 900;
+}
+
+.worked-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .professor-session {
   display: grid;
   gap: 14px;
@@ -1206,6 +1311,7 @@ p {
 .search-stack {
   display: grid;
   gap: 8px;
+  min-width: 0;
   width: min(680px, 100%);
 }
 
@@ -1236,6 +1342,7 @@ p {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto auto;
   gap: 8px;
+  min-width: 0;
   width: min(680px, 100%);
 }
 
@@ -1870,6 +1977,7 @@ p {
   .seminar-panel,
   .roadmap-panel,
   .lecture-notes-grid,
+  .worked-layout,
   .session-step,
   .session-artifacts,
   .lens-card,
@@ -1926,6 +2034,14 @@ p {
   .search-row,
   .check-card {
     grid-template-columns: 1fr;
+  }
+
+  .search-row,
+  .search-stack,
+  .search-row input,
+  .search-row button {
+    width: 100%;
+    min-width: 0;
   }
 
   .lesson-hero,

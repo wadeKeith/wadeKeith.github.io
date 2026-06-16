@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616z" />
+    <link rel="stylesheet" href="./styles.css?v=20260616aa" />
   </head>
   <body>
     <header class="topbar">
@@ -158,6 +158,28 @@
                 <h4>实验 / 阅读</h4>
                 <ul id="readingList"></ul>
               </article>
+            </div>
+          </section>
+          <section class="worked-example">
+            <div class="section-title">
+              <p class="eyebrow">Worked Example</p>
+              <h3 id="workedExampleTitle">把本章概念推到一个可检查实验</h3>
+            </div>
+            <div class="worked-layout">
+              <article class="worked-problem">
+                <p class="eyebrow">示范题</p>
+                <h4 id="workedExampleProblem">选择模块后显示。</h4>
+                <div id="workedExampleSteps" class="worked-steps"></div>
+              </article>
+              <aside class="worked-lab">
+                <p class="eyebrow">最小实验</p>
+                <div id="workedExampleExperiment" class="worked-experiment"></div>
+                <div id="workedExampleRubric" class="worked-rubric"></div>
+                <div class="worked-actions">
+                  <button id="workedSearchBtn" class="secondary" type="button">检索示范题证据</button>
+                  <button id="workedAskBtn" type="button">让导师审这个示范题</button>
+                </div>
+              </aside>
             </div>
           </section>
           <section class="professor-session">
@@ -351,6 +373,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616z"></script>
+    <script src="./app.js?v=20260616aa"></script>
   </body>
 </html>
