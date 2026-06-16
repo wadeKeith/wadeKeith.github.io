@@ -608,6 +608,38 @@ p {
   line-height: 1.6;
 }
 
+.study-cycle {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #d7e0da;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.study-cycle > strong {
+  color: var(--blue);
+}
+
+.study-cycle div {
+  display: grid;
+  gap: 3px;
+  padding-top: 8px;
+  border-top: 1px solid #edf0eb;
+}
+
+.study-cycle span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.study-cycle p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .teaching-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -947,6 +979,16 @@ p {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.retrieval-inline-status {
+  grid-column: 1 / -1;
+  padding: 10px 12px;
+  border: 1px solid #c8d8d1;
+  border-radius: 8px;
+  background: #f2f8f5;
+  color: #42645b;
+  line-height: 1.55;
 }
 
 .evidence-card {

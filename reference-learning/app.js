@@ -794,6 +794,11 @@ function seminarFor(module, bp, pack) {
   return {
     ...guide,
     paragraphs,
+    studyCycle: [
+      ["课前", `先带着问题读：${guide.question}`],
+      ["课中", `用黑板框架抓机制：${guide.board[0] || guide.model}`],
+      ["课后", `交付可检查作品：${module.project}`],
+    ],
     evidenceQuery: module.queries.slice(0, 4).join(" ") || module.title,
     askPrompt: `请像人工智能前沿课程教授一样，围绕「${module.title}」讲一节课。\n\n核心问题：${guide.question}\n黑板框架：${guide.board.join(" / ")}\n本章项目：${module.project}\n\n请按：直觉、机制、工程实验、论文阅读、常见误区来讲。`,
   };
@@ -981,6 +986,19 @@ function renderTeach() {
         `
       )
       .join("")}
+    <div class="study-cycle">
+      <strong>学习节奏</strong>
+      ${seminar.studyCycle
+        .map(
+          ([label, body]) => `
+            <div>
+              <span>${escapeHtml(label)}</span>
+              <p>${escapeHtml(body)}</p>
+            </div>
+          `
+        )
+        .join("")}
+    </div>
   `;
   el("seminarSearchBtn").dataset.seminarSearch = seminar.evidenceQuery;
   el("seminarAskBtn").dataset.seminarAsk = seminar.askPrompt;
@@ -1132,12 +1150,95 @@ function sourcePathLabel(path) {
   return path.replace(/^\/Users\/yin\/Documents_local\/Github\/LLM-learn\/Reference\//, "");
 }
 
+function clientQueryTerms(query) {
+  return (query.toLowerCase().match(/[a-z0-9][a-z0-9_.-]{1,}|[\u4e00-\u9fff]{2,}/g) || [])
+    .filter((term) => !["and", "or", "the", "what", "how", "why"].includes(term))
+    .slice(0, 10);
+}
+
+function countTermHits(text, terms) {
+  const lower = text.toLowerCase();
+  return terms.reduce((sum, term) => sum + (lower.includes(term) ? 1 : 0), 0);
+}
+
+function localPreviewResults(query, activeModuleId = "") {
+  const modules = state.modules.length ? state.modules : FALLBACK_MODULES;
+  const terms = clientQueryTerms(query);
+  const scored = modules
+    .map((module) => {
+      const bp = blueprintFor(module);
+      const pack = LECTURE_PACKS[module.id] || LECTURE_PACKS.orientation;
+      const seminar = seminarFor(module, bp, pack);
+      const anchors = COURSE_ANCHORS[module.id] || [];
+      const haystack = [
+        module.stage,
+        module.title,
+        module.summary,
+        module.project,
+        ...(module.outcomes || []),
+        ...(module.queries || []),
+        bp.thesis,
+        bp.frame,
+        ...(bp.concepts || []),
+        ...(bp.misconceptions || []),
+        ...(pack.principles || []),
+        ...(pack.mechanisms || []),
+        ...(pack.readings || []),
+        seminar.question,
+        seminar.model,
+        ...seminar.board,
+        ...anchors,
+      ].join(" ");
+      const hits = terms.length ? countTermHits(haystack, terms) : 0;
+      const activeBoost = module.id === activeModuleId ? 2.4 : 0;
+      const titleBoost = countTermHits(`${module.title} ${(module.queries || []).join(" ")}`, terms) * 1.7;
+      return { module, bp, pack, seminar, score: hits + activeBoost + titleBoost };
+    })
+    .filter((item) => item.score > 0 || item.module.id === activeModuleId)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 4);
+
+  if (!scored.length && modules[0]) {
+    const module = modules[0];
+    const bp = blueprintFor(module);
+    const pack = LECTURE_PACKS[module.id] || LECTURE_PACKS.orientation;
+    scored.push({ module, bp, pack, seminar: seminarFor(module, bp, pack), score: 0 });
+  }
+
+  return scored.flatMap(({ module, bp, pack, seminar }, idx) => {
+    const intro = seminar.paragraphs.slice(0, 2).join(" ");
+    const mechanism = [bp.thesis, pack.mechanisms[0], module.project].filter(Boolean).join(" ");
+    const basePath = `大模型学习之路/课程内讲义/${module.stage}-${module.id}`;
+    const cards = [
+      {
+        title: `${module.stage} ${module.title}：教授讲义`,
+        path: `${basePath}/professor-lecture`,
+        category: "课程内即时索引",
+        score: idx,
+        source_label: "Course",
+        excerpt: intro,
+      },
+      {
+        title: `${module.stage} ${module.title}：机制与练习抓手`,
+        path: `${basePath}/mechanism-practice`,
+        category: "课程内即时索引",
+        score: idx + 0.1,
+        source_label: "Course",
+        excerpt: mechanism,
+      },
+    ];
+    return cards;
+  }).slice(0, 6);
+}
+
 function renderEvidence(results, message = "") {
   const box = el("evidenceResults");
   if (message) {
-    state.visibleEvidence = [];
-    box.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
-    return;
+    if (!results || !results.length) {
+      state.visibleEvidence = [];
+      box.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
+      return;
+    }
   }
   if (!results || !results.length) {
     state.visibleEvidence = [];
@@ -1145,12 +1246,15 @@ function renderEvidence(results, message = "") {
     return;
   }
   state.visibleEvidence = results;
-  box.innerHTML = results
+  const status = message ? `<div class="retrieval-inline-status">${escapeHtml(message)}</div>` : "";
+  box.innerHTML =
+    status +
+    results
     .map(
       (item, idx) => `
         <article class="evidence-card">
           <div class="source-meta">
-            <span>Source ${idx + 1}</span>
+            <span>${escapeHtml(item.source_label || `Source ${idx + 1}`)}</span>
             <div class="source-actions">
               <button class="text-button pin-source" type="button" data-source="${idx}">存证据</button>
               <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
@@ -1312,6 +1416,7 @@ async function runSearch(queryOverride = "") {
   const semantic = state.searchMode === "semantic" ? "1" : "0";
   const moduleId = state.active ? state.active.id : "";
   const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
+  const preview = localPreviewResults(q, moduleId);
   if (state.searchCache.has(cacheKey)) {
     const cached = state.searchCache.get(cacheKey);
     el("retrievalHint").textContent =
@@ -1322,7 +1427,12 @@ async function runSearch(queryOverride = "") {
     showTab("read");
     return;
   }
-  renderEvidence([], state.searchMode === "semantic" ? "正在语义重排本地证据..." : "正在查询本地极速索引...");
+  renderEvidence(
+    preview,
+    state.searchMode === "semantic"
+      ? "正在请求公网语义重排；先显示课程内即时索引，数据库证据返回后自动替换。"
+      : "正在请求公网极速 FTS；先显示课程内即时索引，数据库证据返回后自动替换。"
+  );
   const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
   try {
     const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=${semantic}${module}`);
@@ -1334,7 +1444,7 @@ async function runSearch(queryOverride = "") {
         : "已使用极速 FTS：关键词召回优先，适合快速定位原始证据。";
     renderEvidence(data.results || []);
   } catch (err) {
-    renderEvidence([], `检索失败：${err.message}`);
+    renderEvidence(preview, `公网数据库检索失败，保留课程内即时索引：${err.message}`);
   }
 }
 
