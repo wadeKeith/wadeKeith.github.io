@@ -17,6 +17,223 @@ const state = {
   notes: JSON.parse(localStorage.getItem("referenceLearningNotes") || "{}"),
 };
 
+const FALLBACK_STATS = {
+  documents: 66956,
+  chunks: 831986,
+  modules: 16,
+};
+
+const FALLBACK_MODULES = [
+  {
+    id: "orientation",
+    stage: "00",
+    title: "Reference orientation and study system",
+    summary: "Understand the local archive, how the database is built, and how to study with retrieval-backed notes.",
+    outcomes: [
+      "Know the major Reference folders and what each contributes.",
+      "Use search, source citations, and module progress deliberately.",
+      "Distinguish Chinese hands-on material from frontier public course material.",
+    ],
+    queries: ["Reference contents map", "Frontier AI PhD Curriculum", "学习路径", "LLM 综述"],
+    project: "Create a personal map of the folders you will use every week.",
+  },
+  {
+    id: "math_pytorch_nlp",
+    stage: "01",
+    title: "Math, PyTorch, NLP, and deep learning prerequisites",
+    summary: "Build the foundations needed to implement and debug transformer models.",
+    outcomes: [
+      "Review tensor shapes, autograd, optimization, and training loops.",
+      "Understand tokenization, embeddings, language modeling, and NLP datasets.",
+      "Read notebooks and code without treating them as black boxes.",
+    ],
+    queries: ["PyTorch", "自然语言处理", "Word2Vec", "Embedding", "大模型必备的深度学习基础"],
+    project: "Reproduce a tiny text classifier or language-model training loop.",
+  },
+  {
+    id: "transformer_gpt_llama",
+    stage: "02",
+    title: "Transformer, GPT, and LLaMA from scratch",
+    summary: "Move from attention mechanics to decoder-only LLM implementation.",
+    outcomes: [
+      "Derive scaled dot-product attention, masking, MHA, MLP, residuals, and layer norm.",
+      "Implement GPT-style training and sampling.",
+      "Understand LLaMA choices such as RoPE, RMSNorm, SwiGLU, and GQA.",
+    ],
+    queries: ["Transformer", "手撕GPT", "LLaMA", "RoPE", "RMSNorm", "Grouped Query Attention", "CS336 assignment1"],
+    project: "Implement a minimal decoder-only transformer and compare it with nanoGPT or CS336 basics.",
+  },
+  {
+    id: "llm_training_scaling_data",
+    stage: "03",
+    title: "LLM training, data, scaling, and DeepSeek-style architecture",
+    summary: "Study modern pretraining choices, data pipelines, scaling laws, and MoE/MLA style design.",
+    outcomes: [
+      "Explain scaling laws and data quality tradeoffs.",
+      "Understand deduplication, filtering, and curriculum/data mixtures.",
+      "Study MoE, MLA, YaRN, load balancing, and multi-token prediction.",
+    ],
+    queries: ["scaling laws", "CS336 scaling", "CS336 data", "DeepSeek-V3", "Mixture-of-Experts", "Multi Latent Attention", "YaRN"],
+    project: "Design a small pretraining run plan with data, model size, and evaluation checkpoints.",
+  },
+  {
+    id: "sft_peft_lora",
+    stage: "04",
+    title: "SFT, PEFT, LoRA, QLoRA, and instruction tuning",
+    summary: "Learn practical adaptation methods for making pretrained LLMs useful.",
+    outcomes: [
+      "Understand SFT data formats and loss masking.",
+      "Compare full fine-tuning, LoRA, QLoRA, Adapter, and prompt tuning.",
+      "Know when quantization and PEFT are appropriate.",
+    ],
+    queries: ["LoRA", "QLoRA", "PEFT", "SFT", "Adapter", "Prompting", "Supervised FineTuning"],
+    project: "Prepare a small instruction-tuning dataset and outline an SFT/LoRA experiment.",
+  },
+  {
+    id: "inference_systems",
+    stage: "05",
+    title: "Inference, serving, acceleration, and distributed systems",
+    summary: "Connect model internals to real latency, throughput, memory, and serving constraints.",
+    outcomes: [
+      "Explain KV cache, batching, prefill/decode, chunk prefill, and speculative decoding.",
+      "Understand FlashAttention, vLLM, tensor parallelism, and distributed training basics.",
+      "Read profiling results and identify bottlenecks.",
+    ],
+    queries: ["Inference", "FlashAttention", "vLLM", "KV cache", "speculative decoding", "DeepSpeed", "Tensor Model Parallelism", "CS336 systems"],
+    project: "Write a deployment note for serving a 7B model under a latency and memory budget.",
+  },
+  {
+    id: "alignment_rlhf_eval",
+    stage: "06",
+    title: "RLHF, DPO, reward models, evaluation, and safety",
+    summary: "Study post-training, preference learning, evaluation harnesses, and safety checks.",
+    outcomes: [
+      "Understand reward modeling, PPO, DPO, GRPO, and constitutional AI.",
+      "Use benchmark harnesses and simple local evals.",
+      "Separate capability evals, safety evals, and regression tests.",
+    ],
+    queries: ["RLHF", "PPO", "DPO", "reward model", "OpenAI Evals", "HELM", "HarmBench", "Constitutional AI", "CS329H"],
+    project: "Define an eval suite for a local assistant that studies this Reference archive.",
+  },
+  {
+    id: "rag_agents",
+    stage: "07",
+    title: "RAG, agents, tools, and code agents",
+    summary: "Build systems that retrieve, reason, and act with language models.",
+    outcomes: [
+      "Understand chunking, retrieval, reranking, source citation, and hallucination failure modes.",
+      "Study tool use, planning, memory, ReAct, and code-agent workflows.",
+      "Relate this app's database design to production RAG patterns.",
+    ],
+    queries: ["RAG", "ReAct", "Agent", "LangChain", "Berkeley LLM Agents", "Code Agents", "SWE-bench"],
+    project: "Improve one retrieval prompt and test it on five questions from this archive.",
+  },
+  {
+    id: "vlm_multimodal",
+    stage: "08",
+    title: "VLM and multimodal foundations",
+    summary: "Study vision-language representation learning and LLM-centered multimodal models.",
+    outcomes: [
+      "Understand ViT, CLIP, BLIP-2, LLaVA, multimodal alignment, and VQA-style tasks.",
+      "Compare contrastive, captioning, and instruction-tuned VLM routes.",
+      "Know how image tokens connect to LLM context.",
+    ],
+    queries: ["ViT", "CLIP", "BLIP2", "LLaVA", "多模态", "CMU MMML", "CS25", "VLM"],
+    project: "Explain the LLaVA training pipeline from image encoder to language model output.",
+  },
+  {
+    id: "streaming_video_vlm",
+    stage: "09",
+    title: "Streaming VLM and online video understanding",
+    summary: "Focus on long-horizon, real-time, and online video-language systems.",
+    outcomes: [
+      "Understand online video benchmarks and temporal reasoning needs.",
+      "Compare streaming memory, frame selection, and hierarchical video understanding.",
+      "Relate streaming VLMs to embodied and robot settings.",
+    ],
+    queries: ["StreamingVLM", "VideoLLM-online", "StreamingBench", "OVO-Bench", "online video", "hierarchical streaming video"],
+    project: "Design a streaming VLM benchmark question set for a robot or egocentric video scenario.",
+  },
+  {
+    id: "vla_robotics",
+    stage: "10",
+    title: "VLA, robot learning, and embodied policies",
+    summary: "Study how vision-language models become robot action policies.",
+    outcomes: [
+      "Understand OpenVLA, RT-1/RT-2, Octo, pi0, action tokenization, and policy fine-tuning.",
+      "Connect robot datasets, simulators, and real-world manipulation.",
+      "Know what changes when outputs are actions rather than text.",
+    ],
+    queries: ["OpenVLA", "OpenVLA-OFT", "RT-1", "RT-2", "Octo", "pi0", "action tokenization", "CS224R", "CS285"],
+    project: "Sketch an experiment to fine-tune a VLA on a new manipulation task.",
+  },
+  {
+    id: "robot_sim_data",
+    stage: "11",
+    title: "Robot simulators, datasets, and reproducible embodied AI",
+    summary: "Learn the tooling needed to run robot learning experiments locally or on a workstation.",
+    outcomes: [
+      "Compare ManiSkill, Isaac Lab, Habitat, RoboCasa, RLBench, robosuite, DROID, and BridgeData.",
+      "Understand benchmark/task design and dataset collection tradeoffs.",
+      "Know how simulators support VLA and world-model research.",
+    ],
+    queries: ["ManiSkill", "Isaac Lab", "Habitat", "RoboCasa", "RLBench", "robosuite", "DROID", "BridgeData"],
+    project: "Choose one simulator and define the minimal steps to reproduce a manipulation benchmark.",
+  },
+  {
+    id: "world_models",
+    stage: "12",
+    title: "World models and model-based RL",
+    summary: "Study latent dynamics, imagination rollouts, predictive representations, and planning.",
+    outcomes: [
+      "Understand World Models, Dreamer, MuZero, V-JEPA, JEPA-WM, Genie, and model-based RL.",
+      "Compare reconstruction-based and joint-embedding predictive models.",
+      "Connect world models to robotics and autonomous driving.",
+    ],
+    queries: ["World Models", "DreamerV3", "MuZero", "V-JEPA", "JEPA-WM", "Genie", "LightZero", "CS330"],
+    project: "Explain why latent imagination can improve sample efficiency in control.",
+  },
+  {
+    id: "driving_world_models",
+    stage: "13",
+    title: "Autonomous-driving world models and VLMs",
+    summary: "Study driving-specific generative simulation, planning, and VLM reasoning.",
+    outcomes: [
+      "Understand GAIA-1, DriveDreamer, Vista, CarDreamer, Waymax, DriveLM, and OpenEMMA.",
+      "Connect scene generation, closed-loop evaluation, and planning.",
+      "Identify how driving world models differ from general video generation.",
+    ],
+    queries: ["GAIA-1", "DriveDreamer", "Vista", "CarDreamer", "Waymax", "DriveLM", "OpenEMMA", "autonomous driving world model"],
+    project: "Write a short survey comparing two driving world-model approaches.",
+  },
+  {
+    id: "diffusion_video_3d",
+    stage: "14",
+    title: "Diffusion, flow matching, video generation, and 3D spatial intelligence",
+    summary: "Add modern generative modeling and spatial representations to the LLM/VLM stack.",
+    outcomes: [
+      "Understand DDPM, score SDEs, latent diffusion, DiT, flow matching, and stable video diffusion.",
+      "Understand NeRF, 3D Gaussian Splatting, PyTorch3D, Nerfstudio, and spatial VLMs.",
+      "Relate generative video to world simulators.",
+    ],
+    queries: ["DDPM", "Score SDE", "Latent Diffusion", "DiT", "Flow Matching", "Stable Video Diffusion", "NeRF", "Gaussian Splatting", "VLM-3R"],
+    project: "Explain how video generation and 3D scene representations can support world-model training.",
+  },
+  {
+    id: "omni_audio_capstone",
+    stage: "15",
+    title: "Omni-modal models and final capstone",
+    summary: "Track audio/omni-modal models and integrate the whole curriculum into a research artifact.",
+    outcomes: [
+      "Understand Qwen3-Omni, Ola, InternLM OmniLive, SLAM-LLM, SenseVoice, and CosyVoice directions.",
+      "Design a research project that uses at least two modalities and one evaluation suite.",
+      "Use this local learning app as an open-source study companion.",
+    ],
+    queries: ["Qwen3-Omni", "Ola", "InternLM OmniLive", "SLAM-LLM", "SenseVoice", "CosyVoice", "audio language model"],
+    project: "Build a capstone proposal: problem, data, model, eval, baseline, risks, and compute plan.",
+  },
+];
+
 const LESSON_BLUEPRINTS = {
   orientation: {
     thesis: "先把资料库当成研究实验室，而不是文件夹仓库。",
@@ -303,12 +520,12 @@ function api(path, options = {}) {
 }
 
 function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+  return String(value == null ? "" : value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function formatNumber(value) {
@@ -566,7 +783,7 @@ async function ask() {
 }
 
 function askAboutSource(idx) {
-  const source = state.lesson?.evidence?.[idx];
+  const source = state.lesson && state.lesson.evidence ? state.lesson.evidence[idx] : null;
   if (!source) return;
   const prompt = `我读不懂这段资料，请像教授一样解释关键概念、背景和学习顺序：\n\n标题：${source.title}\n路径：${sourcePathLabel(source.path)}\n片段：${source.excerpt}`;
   setQuestion(prompt, true);
@@ -579,12 +796,22 @@ function showTab(tab) {
 }
 
 async function load() {
+  state.modules = FALLBACK_MODULES;
+  el("statDocs").textContent = formatNumber(FALLBACK_STATS.documents);
+  el("statChunks").textContent = formatNumber(FALLBACK_STATS.chunks);
+  el("statModules").textContent = formatNumber(FALLBACK_STATS.modules);
+  el("dbStatus").textContent = "知识库：课程已加载";
+  el("modelStatus").textContent = "模型：连接中";
+  renderModules();
+  if (state.modules.length) selectModule((state.active && state.active.id) || state.modules[0].id);
+
   try {
     const [course, stats, model] = await Promise.all([api("course"), api("stats"), api("model/status")]);
-    state.modules = course.modules || [];
+    const activeId = state.active && state.active.id;
+    state.modules = course.modules && course.modules.length ? course.modules : FALLBACK_MODULES;
     el("statDocs").textContent = formatNumber(stats.documents);
     el("statChunks").textContent = formatNumber(stats.chunks);
-    el("statModules").textContent = formatNumber(stats.modules ?? state.modules.length);
+    el("statModules").textContent = formatNumber(stats.modules == null ? state.modules.length : stats.modules);
     el("dbStatus").textContent = stats.ready ? `知识库：${formatNumber(stats.documents)} 文档` : "知识库：未构建";
     if (!model.available) {
       el("modelStatus").textContent = `模型：${model.provider || "服务"} 离线`;
@@ -595,12 +822,16 @@ async function load() {
     } else {
       el("modelStatus").textContent = `模型：${model.models.length} 个可用，默认模型缺失`;
     }
-    renderModules();
-    if (state.modules.length) selectModule(state.modules[0].id);
+    if (activeId && state.modules.some((item) => item.id === activeId)) {
+      state.active = state.modules.find((item) => item.id === activeId);
+      renderAll();
+    } else if (state.modules.length) {
+      selectModule(state.modules[0].id);
+    }
   } catch (err) {
-    el("dbStatus").textContent = "知识库：错误";
-    el("modelStatus").textContent = "模型：未知";
-    el("answerBox").textContent = String(err);
+    el("dbStatus").textContent = "知识库：离线课程";
+    el("modelStatus").textContent = "模型：暂未连接";
+    el("answerBox").textContent = `课程内容已离线加载，可以先正常学习。证据检索和问答暂时连接不到公网 API：${err.message}`;
   }
 }
 
