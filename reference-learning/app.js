@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616am";
+const APP_VERSION = "20260616an";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -25,6 +25,7 @@ const state = {
   activeTab: "teach",
   activeLens: "intuition",
   studyLevel: localStorage.getItem("llmRoadStudyLevel") || "concept",
+  lectureStep: Number(localStorage.getItem("llmRoadLectureStep") || "0"),
   mechanismKnobs: { component: 55, evidence: 55, budget: 45, pressure: 40 },
   searchMode: "fts",
   lesson: null,
@@ -1342,6 +1343,69 @@ function lessonDashboardFor(module, bp, pack, manuscript, seminar, worked, brief
   };
 }
 
+function lectureDeckFor(module, bp, pack, manuscript, seminar, worked, brief) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const second = concepts[1] || main;
+  const evidenceQuery = seminar.evidenceQuery || module.queries.slice(0, 4).join(" ") || module.title;
+  return [
+    {
+      kicker: "Opening question",
+      title: "先把问题立住",
+      body: `这节课先回答：${seminar.question} 你要抓住的不是术语清单，而是这条核心判断：${bp.thesis}`,
+      board: ["本章问题是什么", "为什么现在必须学", "学完要交付什么"],
+      checkpoint: `能否用一句话说明「${module.title}」解决什么问题？`,
+      query: main,
+      ask: `请像教授开场一样讲清楚：${seminar.question}`,
+    },
+    {
+      kicker: "Intuition",
+      title: "建立可迁移直觉",
+      body: `直觉层面，把本章放进这条课程线：${bp.frame} 先把 ${concepts.slice(0, 4).join("、")} 读成因果关系，而不是孤立名词。`,
+      board: ["对象", main, "桥接概念", second],
+      checkpoint: `能否不用公式解释 ${main} 和 ${second} 的关系？`,
+      query: concepts.slice(0, 3).join(" ") || module.title,
+      ask: `请用直觉方式重讲「${module.title}」，重点解释 ${main} 和 ${second}。`,
+    },
+    {
+      kicker: "Mechanism",
+      title: "把机制压到黑板上",
+      body: `${pack.mechanisms[0] || bp.frame} 本章黑板式是：${manuscript.blackboard.formula}。你要能解释式子里每个变量对应什么资料、状态、动作或指标。`,
+      board: ["输入", "变换", "约束", "瓶颈", "失败模式"],
+      checkpoint: `能否画出 ${manuscript.blackboard.title} 并指出一个瓶颈？`,
+      query: manuscript.blackboard.formula,
+      ask: `请逐项解释这个黑板式：${manuscript.blackboard.formula}`,
+    },
+    {
+      kicker: "Evidence",
+      title: "先检索证据，再相信结论",
+      body: `本章证据入口是：${evidenceQuery}。阅读时把资料分成概念证据、机制证据、实验证据和局限证据，先保存来源，再请导师解释卡住的片段。`,
+      board: ["概念证据", "机制证据", "实验证据", "局限证据"],
+      checkpoint: "能否保存两条来源，并说明它们分别支持什么 claim？",
+      query: evidenceQuery,
+      ask: `请把「${module.title}」的证据阅读顺序拆成 4 步，并说明每步看什么。`,
+    },
+    {
+      kicker: "Lab",
+      title: "把理解变成最小作品",
+      body: `现在收束到作品：${module.project} 最小版本也必须包含 baseline、一个变量、一个指标、一个失败样例和一次复盘。`,
+      board: ["baseline", "变量", "指标", "失败样例", "复盘"],
+      checkpoint: `能否今天开始做出「${module.project}」的最小版本？`,
+      query: worked.searchQuery || `${module.title} implementation baseline`,
+      ask: worked.askPrompt,
+    },
+    {
+      kicker: "Oral exam",
+      title: "用口试确认真正掌握",
+      body: `最后检查边界：${bp.misconceptions[0] || "不要把顺口解释当作掌握。"} 如果你能讲清反例、baseline、指标和下一步 ablation，才算进入下一章。`,
+      board: ["反例", "baseline", "指标", "ablation"],
+      checkpoint: "能否说出一个让本章方法失效的场景？",
+      query: `${evidenceQuery} failure mode ablation benchmark`,
+      ask: `请按严格口试官标准追问我「${module.title}」：反例、baseline、指标和 ablation。`,
+    },
+  ];
+}
+
 function textbookFor(module, bp, pack, manuscript, worked, brief) {
   const concepts = bp.concepts || module.queries || [];
   const main = concepts[0] || module.title;
@@ -1914,6 +1978,7 @@ function renderTeach() {
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
   const dashboard = lessonDashboardFor(state.active, bp, pack, manuscript, seminar, worked, brief);
+  const lectureDeck = lectureDeckFor(state.active, bp, pack, manuscript, seminar, worked, brief);
   const textbook = textbookFor(state.active, bp, pack, manuscript, worked, brief);
   const standard = courseStandardFor(state.active, bp, pack, manuscript, worked, brief);
   const conceptMap = conceptMapFor(state.active, bp, pack, manuscript, worked, brief);
@@ -1922,6 +1987,8 @@ function renderTeach() {
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
   const prev = activeIndex > 0 ? state.modules[activeIndex - 1] : null;
   const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
+  const activeLectureIdx = Math.min(Math.max(state.lectureStep, 0), lectureDeck.length - 1);
+  state.lectureStep = activeLectureIdx;
   renderGlobalCourseMap();
   renderCourseAtlas();
   el("lessonCompass").innerHTML = dashboard.compass
@@ -1973,6 +2040,38 @@ function renderTeach() {
       `
     )
     .join("");
+  el("lectureStepList").innerHTML = lectureDeck
+    .map(
+      (item, idx) => `
+        <button class="lecture-step-btn${idx === activeLectureIdx ? " active" : ""}" type="button" data-lecture-step="${idx}">
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <strong>${escapeHtml(item.title)}</strong>
+          <small>${escapeHtml(item.kicker)}</small>
+        </button>
+      `
+    )
+    .join("");
+  const activeLecture = lectureDeck[activeLectureIdx];
+  el("lectureSlide").innerHTML = `
+    <div class="lecture-slide-head">
+      <span>${escapeHtml(activeLecture.kicker)}</span>
+      <h3>${escapeHtml(activeLecture.title)}</h3>
+      <p>${escapeHtml(activeLecture.body)}</p>
+    </div>
+    <div class="lecture-board">
+      ${activeLecture.board.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+    </div>
+    <div class="lecture-checkpoint">
+      <strong>课堂检查点</strong>
+      <p>${escapeHtml(activeLecture.checkpoint)}</p>
+    </div>
+    <div class="lecture-slide-actions">
+      <button class="secondary" type="button" data-lecture-nav="prev" ${activeLectureIdx === 0 ? "disabled" : ""}>上一段</button>
+      <button class="secondary" type="button" data-deck-search="${escapeHtml(activeLecture.query)}">检索证据</button>
+      <button type="button" data-deck-ask="${escapeHtml(activeLecture.ask)}">问导师</button>
+      <button type="button" data-lecture-nav="next" ${activeLectureIdx === lectureDeck.length - 1 ? "disabled" : ""}>下一段</button>
+    </div>
+  `;
   el("textbookTitle").textContent = textbook.title;
   el("textbookSections").innerHTML = textbook.sections
     .map(
@@ -2891,7 +2990,7 @@ function renderAll() {
   renderTeach();
   renderPractice();
   renderNotes();
-  renderRead();
+  if (!state.manualSearchActive || state.activeTab !== "read") renderRead();
   renderQuickPrompts();
 }
 
@@ -3122,6 +3221,21 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
+  const lectureStepBtn = event.target.closest("[data-lecture-step]");
+  if (lectureStepBtn) {
+    state.lectureStep = Number(lectureStepBtn.dataset.lectureStep);
+    localStorage.setItem("llmRoadLectureStep", String(state.lectureStep));
+    renderTeach();
+    return;
+  }
+  const lectureNavBtn = event.target.closest("[data-lecture-nav]");
+  if (lectureNavBtn) {
+    const delta = lectureNavBtn.dataset.lectureNav === "next" ? 1 : -1;
+    state.lectureStep = Math.max(0, Math.min(5, state.lectureStep + delta));
+    localStorage.setItem("llmRoadLectureStep", String(state.lectureStep));
+    renderTeach();
+    return;
+  }
   const lensBtn = event.target.closest("[data-lens]");
   if (lensBtn) {
     state.activeLens = lensBtn.dataset.lens;
@@ -3138,7 +3252,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-standard-search], [data-map-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-deck-search], [data-textbook-search], [data-standard-search], [data-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -3151,6 +3265,7 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.courseMapSearch ||
       searchBtn.dataset.atlasSearch ||
       searchBtn.dataset.briefingSearch ||
+      searchBtn.dataset.deckSearch ||
       searchBtn.dataset.textbookSearch ||
       searchBtn.dataset.standardSearch ||
       searchBtn.dataset.mapSearch ||
@@ -3160,7 +3275,7 @@ el("teachTab").addEventListener("click", (event) => {
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-standard-ask], [data-map-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-deck-ask], [data-standard-ask], [data-map-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
@@ -3171,6 +3286,7 @@ el("teachTab").addEventListener("click", (event) => {
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||
       askBtn.dataset.briefingAsk ||
+      askBtn.dataset.deckAsk ||
       askBtn.dataset.standardAsk ||
       askBtn.dataset.mapAsk ||
       askBtn.dataset.sessionAsk;

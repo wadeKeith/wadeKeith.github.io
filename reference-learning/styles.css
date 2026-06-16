@@ -518,6 +518,152 @@ p {
   padding: 13px;
 }
 
+.lecture-player {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  scroll-margin-top: 118px;
+}
+
+.lecture-player-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.38fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.lecture-step-list {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.lecture-step-btn {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  min-height: 62px;
+  padding: 10px;
+  border: 1px solid #d8e1dc;
+  background: #fbfcfb;
+  color: var(--ink);
+  text-align: left;
+}
+
+.lecture-step-btn.active {
+  border-color: var(--green);
+  background: #ecf7f2;
+}
+
+.lecture-step-btn span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.lecture-step-btn.active span {
+  background: var(--green);
+  color: #fff;
+}
+
+.lecture-step-btn strong,
+.lecture-step-btn small {
+  grid-column: 2;
+}
+
+.lecture-step-btn small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.lecture-slide {
+  display: grid;
+  gap: 14px;
+  min-height: 420px;
+  padding: 20px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f9fcfb 0%, #fff 68%);
+}
+
+.lecture-slide-head {
+  display: grid;
+  gap: 10px;
+}
+
+.lecture-slide-head span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.lecture-slide-head h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.12;
+}
+
+.lecture-slide-head p {
+  max-width: 880px;
+  margin: 0;
+  color: #35413e;
+  font-size: 17px;
+  line-height: 1.78;
+}
+
+.lecture-board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lecture-board span {
+  padding: 8px 10px;
+  border: 1px solid #cbd8d3;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--green);
+  font-weight: 850;
+}
+
+.lecture-checkpoint {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid #cbd8d3;
+  border-radius: 8px;
+  background: var(--surface-cool);
+}
+
+.lecture-checkpoint strong {
+  color: var(--blue);
+}
+
+.lecture-checkpoint p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.lecture-slide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
 .textbook-chapter {
   display: grid;
   gap: 14px;
@@ -3122,6 +3268,7 @@ p {
   .lesson-compass,
   .lesson-flow-wrap,
   .source-spine,
+  .lecture-player-layout,
   .textbook-layout,
   .textbook-section,
   .textbook-matrix,
@@ -3232,12 +3379,14 @@ p {
 
   .lesson-hero,
   .lesson-dashboard,
+  .lecture-player,
   .textbook-chapter,
   .course-standard-lab,
   .concept-map-lab,
   .classroom-quiz-panel,
   .textbook-main,
   .textbook-side,
+  .lecture-slide,
   .reader-main,
   .reader-side,
   .lecture-card,
