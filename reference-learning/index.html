@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616y" />
+    <link rel="stylesheet" href="./styles.css?v=20260616z" />
   </head>
   <body>
     <header class="topbar">
@@ -63,6 +63,30 @@
         </nav>
 
         <section id="teachTab" class="tab-panel active">
+          <section class="course-reader">
+            <article class="reader-main">
+              <div class="section-title">
+                <p class="eyebrow">教授主讲义</p>
+                <h3 id="readerTitle">先读完整讲义，再用导师追问</h3>
+              </div>
+              <div id="readerParagraphs" class="reader-paragraphs"></div>
+              <div id="readerBlackboard" class="reader-blackboard"></div>
+              <div class="reader-actions">
+                <button id="readerSearchBtn" class="secondary" type="button">检索本章证据</button>
+                <button id="readerAskBtn" type="button">让导师按这篇讲义答疑</button>
+              </div>
+            </article>
+            <aside class="reader-side">
+              <div>
+                <p class="eyebrow">术语黑板</p>
+                <div id="readerGlossary" class="reader-glossary"></div>
+              </div>
+              <div>
+                <p class="eyebrow">课堂检查点</p>
+                <div id="readerCheckpoints" class="reader-checkpoints"></div>
+              </div>
+            </aside>
+          </section>
           <section class="global-course-map">
             <div class="section-title">
               <p class="eyebrow">世界级课程地图</p>
@@ -327,6 +351,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616y"></script>
+    <script src="./app.js?v=20260616z"></script>
   </body>
 </html>

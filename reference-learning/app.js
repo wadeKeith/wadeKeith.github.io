@@ -794,7 +794,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616y")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616z")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -841,6 +841,150 @@ function saveMastery() {
 
 function savePinnedSources() {
   localStorage.setItem("llmRoadPinnedSources", JSON.stringify(state.pinnedSources));
+}
+
+const BLACKBOARD_NOTES = {
+  orientation: {
+    title: "学习系统 = 路径 + 证据 + 产出 + 复盘",
+    formula: "learning_gain = route_quality x evidence_quality x practice_feedback",
+    interpretation: "只收藏资料不会形成能力；每章都要把证据转成可检查作品，再用复盘修正下一章的阅读策略。",
+  },
+  math_pytorch_nlp: {
+    title: "语言建模的最小闭环",
+    formula: "tokens -> embeddings -> logits -> cross_entropy(logits, next_token)",
+    interpretation: "先能追踪每个张量的形状，再谈模型规模；shape 错误通常比概念错误更早暴露理解漏洞。",
+  },
+  transformer_gpt_llama: {
+    title: "Decoder-only Transformer 数据流",
+    formula: "p(x_t | x_<t) = softmax(W_o * Block_L(...Block_1(E[x] + pos)))",
+    interpretation: "mask 决定可见信息，attention 决定信息混合，MLP 决定非线性变换，残差和归一化决定训练稳定性。",
+  },
+  llm_training_scaling_data: {
+    title: "预训练预算方程",
+    formula: "quality ~= f(model_params, tokens, data_mix, compute, eval_feedback)",
+    interpretation: "Scaling law 给预算分配方向，数据质量和评测闭环决定这些预算是否真正转化为能力。",
+  },
+  sft_peft_lora: {
+    title: "后训练的更新范围",
+    formula: "W' = W + delta_W, delta_W_lora = B * A, rank(A,B) << rank(W)",
+    interpretation: "LoRA 的核心不是神秘技巧，而是用低秩增量改变任务行为，同时保留大部分预训练权重。",
+  },
+  inference_systems: {
+    title: "推理延迟拆解",
+    formula: "latency = prefill_compute + decode_memory_io + scheduling_overhead",
+    interpretation: "FlashAttention、KV cache、batching 和并行策略都在改变这个式子里的某一项。",
+  },
+  alignment_rlhf_eval: {
+    title: "偏好优化的对照视角",
+    formula: "policy_update = improve(preferred > rejected) while staying near reference",
+    interpretation: "对齐不是让模型更会背答案，而是在参考模型附近改变取舍、语气、安全边界和拒答行为。",
+  },
+  rag_agents: {
+    title: "RAG/Agent 的可审计链路",
+    formula: "question -> retrieve -> rerank -> compress -> answer -> cite -> verify",
+    interpretation: "每一步都可能失败；优秀系统要能指出证据从哪里来、为什么被选中、如何被回答使用。",
+  },
+  vlm_multimodal: {
+    title: "视觉语言对齐",
+    formula: "image_patches -> visual_encoder -> projector -> LLM_context -> text_or_action",
+    interpretation: "VLM 的难点在接口：视觉特征如何变成语言模型能推理、能引用、能执行的上下文。",
+  },
+  streaming_video_vlm: {
+    title: "在线视频状态更新",
+    formula: "state_t = update(memory_t-1, selected_frames_t, query)",
+    interpretation: "流式理解不是把所有帧塞进上下文，而是持续选择、压缩和更新对任务有用的状态。",
+  },
+  vla_robotics: {
+    title: "从理解到行动",
+    formula: "policy(action_t | image_t, language, history) -> environment_t+1",
+    interpretation: "VLA 的输出会改变世界，所以评测必须看闭环成功率、失败轨迹和安全约束。",
+  },
+  robot_sim_data: {
+    title: "可复现实验协议",
+    formula: "result = policy x task_distribution x simulator_version x seed x metric",
+    interpretation: "机器人结果不能脱离环境版本、任务分布和评测脚本，否则同一个成功率没有比较意义。",
+  },
+  world_models: {
+    title: "世界模型与想象 rollout",
+    formula: "latent_state -> predict(next_state, reward) -> plan(action)",
+    interpretation: "世界模型的价值在于让智能体在内部模拟后果，但模型误差会沿规划链路累积。",
+  },
+  driving_world_models: {
+    title: "驾驶闭环评测",
+    formula: "action_t changes scenario_t+1; open_loop_score != closed_loop_safety",
+    interpretation: "驾驶系统必须让动作影响未来，才能暴露恢复能力、长尾风险和连锁错误。",
+  },
+  diffusion_video_3d: {
+    title: "生成模型统一视角",
+    formula: "noise/data path + score_or_velocity_field + sampler -> generated_sample",
+    interpretation: "扩散、flow 和 3D 表示都在建模从潜变量到可观测世界的路径，只是参数化和约束不同。",
+  },
+  omni_audio_capstone: {
+    title: "Capstone 研究设计",
+    formula: "claim = task + data + baseline + metric + ablation + risk",
+    interpretation: "一个前沿题目必须能被证伪：没有 baseline、指标和消融，就只是方向描述。",
+  },
+};
+
+const GLOSSARY_NOTES = {
+  "KV cache": "推理时缓存历史 token 的 Key/Value，避免每步重复计算过去上下文。",
+  FlashAttention: "IO-aware exact attention，通过分块和在线 softmax 减少 HBM 读写。",
+  RoPE: "旋转位置编码，把相对位置信息注入 Q/K 的相似度计算。",
+  RMSNorm: "只按均方根归一化激活，常用于 LLaMA 系结构以提升稳定性和效率。",
+  SwiGLU: "门控 MLP 变体，用更强非线性提高 Transformer FFN 表达能力。",
+  MoE: "稀疏专家模型，每个 token 只激活部分专家以提升容量效率。",
+  MLA: "Multi-head Latent Attention，用低维潜表示压缩 KV 以改善推理成本。",
+  SFT: "监督微调，用指令-回答样本塑造基本任务格式和响应习惯。",
+  LoRA: "低秩适配方法，只训练低秩增量参数来改变模型行为。",
+  QLoRA: "在量化基座上训练 LoRA adapter，以更低显存完成微调。",
+  RLHF: "用人类偏好训练 reward/policy，让模型输出更符合偏好和安全要求。",
+  DPO: "直接偏好优化，不显式训练 reward model，直接用偏好对更新策略。",
+  RAG: "检索增强生成，把外部证据放入上下文并要求回答引用来源。",
+  ReAct: "让模型交替进行推理、行动和观察，适合工具调用和任务执行。",
+  Agent: "具备状态、工具、计划和反馈循环的大模型系统。",
+  ViT: "把图像分成 patch token 后用 Transformer 编码视觉信息。",
+  CLIP: "用图文对比学习把图像和文本投到共同语义空间。",
+  LLaVA: "典型视觉语言助手路线，用视觉编码器和投影层连接 LLM。",
+  OpenVLA: "视觉-语言-动作模型路线，把多模态理解接到机器人动作策略。",
+  Dreamer: "在潜空间学习世界模型并通过想象 rollout 做强化学习。",
+  MuZero: "学习可用于规划的动态模型，不需要显式还原完整环境状态。",
+  NeRF: "用神经场表示 3D 场景，可从新视角渲染图像。",
+  "3D Gaussian Splatting": "用 3D 高斯显式表示场景，支持高效新视角渲染。",
+  "Flow matching": "学习把简单分布连续变换到数据分布的速度场。",
+};
+
+function glossaryText(concept) {
+  return GLOSSARY_NOTES[concept] || `${concept} 是本章的核心抓手；学习时要说清它的输入、输出、约束、指标和失败模式。`;
+}
+
+function lectureManuscriptFor(module, bp, pack) {
+  const anchors = COURSE_ANCHORS[module.id] || COURSE_ANCHORS.orientation;
+  const blackboard = BLACKBOARD_NOTES[module.id] || BLACKBOARD_NOTES.orientation;
+  const conceptLine = bp.concepts.slice(0, 5).join("、");
+  const firstRoute = bp.route[0] || ["先看问题", bp.thesis];
+  const secondRoute = bp.route[1] || ["再看机制", pack.mechanisms[0]];
+  const paragraphs = [
+    `本章先抓一个主问题：${bp.thesis} 你不要从模型名开始学，而要先问：输入是什么、内部状态如何变化、优化目标或系统约束是什么、最后用什么证据判断它真的有效。`,
+    `从机制上看，${pack.mechanisms[0]} 这句话应当被拆成可画在黑板上的链路：${firstRoute[0]}，然后${secondRoute[0]}。如果你只能复述术语，却画不出链路，说明还停留在资料浏览层。`,
+    `从世界级课程的学习方式看，${anchors[0]} ${anchors[1] || ""} 本页把它们压缩成一套本地路线：先读讲义建立框架，再用证据精读验证细节，最后用作业和口试逼近真实掌握。`,
+    `本章最应该反复使用的概念是 ${conceptLine}。每个概念都要能回答四个问题：它解决什么瓶颈、用什么假设换取收益、在哪些数据或系统条件下会失败、如何通过实验或评测发现失败。`,
+    `学习动作要非常具体：${pack.readings[0]} 然后完成本章产出物「${module.project}」。完成以后再问导师，不是让导师替你学习，而是让它检查你的证据链、推导漏洞和实验设计。`,
+  ];
+  const checkpoints = [
+    ["一句话", `我能否不用术语讲清：${bp.thesis}`],
+    ["黑板图", `我能否画出：${blackboard.formula}`],
+    ["反例", bp.misconceptions[0] || "我能否指出一种会让本章方法失败的场景？"],
+    ["作品", `我是否完成了可检查产出：${module.project}`],
+  ];
+  return {
+    title: `${module.stage}｜${module.title}：一节可独立阅读的主讲义`,
+    paragraphs,
+    blackboard,
+    glossary: bp.concepts.slice(0, 6).map((concept) => [concept, glossaryText(concept)]),
+    checkpoints,
+    searchQuery: module.queries.slice(0, 4).join(" ") || module.title,
+    askPrompt: `请作为“大模型学习之路”的课程教授，围绕本章主讲义答疑。\n章节：${module.title}\n核心论断：${bp.thesis}\n黑板式：${blackboard.formula}\n我的问题是：`,
+  };
 }
 
 function blueprintFor(module) {
@@ -1144,6 +1288,7 @@ function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
+  const manuscript = lectureManuscriptFor(state.active, bp, pack);
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
@@ -1152,6 +1297,37 @@ function renderTeach() {
   const prev = activeIndex > 0 ? state.modules[activeIndex - 1] : null;
   const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
   renderGlobalCourseMap();
+  el("readerTitle").textContent = manuscript.title;
+  el("readerParagraphs").innerHTML = manuscript.paragraphs
+    .map((item, idx) => `<p><span>${String(idx + 1).padStart(2, "0")}</span>${escapeHtml(item)}</p>`)
+    .join("");
+  el("readerBlackboard").innerHTML = `
+    <strong>${escapeHtml(manuscript.blackboard.title)}</strong>
+    <code>${escapeHtml(manuscript.blackboard.formula)}</code>
+    <p>${escapeHtml(manuscript.blackboard.interpretation)}</p>
+  `;
+  el("readerGlossary").innerHTML = manuscript.glossary
+    .map(
+      ([term, body]) => `
+        <button class="glossary-item" type="button" data-concept="${escapeHtml(term)}">
+          <strong>${escapeHtml(term)}</strong>
+          <span>${escapeHtml(body)}</span>
+        </button>
+      `
+    )
+    .join("");
+  el("readerCheckpoints").innerHTML = manuscript.checkpoints
+    .map(
+      ([label, body]) => `
+        <article>
+          <strong>${escapeHtml(label)}</strong>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("readerSearchBtn").dataset.readerSearch = manuscript.searchQuery;
+  el("readerAskBtn").dataset.readerAsk = manuscript.askPrompt;
   el("trackTitle").textContent = track.title;
   el("trackSummary").textContent = track.summary;
   el("trackModules").innerHTML = track.modules
@@ -1960,21 +2136,28 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
+      searchBtn.dataset.readerSearch ||
       searchBtn.dataset.lensSearch ||
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
       searchBtn.dataset.courseMapSearch ||
-      searchBtn.dataset.sessionSearch;
+      searchBtn.dataset.sessionSearch ||
+      searchBtn.dataset.concept;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
   if (askBtn) {
-    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk || askBtn.dataset.seminarAsk || askBtn.dataset.sessionAsk;
+    const prompt =
+      askBtn.dataset.readerAsk ||
+      askBtn.dataset.lensAsk ||
+      askBtn.dataset.ladderAsk ||
+      askBtn.dataset.seminarAsk ||
+      askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }
 });
