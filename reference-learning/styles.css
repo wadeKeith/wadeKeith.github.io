@@ -387,6 +387,98 @@ p {
   gap: 16px;
 }
 
+.roadmap-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 12px;
+}
+
+.roadmap-main,
+.bridge-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.roadmap-main h3 {
+  margin: 0 0 8px;
+  font-size: 23px;
+  line-height: 1.25;
+}
+
+.roadmap-main p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.track-modules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.track-module {
+  min-height: 36px;
+  color: var(--ink);
+  background: #fff;
+  border-color: #cad7d2;
+  line-height: 1.25;
+}
+
+.track-module span {
+  margin-right: 6px;
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.track-module.active {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.track-module.active span {
+  color: #fff;
+}
+
+.track-module.done {
+  border-color: rgba(38, 112, 95, 0.55);
+}
+
+.bridge-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background: var(--paper);
+}
+
+.bridge-row {
+  display: grid;
+  gap: 5px;
+  padding: 10px 0;
+  border-top: 1px solid #e1e5df;
+}
+
+.bridge-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.bridge-row span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.bridge-row strong {
+  color: #3b4643;
+  line-height: 1.55;
+}
+
 .syllabus-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1057,6 +1149,7 @@ p {
 
   .app-grid,
   .syllabus-grid,
+  .roadmap-panel,
   .lecture-notes-grid,
   .lens-card,
   .ladder-step,

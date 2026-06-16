@@ -478,6 +478,44 @@ const COURSE_ANCHORS = {
   omni_audio_capstone: ["Omni 模型路线：音频、语音、视觉、文本统一接口。", "Capstone 研究训练：问题、数据、baseline、评测。", "系统整合：检索、模型、工具和多模态输入协作。"],
 };
 
+const COURSE_TRACKS = [
+  {
+    id: "foundation",
+    title: "Foundation：研究学习系统与基础能力",
+    summary: "建立资料库地图、数学/PyTorch/NLP 基础，以及手写 Transformer 的最低可运行能力。",
+    modules: ["orientation", "math_pytorch_nlp", "transformer_gpt_llama"],
+    milestone: "能从零解释 decoder-only LLM 的数据流，并用最小代码验证。",
+  },
+  {
+    id: "llm_core",
+    title: "Core LLM：训练、后训练、推理系统与对齐",
+    summary: "从预训练数据和 scaling 进入 SFT/LoRA、推理服务、RLHF/DPO 与评测安全。",
+    modules: ["llm_training_scaling_data", "sft_peft_lora", "inference_systems", "alignment_rlhf_eval"],
+    milestone: "能设计一个小模型训练/后训练/部署/评测的完整实验计划。",
+  },
+  {
+    id: "agents",
+    title: "Systems & Agents：RAG、工具调用与代码智能体",
+    summary: "把模型从闭卷生成扩展为能检索、引用、调用工具和完成任务的可审计系统。",
+    modules: ["rag_agents"],
+    milestone: "能解释一个生产级 RAG/Agent 系统的召回、重排、引用、工具和失败恢复。",
+  },
+  {
+    id: "embodied",
+    title: "Multimodal & Embodied：VLM、视频、VLA 与机器人数据",
+    summary: "把语言模型扩展到图像、视频、动作策略、仿真和机器人可复现实验。",
+    modules: ["vlm_multimodal", "streaming_video_vlm", "vla_robotics", "robot_sim_data"],
+    milestone: "能把视觉语言理解转成机器人任务接口、数据方案和成功率评测。",
+  },
+  {
+    id: "world_models",
+    title: "World Models & Generative Systems：世界模型、驾驶、扩散、3D 与全模态",
+    summary: "学习可预测世界、可生成场景、可评测规划和全模态 capstone 研究设计。",
+    modules: ["world_models", "driving_world_models", "diffusion_video_3d", "omni_audio_capstone"],
+    milestone: "能提出一个多模态或世界模型研究计划，并定义 baseline、指标和风险。",
+  },
+];
+
 const TEACHING_LENSES = [
   {
     id: "intuition",
@@ -649,6 +687,14 @@ function blueprintFor(module) {
   return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
 }
 
+function trackFor(moduleId) {
+  return COURSE_TRACKS.find((track) => track.modules.includes(moduleId)) || COURSE_TRACKS[0];
+}
+
+function moduleById(id) {
+  return state.modules.find((item) => item.id === id) || FALLBACK_MODULES.find((item) => item.id === id);
+}
+
 function masteryFor(module, bp) {
   const concept = (bp.concepts && bp.concepts[0]) || module.title;
   return {
@@ -754,6 +800,43 @@ function renderTeach() {
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
+  const track = trackFor(state.active.id);
+  const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
+  const prev = activeIndex > 0 ? state.modules[activeIndex - 1] : null;
+  const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
+  el("trackTitle").textContent = track.title;
+  el("trackSummary").textContent = track.summary;
+  el("trackModules").innerHTML = track.modules
+    .map((id) => {
+      const item = moduleById(id);
+      if (!item) return "";
+      const active = item.id === state.active.id ? " active" : "";
+      const done = state.done.has(item.id) ? " done" : "";
+      return `<button class="track-module${active}${done}" type="button" data-track-module="${escapeHtml(item.id)}"><span>${escapeHtml(item.stage)}</span>${escapeHtml(item.title)}</button>`;
+    })
+    .join("");
+  el("moduleBridge").innerHTML = `
+    <div class="bridge-row">
+      <span>前置</span>
+      ${
+        prev
+          ? `<button class="text-button" type="button" data-track-module="${escapeHtml(prev.id)}">${escapeHtml(prev.stage)} ${escapeHtml(prev.title)}</button>`
+          : "<strong>从这里开始</strong>"
+      }
+    </div>
+    <div class="bridge-row">
+      <span>本章里程碑</span>
+      <strong>${escapeHtml(track.milestone)}</strong>
+    </div>
+    <div class="bridge-row">
+      <span>后续</span>
+      ${
+        next
+          ? `<button class="text-button" type="button" data-track-module="${escapeHtml(next.id)}">${escapeHtml(next.stage)} ${escapeHtml(next.title)}</button>`
+          : "<strong>进入 Capstone 复盘</strong>"
+      }
+    </div>
+  `;
   el("outcomeList").innerHTML = (state.active.outcomes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("courseAnchorList").innerHTML = (COURSE_ANCHORS[state.active.id] || COURSE_ANCHORS.orientation)
     .map((item) => `<li>${escapeHtml(item)}</li>`)
@@ -1123,6 +1206,11 @@ el("conceptMap").addEventListener("click", (event) => {
 });
 
 el("teachTab").addEventListener("click", (event) => {
+  const trackBtn = event.target.closest("[data-track-module]");
+  if (trackBtn) {
+    selectModule(trackBtn.dataset.trackModule);
+    return;
+  }
   const lensBtn = event.target.closest("[data-lens]");
   if (lensBtn) {
     state.activeLens = lensBtn.dataset.lens;
