@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ak" />
+    <link rel="stylesheet" href="./styles.css?v=20260616al" />
   </head>
   <body>
     <header class="topbar">
@@ -126,6 +126,26 @@
               </aside>
             </div>
             <div id="standardAssignment" class="standard-assignment"></div>
+          </section>
+          <section class="concept-map-lab">
+            <div class="section-title">
+              <p class="eyebrow">概念图谱与机制路径</p>
+              <h3>先看懂本章知识怎么连起来，再去读证据和问导师</h3>
+            </div>
+            <div class="concept-map-layout">
+              <div id="conceptMapNodes" class="concept-map-nodes"></div>
+              <aside class="pathway-panel">
+                <p class="eyebrow">从概念到作品</p>
+                <div id="conceptPathway" class="concept-pathway"></div>
+              </aside>
+            </div>
+            <div class="concept-debug-row">
+              <div>
+                <p class="eyebrow">黑板压缩</p>
+                <h3 id="conceptMapFormula">选择模块后显示机制式。</h3>
+              </div>
+              <div id="conceptDebugQuestions" class="concept-debug-questions"></div>
+            </div>
           </section>
           <section class="course-reader">
             <article class="reader-main">
@@ -491,6 +511,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ak"></script>
+    <script src="./app.js?v=20260616al"></script>
   </body>
 </html>

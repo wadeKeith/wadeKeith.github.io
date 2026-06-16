@@ -791,6 +791,156 @@ p {
   line-height: 1.35;
 }
 
+.concept-map-lab {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  scroll-margin-top: 118px;
+}
+
+.concept-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 14px;
+}
+
+.concept-map-nodes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.concept-node,
+.pathway-panel,
+.concept-debug-row {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.concept-node {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 11px;
+  align-content: start;
+  min-height: 192px;
+  padding: 14px;
+}
+
+.concept-node-index {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.concept-node span,
+.pathway-panel .eyebrow {
+  color: var(--amber);
+}
+
+.concept-node h4 {
+  margin: 0 0 7px;
+  color: var(--green);
+  font-size: 19px;
+  line-height: 1.28;
+}
+
+.concept-node p,
+.concept-pathway p,
+.concept-debug-row h3 {
+  margin: 0;
+  color: #3d4845;
+  line-height: 1.66;
+}
+
+.concept-node-actions {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pathway-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 16px;
+  background: var(--paper);
+}
+
+.concept-pathway {
+  display: grid;
+  gap: 9px;
+}
+
+.concept-pathway article {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 11px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.concept-pathway span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--green);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.concept-pathway strong {
+  color: var(--ink);
+}
+
+.concept-debug-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 14px;
+  padding: 16px;
+  background: #f7fbfa;
+}
+
+.concept-debug-row h3 {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.concept-debug-questions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.concept-debug-questions button {
+  min-height: 54px;
+  border: 1px solid #cbd8d3;
+  background: #fff;
+  color: #34413e;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: left;
+}
+
 .course-reader {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
@@ -2849,6 +2999,12 @@ p {
   .standard-layout,
   .standard-benchmarks,
   .standard-assignment,
+  .concept-map-layout,
+  .concept-map-nodes,
+  .concept-node,
+  .concept-pathway article,
+  .concept-debug-row,
+  .concept-debug-questions,
   .course-reader,
   .global-course-grid,
   .course-atlas-grid,
@@ -2944,6 +3100,7 @@ p {
   .lesson-dashboard,
   .textbook-chapter,
   .course-standard-lab,
+  .concept-map-lab,
   .textbook-main,
   .textbook-side,
   .reader-main,
@@ -2967,6 +3124,10 @@ p {
 
   .diagnostic-tabs {
     grid-template-columns: 1fr;
+  }
+
+  .concept-node-actions {
+    grid-column: 1;
   }
 
   .brief-actions {

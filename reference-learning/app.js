@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ak";
+const APP_VERSION = "20260616al";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -1464,6 +1464,83 @@ function courseStandardFor(module, bp, pack, manuscript, worked, brief) {
   };
 }
 
+function conceptMapFor(module, bp, pack, manuscript, worked, brief) {
+  const concepts = bp.concepts || module.queries || [];
+  const queries = module.queries || [];
+  const main = concepts[0] || module.title;
+  const second = concepts[1] || main;
+  const third = concepts[2] || second;
+  const fourth = concepts[3] || third;
+  const evidenceQuery = queries.slice(0, 4).join(" ") || module.title;
+  const mechanism = pack.mechanisms[0] || bp.frame;
+  return {
+    formula: manuscript.blackboard.formula,
+    nodes: [
+      {
+        tone: "foundation",
+        label: "先修对象",
+        title: main,
+        body: `先把 ${main} 当作本章的研究对象：它输入什么、输出什么、为什么会影响整条大模型系统链路。`,
+        query: `${main} ${queries[0] || ""}`.trim(),
+        ask: `请用先修课方式解释「${main}」：定义、输入输出、和本章为什么相关。`,
+      },
+      {
+        tone: "bridge",
+        label: "连接概念",
+        title: second,
+        body: `${second} 是连接概念和机制的桥。学习时不要只背定义，要能说出它如何改变状态、表示、数据或动作。`,
+        query: `${main} ${second}`,
+        ask: `请解释「${main}」和「${second}」之间的关系，并给一个本章例子。`,
+      },
+      {
+        tone: "mechanism",
+        label: "机制链路",
+        title: manuscript.blackboard.title,
+        body: `${mechanism} 把它压成黑板式：${manuscript.blackboard.formula}`,
+        query: manuscript.blackboard.formula,
+        ask: `请按黑板式逐项解释：${manuscript.blackboard.formula}`,
+      },
+      {
+        tone: "evidence",
+        label: "证据入口",
+        title: third,
+        body: `读资料时先判断证据类型：${third} 支持的是概念、机制、实验，还是局限？先定位证据，再让导师解释。`,
+        query: evidenceQuery,
+        ask: `请把「${module.title}」的本地证据分成概念、机制、实验、局限四类，并告诉我怎么读。`,
+      },
+      {
+        tone: "evaluation",
+        label: "评测边界",
+        title: fourth,
+        body: `如果不能说清指标、baseline 和失败样例，${fourth} 就只是术语。顶级课程会要求你证明结论站得住。`,
+        query: `${evidenceQuery} benchmark baseline ablation`,
+        ask: `请为「${module.title}」设计 baseline、指标、失败样例和 ablation。`,
+      },
+      {
+        tone: "artifact",
+        label: "可交付作品",
+        title: module.project,
+        body: `最终把概念变成作品：${module.project} 这一步决定你是在学习，还是只是在浏览资料。`,
+        query: worked.searchQuery || `${evidenceQuery} implementation`,
+        ask: `请把这个作品拆成可以今天开始的任务：${module.project}`,
+      },
+    ],
+    pathway: [
+      ["01", "对象", `定义 ${main} 的输入、输出和边界。`, `${main} definition input output`],
+      ["02", "状态", `说明 ${second} 如何改变模型、数据、环境或评测状态。`, `${main} ${second}`],
+      ["03", "机制", `把机制压缩成：${manuscript.blackboard.formula}`, manuscript.blackboard.formula],
+      ["04", "证据", `检索并保存两条来源，判断它们支持哪种结论。`, evidenceQuery],
+      ["05", "作品", `完成一个可检查版本：${module.project}`, worked.searchQuery || module.project],
+    ],
+    debugQuestions: [
+      [`我能不能不用模型，用自己的话解释 ${main}？`, main],
+      [`如果去掉 ${second}，系统会在哪个指标上退化？`, `${second} ablation benchmark`],
+      [`本章最容易误判的结论是什么？`, bp.misconceptions[0] || `${module.title} failure mode`],
+      [`哪条证据能支持作品：${module.project}？`, worked.searchQuery || evidenceQuery],
+    ],
+  };
+}
+
 function trackFor(moduleId) {
   return COURSE_TRACKS.find((track) => track.modules.includes(moduleId)) || COURSE_TRACKS[0];
 }
@@ -1728,6 +1805,7 @@ function renderTeach() {
   const dashboard = lessonDashboardFor(state.active, bp, pack, manuscript, seminar, worked, brief);
   const textbook = textbookFor(state.active, bp, pack, manuscript, worked, brief);
   const standard = courseStandardFor(state.active, bp, pack, manuscript, worked, brief);
+  const conceptMap = conceptMapFor(state.active, bp, pack, manuscript, worked, brief);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -1856,6 +1934,46 @@ function renderTeach() {
               : ""
           }
         </article>
+      `
+    )
+    .join("");
+  el("conceptMapNodes").innerHTML = conceptMap.nodes
+    .map(
+      (item, idx) => `
+        <article class="concept-node node-${escapeHtml(item.tone)}">
+          <div class="concept-node-index">${String(idx + 1).padStart(2, "0")}</div>
+          <div>
+            <span>${escapeHtml(item.label)}</span>
+            <h4>${escapeHtml(item.title)}</h4>
+            <p>${escapeHtml(item.body)}</p>
+          </div>
+          <div class="concept-node-actions">
+            <button class="text-button" type="button" data-map-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="text-button" type="button" data-map-ask="${escapeHtml(item.ask)}">问导师</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("conceptPathway").innerHTML = conceptMap.pathway
+    .map(
+      ([step, title, body, query]) => `
+        <article>
+          <span>${escapeHtml(step)}</span>
+          <div>
+            <strong>${escapeHtml(title)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+          <button class="text-button" type="button" data-map-search="${escapeHtml(query)}">证据</button>
+        </article>
+      `
+    )
+    .join("");
+  el("conceptMapFormula").textContent = conceptMap.formula;
+  el("conceptDebugQuestions").innerHTML = conceptMap.debugQuestions
+    .map(
+      ([question, query]) => `
+        <button type="button" data-map-search="${escapeHtml(query)}">${escapeHtml(question)}</button>
       `
     )
     .join("");
@@ -2870,7 +2988,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-standard-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-standard-search], [data-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -2885,13 +3003,14 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.briefingSearch ||
       searchBtn.dataset.textbookSearch ||
       searchBtn.dataset.standardSearch ||
+      searchBtn.dataset.mapSearch ||
       searchBtn.dataset.sessionSearch ||
       searchBtn.dataset.concept;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-standard-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-standard-ask], [data-map-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
@@ -2903,6 +3022,7 @@ el("teachTab").addEventListener("click", (event) => {
       askBtn.dataset.seminarAsk ||
       askBtn.dataset.briefingAsk ||
       askBtn.dataset.standardAsk ||
+      askBtn.dataset.mapAsk ||
       askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }
