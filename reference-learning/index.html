@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616o" />
+    <link rel="stylesheet" href="./styles.css?v=20260616p" />
   </head>
   <body>
     <header class="topbar">
@@ -164,6 +164,29 @@
           </div>
           <div id="queryChips" class="query-chips"></div>
           <div id="retrievalHint" class="retrieval-hint"></div>
+          <section class="evidence-workflow">
+            <div class="reading-protocol-card">
+              <div class="section-title">
+                <p class="eyebrow">精读流程</p>
+                <h3>把检索结果读成可复用证据</h3>
+              </div>
+              <div id="readingProtocol" class="reading-protocol"></div>
+            </div>
+            <aside class="source-basket">
+              <div class="source-basket-head">
+                <div>
+                  <p class="eyebrow">证据篮</p>
+                  <h3 id="sourceBasketTitle">0 条已保存</h3>
+                </div>
+                <button id="clearPinnedSources" class="text-button" type="button">清空</button>
+              </div>
+              <div id="pinnedSources" class="pinned-sources"></div>
+              <div class="basket-actions">
+                <button id="sendSourcesToNotes" class="secondary" type="button">写入笔记</button>
+                <button id="askSourcesBtn" type="button">检查证据链</button>
+              </div>
+            </aside>
+          </section>
           <div id="evidenceResults" class="evidence-grid"></div>
         </section>
 
@@ -248,6 +271,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616o"></script>
+    <script src="./app.js?v=20260616p"></script>
   </body>
 </html>

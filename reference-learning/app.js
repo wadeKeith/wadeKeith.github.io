@@ -29,6 +29,7 @@ const state = {
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
   mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
+  pinnedSources: JSON.parse(localStorage.getItem("llmRoadPinnedSources") || "{}"),
 };
 
 const FALLBACK_STATS = {
@@ -671,6 +672,10 @@ function saveMastery() {
   localStorage.setItem("llmRoadMastery", JSON.stringify(state.mastery));
 }
 
+function savePinnedSources() {
+  localStorage.setItem("llmRoadPinnedSources", JSON.stringify(state.pinnedSources));
+}
+
 function blueprintFor(module) {
   const fallback = {
     thesis: module.summary,
@@ -722,6 +727,15 @@ function masteryFor(module, bp) {
       },
     ],
   };
+}
+
+function readingProtocolFor(module, bp) {
+  return [
+    ["Claim", `先写出资料想回答的问题，并对照本章核心判断：${bp.thesis}`],
+    ["Evidence", "保存 2 条来源到证据篮，标注它们分别支持概念、机制、实验还是局限。"],
+    ["Mechanism", `把来源里的术语映射回本章概念：${bp.concepts.slice(0, 4).join(" / ")}。`],
+    ["Transfer", `把证据转成一个可检查动作：${module.project}`],
+  ];
 }
 
 function workbenchFor(module, bp) {
@@ -1006,7 +1020,10 @@ function renderEvidence(results, message = "") {
         <article class="evidence-card">
           <div class="source-meta">
             <span>Source ${idx + 1}</span>
-            <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
+            <div class="source-actions">
+              <button class="text-button pin-source" type="button" data-source="${idx}">存证据</button>
+              <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
+            </div>
           </div>
           <h4>${escapeHtml(item.title || "未命名资料")}</h4>
           <code>${escapeHtml(sourcePathLabel(item.path || ""))}</code>
@@ -1017,8 +1034,56 @@ function renderEvidence(results, message = "") {
     .join("");
 }
 
+function currentPinnedSources() {
+  if (!state.active) return [];
+  return state.pinnedSources[state.active.id] || [];
+}
+
+function renderPinnedSources() {
+  if (!state.active) return;
+  const pinned = currentPinnedSources();
+  el("sourceBasketTitle").textContent = `${pinned.length} 条已保存`;
+  if (!pinned.length) {
+    el("pinnedSources").innerHTML = `<div class="empty-state compact">从检索结果中点击“存证据”，把关键来源放到这里。</div>`;
+    return;
+  }
+  el("pinnedSources").innerHTML = pinned
+    .map(
+      (item, idx) => `
+        <article class="pinned-source">
+          <button class="text-button remove-pinned" type="button" data-pinned="${idx}">移除</button>
+          <strong>${escapeHtml(item.title || "未命名资料")}</strong>
+          <code>${escapeHtml(sourcePathLabel(item.path || ""))}</code>
+          <p>${escapeHtml(item.excerpt || "")}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function pinSource(idx) {
+  if (!state.active || !state.lesson || !state.lesson.evidence) return;
+  const source = state.lesson.evidence[idx];
+  if (!source) return;
+  const pinned = currentPinnedSources();
+  const key = `${source.title || ""}::${source.path || ""}`;
+  if (!pinned.some((item) => `${item.title || ""}::${item.path || ""}` === key)) {
+    state.pinnedSources[state.active.id] = [
+      ...pinned,
+      {
+        title: source.title || "",
+        path: source.path || "",
+        excerpt: source.excerpt || "",
+      },
+    ].slice(0, 8);
+    savePinnedSources();
+  }
+  renderPinnedSources();
+}
+
 function renderRead() {
   if (!state.active) return;
+  const bp = blueprintFor(state.active);
   el("searchInput").value = state.active.queries.slice(0, 3).join(" ");
   document.querySelectorAll("[data-search-mode]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.searchMode === state.searchMode);
@@ -1030,6 +1095,20 @@ function renderRead() {
   el("queryChips").innerHTML = state.active.queries
     .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
     .join("");
+  el("readingProtocol").innerHTML = readingProtocolFor(state.active, bp)
+    .map(
+      ([label, body], idx) => `
+        <article class="protocol-step">
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <div>
+            <strong>${escapeHtml(label)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  renderPinnedSources();
   if (!state.lesson) {
     renderEvidence([], "正在从本地数据库抽取本章必读证据...");
     return;
@@ -1245,7 +1324,55 @@ el("retrievalModeSwitch").addEventListener("click", (event) => {
 
 el("evidenceResults").addEventListener("click", (event) => {
   const btn = event.target.closest("[data-source]");
-  if (btn) askAboutSource(Number(btn.dataset.source));
+  if (!btn) return;
+  if (btn.classList.contains("pin-source")) pinSource(Number(btn.dataset.source));
+  else askAboutSource(Number(btn.dataset.source));
+});
+
+el("pinnedSources").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-pinned]");
+  if (!btn || !state.active) return;
+  const pinned = currentPinnedSources();
+  pinned.splice(Number(btn.dataset.pinned), 1);
+  state.pinnedSources[state.active.id] = pinned;
+  savePinnedSources();
+  renderPinnedSources();
+});
+
+el("clearPinnedSources").addEventListener("click", () => {
+  if (!state.active) return;
+  state.pinnedSources[state.active.id] = [];
+  savePinnedSources();
+  renderPinnedSources();
+});
+
+el("sendSourcesToNotes").addEventListener("click", () => {
+  if (!state.active) return;
+  const pinned = currentPinnedSources();
+  if (!pinned.length) return;
+  const existing = state.notes[state.active.id] || "";
+  const sourceNote = [
+    "",
+    `## 证据精读：${state.active.title}`,
+    ...pinned.map((item, idx) => `${idx + 1}. ${item.title}\n   路径：${sourcePathLabel(item.path)}\n   证据用途：\n   局限/疑问：`),
+  ].join("\n");
+  state.notes[state.active.id] = `${existing}${existing ? "\n" : ""}${sourceNote}`.trim();
+  saveNotes();
+  showTab("notes");
+  renderNotes();
+});
+
+el("askSourcesBtn").addEventListener("click", () => {
+  if (!state.active) return;
+  const pinned = currentPinnedSources();
+  if (!pinned.length) return;
+  const sources = pinned
+    .map((item, idx) => `[${idx + 1}] ${item.title}\n路径：${sourcePathLabel(item.path)}\n片段：${item.excerpt}`)
+    .join("\n\n");
+  setQuestion(
+    `请像论文课助教一样检查我为「${state.active.title}」保存的证据链是否足够。\n\n本章项目：${state.active.project}\n\n证据：\n${sources}\n\n请指出：1）每条证据支持什么 claim；2）缺少哪类证据；3）下一步应该检索什么关键词。`,
+    true
+  );
 });
 
 el("checkList").addEventListener("click", (event) => {

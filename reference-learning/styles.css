@@ -864,6 +864,13 @@ p {
   align-items: center;
 }
 
+.source-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
 .evidence-card h4 {
   margin: 0;
   font-size: 17px;
@@ -886,6 +893,129 @@ p {
   border-radius: 8px;
   background: #fff;
   color: var(--muted);
+}
+
+.empty-state.compact {
+  padding: 12px;
+  font-size: 13px;
+}
+
+.evidence-workflow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 12px;
+}
+
+.reading-protocol-card,
+.source-basket {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.reading-protocol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.protocol-step {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.protocol-step > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.protocol-step strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.protocol-step p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.source-basket {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background: var(--paper);
+}
+
+.source-basket-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.source-basket-head h3 {
+  margin: 0;
+}
+
+.pinned-sources {
+  display: grid;
+  gap: 10px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+.pinned-source {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.pinned-source .remove-pinned {
+  justify-self: end;
+}
+
+.pinned-source strong {
+  line-height: 1.35;
+}
+
+.pinned-source code {
+  color: var(--green);
+  font-size: 12px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.pinned-source p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.basket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .practice-layout,
@@ -1155,6 +1285,7 @@ p {
   .ladder-step,
   .workbench-grid,
   .mastery-panel,
+  .evidence-workflow,
   .teaching-layout,
   .practice-layout,
   .notes-layout,
@@ -1194,6 +1325,7 @@ p {
   .lecture-notes-grid,
   .lens-switch,
   .mode-switch,
+  .reading-protocol,
   .hero-metrics,
   .search-row,
   .check-card {
