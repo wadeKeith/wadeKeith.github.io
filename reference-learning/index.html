@@ -3,20 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>大模型 AI 交互教授</title>
+    <title>大模型学习之路</title>
     <script>
       if (location.protocol === "https:" && /^(www\.)?yincheng429\.cn$/.test(location.hostname)) {
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616g" />
+    <link rel="stylesheet" href="./styles.css?v=20260616h" />
   </head>
   <body>
     <header class="topbar">
       <div class="brand-block">
-        <span class="brand-kicker">Reference Knowledge Studio</span>
-        <h1>大模型人工智能交互教授</h1>
-        <p>基于本地 Reference 数据库的课程讲授、证据精读、练习与 RAG 问答。</p>
+        <span class="brand-kicker">大模型学习之路</span>
+        <h1>从 LLM 到具身智能的交互课程</h1>
+        <p>一套可独立学习的顶级大模型课程；本地知识库检索与 DeepSeek 导师只负责答疑和证据追踪。</p>
       </div>
       <div class="status-strip" aria-label="系统状态">
         <span id="dbStatus">知识库：检查中</span>
@@ -63,6 +63,23 @@
         </nav>
 
         <section id="teachTab" class="tab-panel active">
+          <div class="syllabus-grid">
+            <article class="syllabus-card">
+              <p class="eyebrow">学习目标</p>
+              <h3>本章结束时你应该能做到</h3>
+              <ul id="outcomeList"></ul>
+            </article>
+            <article class="syllabus-card">
+              <p class="eyebrow">名课参照</p>
+              <h3>对齐国际一线课程的学习视角</h3>
+              <ul id="courseAnchorList"></ul>
+            </article>
+            <article class="syllabus-card">
+              <p class="eyebrow">产出物</p>
+              <h3>把知识变成可检查的作品</h3>
+              <p id="deliverableText"></p>
+            </article>
+          </div>
           <div class="teaching-layout">
             <article class="lecture-card">
               <p class="eyebrow">Professor framing</p>
@@ -91,7 +108,7 @@
           <div class="reading-toolbar">
             <div>
               <p class="eyebrow">数据库证据</p>
-              <h3>每章自动从 Reference SQLite/FTS 中抽取必读材料</h3>
+              <h3>每章自动从本地知识库极速索引中抽取必读材料</h3>
             </div>
             <div class="search-row">
               <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
@@ -129,7 +146,6 @@
                 <button id="saveNote" type="button">保存笔记</button>
                 <button id="askFromNote" class="secondary" type="button">用笔记追问导师</button>
               </div>
-            </div>
             <aside class="note-prompt">
               <p class="eyebrow">写作脚手架</p>
               <ul id="notePrompts"></ul>
@@ -156,6 +172,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616g"></script>
+    <script src="./app.js?v=20260616h"></script>
   </body>
 </html>

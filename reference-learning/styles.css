@@ -387,6 +387,37 @@ p {
   gap: 16px;
 }
 
+.syllabus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.syllabus-card {
+  min-height: 190px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.syllabus-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.syllabus-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.syllabus-card li,
+.syllabus-card p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
 .teaching-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -700,6 +731,7 @@ p {
   }
 
   .app-grid,
+  .syllabus-grid,
   .teaching-layout,
   .practice-layout,
   .notes-layout,
@@ -735,6 +767,7 @@ p {
   }
 
   .tab-strip,
+  .syllabus-grid,
   .hero-metrics,
   .search-row,
   .check-card {

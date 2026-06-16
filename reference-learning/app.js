@@ -40,9 +40,9 @@ const FALLBACK_MODULES = [
     stage: "00",
     title: "导学与学习系统",
     summary: "先把本地资料库当成研究实验室：理解目录、数据库和检索式学习方法。",
-    outcomes: ["知道 Reference 资料库的主要目录和各自承担的学习角色。", "能主动使用检索、来源引用、模块进度和学习笔记。", "区分中文实战材料、论文材料和前沿公开课程材料。"],
-    queries: ["Reference contents map", "Frontier AI PhD Curriculum", "学习路径", "LLM 综述"],
-    project: "画出你每周会使用的个人 Reference 资料地图。",
+    outcomes: ["知道本地知识库的主要目录和各自承担的学习角色。", "能主动使用检索、来源引用、模块进度和学习笔记。", "区分中文实战材料、论文材料和前沿公开课程材料。"],
+    queries: ["知识库目录地图", "Frontier AI PhD Curriculum", "学习路径", "LLM 综述"],
+    project: "画出你每周会使用的个人大模型学习资料地图。",
   },
   {
     id: "math_pytorch_nlp",
@@ -96,7 +96,7 @@ const FALLBACK_MODULES = [
     summary: "学习偏好学习、后训练、评测体系和安全检查如何共同塑造可用模型。",
     outcomes: ["理解 reward modeling、PPO、DPO、GRPO 和 Constitutional AI。", "使用 benchmark harness 和简单本地评测。", "区分能力评测、安全评测和回归测试。"],
     queries: ["RLHF", "PPO", "DPO", "reward model", "OpenAI Evals", "HELM", "HarmBench", "Constitutional AI", "CS329H"],
-    project: "为这个 Reference 学习助手定义一套本地评测题和回归测试。",
+    project: "为“大模型学习之路”导师定义一套本地评测题和回归测试。",
   },
   {
     id: "rag_agents",
@@ -186,7 +186,7 @@ const LESSON_BLUEPRINTS = {
     thesis: "先把资料库当成研究实验室，而不是文件夹仓库。",
     frame:
       "这一章解决学习系统问题：你需要知道哪些资料负责概念、哪些资料负责代码、哪些资料负责前沿论文，随后用检索和笔记把它们串成可复用的研究工作流。",
-    concepts: ["Reference 地图", "课程矩阵", "检索式学习", "证据引用", "本地 RAG", "学习闭环"],
+    concepts: ["知识库地图", "课程矩阵", "检索式学习", "证据引用", "本地 RAG", "学习闭环"],
     route: [
       ["先建地图", "读目录、覆盖矩阵和模块路径，明确 LLM、VLM、VLA、world model 等板块的边界。"],
       ["再建索引感", "理解 SQLite/FTS 的角色：它不是替你学习，而是帮你快速回到证据。"],
@@ -456,6 +456,25 @@ const LESSON_BLUEPRINTS = {
   },
 };
 
+const COURSE_ANCHORS = {
+  orientation: ["Stanford CS336：用从零构建理解完整语言模型栈。", "Stanford CS25：用前沿专题保持 Transformer 视野。", "MIT 6.S191：先打牢深度学习和生成模型直觉。"],
+  math_pytorch_nlp: ["MIT 6.S191：神经网络、优化和生成模型基础。", "Stanford CS224N：词向量、语言模型和 NLP 数据。", "CS336 预备能力：能读 shape、loss 和训练循环。"],
+  transformer_gpt_llama: ["Stanford CS336：从 tokenizer 到 Transformer block 手写实现。", "Stanford CS25：理解 Transformer 架构演化。", "nanoGPT/LLM-from-scratch：用最小代码闭环验证。"],
+  llm_training_scaling_data: ["Stanford CS336：data、scaling、training dynamics。", "DeepSeek 技术路线：MoE、MLA、长上下文和训练效率。", "前沿论文阅读：把架构选择和算力预算联系起来。"],
+  sft_peft_lora: ["后训练主线：SFT、偏好优化和安全边界。", "DeepLearning.AI/业界课程：用小数据做可验证 adaptation。", "工程视角：数据格式、mask、LoRA target 和评测闭环。"],
+  inference_systems: ["Stanford CS336 systems：FlashAttention、并行和推理瓶颈。", "vLLM/PagedAttention：从论文到服务系统。", "GPU 性能课：用内存带宽和调度解释延迟。"],
+  alignment_rlhf_eval: ["RLHF/DPO 课程线：偏好数据、reward、policy optimization。", "HELM/OpenAI Evals：区分能力、安全和回归。", "安全课程视角：模型行为要可测、可复现、可追踪。"],
+  rag_agents: ["Berkeley LLM Agents：tools、planning、memory、ReAct。", "RAG 工程课：chunking、retrieval、reranking、citation。", "SWE-bench/code agents：把语言模型接到真实任务。"],
+  vlm_multimodal: ["Stanford CS25：Transformer 扩展到视觉和多模态。", "CLIP/LLaVA 路线：图文对齐、连接器和指令微调。", "VQA/空间推理：从感知到语言证据。"],
+  streaming_video_vlm: ["在线视频理解：temporal reasoning、memory、latency。", "StreamingBench/OVO-Bench：测在线状态更新能力。", "具身视角：视频理解服务于行动和反馈。"],
+  vla_robotics: ["Berkeley/Stanford robot learning：从感知到策略。", "OpenVLA/RT-2：语言、视觉、动作的接口设计。", "LIBERO/robot benchmarks：用成功率和泛化评估策略。"],
+  robot_sim_data: ["ManiSkill/Isaac Lab：仿真、资产和并行实验。", "RoboCasa/RLBench：任务设计和数据分布。", "可复现研究：版本、种子、评测协议和失败轨迹。"],
+  world_models: ["Dreamer/MuZero：model-based RL 和 latent imagination。", "V-JEPA/JEPA-WM：预测表征和世界建模。", "控制视角：模型误差、规划和样本效率。"],
+  driving_world_models: ["DriveDreamer/GAIA-1：驾驶场景生成和预测。", "Waymax/closed-loop eval：让动作影响未来。", "DriveLM/OpenEMMA：VLM 推理进入驾驶决策。"],
+  diffusion_video_3d: ["MIT 6.S978：深度生成模型统一视角。", "Diffusion/Flow Matching：从 score 到生成路径。", "NeRF/3DGS：空间表示服务世界模型。"],
+  omni_audio_capstone: ["Omni 模型路线：音频、语音、视觉、文本统一接口。", "Capstone 研究训练：问题、数据、baseline、评测。", "系统整合：检索、模型、工具和多模态输入协作。"],
+};
+
 const el = (id) => document.getElementById(id);
 
 async function api(path, options = {}) {
@@ -553,6 +572,11 @@ function renderHero() {
 function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
+  el("outcomeList").innerHTML = (state.active.outcomes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("courseAnchorList").innerHTML = (COURSE_ANCHORS[state.active.id] || COURSE_ANCHORS.orientation)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  el("deliverableText").textContent = state.active.project || bp.labSteps[0] || "";
   el("lectureThesis").textContent = bp.thesis;
   el("lectureFrame").textContent = bp.frame;
   el("conceptMap").innerHTML = bp.concepts
@@ -710,10 +734,10 @@ async function runSearch(queryOverride = "") {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
   el("searchInput").value = q;
-  renderEvidence([], "正在查询本地 SQLite FTS 数据库...");
+  renderEvidence([], "正在查询本地极速索引...");
   const module = state.active ? `&module=${encodeURIComponent(state.active.id)}` : "";
   try {
-    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10${module}`);
+    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=0${module}`);
     renderEvidence(data.results || []);
   } catch (err) {
     renderEvidence([], `检索失败：${err.message}`);
