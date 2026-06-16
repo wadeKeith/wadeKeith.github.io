@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ao" />
+    <link rel="stylesheet" href="./styles.css?v=20260616ap" />
   </head>
   <body>
     <header class="topbar">
@@ -166,7 +166,7 @@
               <div id="readerParagraphs" class="reader-paragraphs"></div>
               <div id="readerBlackboard" class="reader-blackboard"></div>
               <div class="reader-actions">
-                <button id="readerSearchBtn" class="secondary" type="button">检索本章证据</button>
+                <button id="readerSearchBtn" class="secondary" type="button">让导师定位证据</button>
                 <button id="readerAskBtn" type="button">让导师按这篇讲义答疑</button>
               </div>
             </article>
@@ -232,7 +232,7 @@
               </div>
               <div id="seminarBody" class="seminar-body"></div>
               <div class="seminar-actions">
-                <button id="seminarSearchBtn" class="secondary" type="button">检索讲义证据</button>
+                <button id="seminarSearchBtn" class="secondary" type="button">让导师结合证据讲解</button>
                 <button id="seminarAskBtn" type="button">请导师讲这章</button>
               </div>
             </article>
@@ -278,7 +278,7 @@
                 <div id="simulatorMetrics" class="simulator-metrics"></div>
                 <div id="simulatorObservation" class="simulator-observation"></div>
                 <div class="simulator-actions">
-                  <button id="simulatorSearchBtn" class="secondary" type="button">检索机制证据</button>
+                  <button id="simulatorSearchBtn" class="secondary" type="button">让导师解释机制证据</button>
                   <button id="simulatorAskBtn" type="button">让导师解释当前设置</button>
                 </div>
               </aside>
@@ -300,7 +300,7 @@
                 <div id="workedExampleExperiment" class="worked-experiment"></div>
                 <div id="workedExampleRubric" class="worked-rubric"></div>
                 <div class="worked-actions">
-                  <button id="workedSearchBtn" class="secondary" type="button">检索示范题证据</button>
+                  <button id="workedSearchBtn" class="secondary" type="button">让导师讲示范题</button>
                   <button id="workedAskBtn" type="button">让导师审这个示范题</button>
                 </div>
               </aside>
@@ -313,7 +313,7 @@
                 <h3 id="briefTitle">把本章学成可提交作品</h3>
               </div>
               <div class="brief-actions">
-                <button id="briefSearchBtn" class="secondary" type="button">检索任务证据</button>
+                <button id="briefSearchBtn" class="secondary" type="button">让导师补足证据</button>
                 <button id="briefAskBtn" type="button">让导师审任务书</button>
               </div>
             </div>
@@ -356,7 +356,7 @@
             <div class="concept-board">
               <div class="section-title">
                 <p class="eyebrow">概念地图</p>
-                <h3>点击任一概念，可直接检索或追问</h3>
+                <h3>点击任一概念，直接让导师结合资料讲解</h3>
               </div>
               <div id="conceptMap" class="concept-map"></div>
             </div>
@@ -374,35 +374,38 @@
         <section id="readTab" class="tab-panel">
           <div class="reading-toolbar">
             <div>
-              <p class="eyebrow">数据库证据</p>
-              <h3>每章自动从本地知识库极速索引中抽取必读材料</h3>
+              <p class="eyebrow">导师导读</p>
+              <h3>读不懂时直接提问，系统在后台检索后由导师回答</h3>
             </div>
-            <div class="search-stack">
+            <div class="reader-question-panel">
+              <div id="readerQuestionChips" class="query-chips"></div>
+            </div>
+            <div class="search-stack internal-only" aria-hidden="true" hidden>
               <div id="retrievalModeSwitch" class="mode-switch" aria-label="检索模式">
-                <button class="mode-btn active" type="button" data-search-mode="fts">极速 FTS</button>
-                <button class="mode-btn" type="button" data-search-mode="semantic">语义重排</button>
+                <button class="mode-btn active" type="button" data-search-mode="fts">内部 FTS</button>
+                <button class="mode-btn" type="button" data-search-mode="semantic">内部语义</button>
               </div>
               <div class="search-row">
-                <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
-                <button id="searchBtn" type="button">即时检索</button>
-                <button id="deepSearchBtn" class="secondary" type="button">后台全库补充</button>
+                <input id="searchInput" type="search" placeholder="内部资料线索" />
+                <button id="searchBtn" type="button">内部处理</button>
+                <button id="deepSearchBtn" class="secondary" type="button">内部深查</button>
               </div>
             </div>
           </div>
-          <div id="queryChips" class="query-chips"></div>
-          <div id="retrievalHint" class="retrieval-hint"></div>
+          <div id="queryChips" class="query-chips internal-only" aria-hidden="true" hidden></div>
+          <div id="retrievalHint" class="retrieval-hint internal-only" aria-hidden="true" hidden></div>
           <section class="evidence-workflow">
             <div class="reading-protocol-card">
               <div class="section-title">
                 <p class="eyebrow">精读流程</p>
-                <h3>把检索结果读成可复用证据</h3>
+                <h3>先按课程协议读；具体资料由导师后台检索</h3>
               </div>
               <div id="readingProtocol" class="reading-protocol"></div>
             </div>
-            <aside class="source-basket">
+            <aside class="source-basket internal-only" aria-hidden="true" hidden>
               <div class="source-basket-head">
                 <div>
-                  <p class="eyebrow">证据篮</p>
+                  <p class="eyebrow">内部记录</p>
                   <h3 id="sourceBasketTitle">0 条已保存</h3>
                 </div>
                 <button id="clearPinnedSources" class="text-button" type="button">清空</button>
@@ -414,7 +417,7 @@
               </div>
             </aside>
           </section>
-          <div id="evidenceResults" class="evidence-grid"></div>
+          <div id="evidenceResults" class="evidence-grid internal-only" aria-hidden="true" hidden></div>
         </section>
 
         <section id="practiceTab" class="tab-panel">
@@ -527,10 +530,10 @@
           <button id="askBtn" type="button">提交问题</button>
           <button id="clearAnswer" class="secondary" type="button">清空</button>
         </div>
-        <div id="answerBox" class="answer-box">导师回答会显示在这里；没有本地模型时，会先返回检索式讲解和来源。</div>
+        <div id="answerBox" class="answer-box">导师回答会显示在这里；系统会在后台检索课程资料，但不会把检索列表展示给读者。</div>
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ao"></script>
+    <script src="./app.js?v=20260616ap"></script>
   </body>
 </html>

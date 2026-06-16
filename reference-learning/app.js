@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ao";
+const APP_VERSION = "20260616ap";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -644,7 +644,7 @@ const LECTURE_PACKS = {
   orientation: {
     principles: ["把资料库理解为可复现研究环境：目录负责边界，索引负责定位，笔记负责迁移。", "每章按“核心问题 -> 证据 -> 机制解释 -> 小实验 -> 复盘”的顺序学习。"],
     mechanisms: ["FTS 适合快速定位术语和路径，embedding 适合语义相近问题；二者混合才适合大型资料库。", "引用来源不是装饰，而是防止模型把常识、猜测和资料证据混在一起。"],
-    readings: ["先读课程矩阵和目录，再读本章证据卡片，最后把卡住的问题交给导师追问。", "每周固定产出一页学习地图：本周概念、来源路径、实验记录、仍未解决的问题。"],
+    readings: ["先读课程矩阵和目录，再把卡住的问题交给导师后台查证后讲解。", "每周固定产出一页学习地图：本周概念、导师答疑要点、实验记录、仍未解决的问题。"],
   },
   math_pytorch_nlp: {
     principles: ["大模型的第一语言是张量形状：batch、sequence、hidden、head 维度必须能在脑中流动。", "语言建模把文本转成 token 序列，再通过 next-token prediction 学习条件分布。"],
@@ -726,8 +726,8 @@ const LECTURE_PACKS = {
 const SEMINAR_GUIDES = {
   orientation: {
     question: "如何把 83 万知识片段变成一套可持续学习的研究系统？",
-    model: "目录给边界，FTS 给定位，证据篮给可追踪来源，笔记给长期迁移。",
-    board: ["资料库不是答案机，而是实验室。", "学习闭环：定位 -> 精读 -> 解释 -> 产出 -> 复盘。", "每次问导师前，先给它一条可引用证据。"],
+    model: "目录给边界，后台检索给依据，导师回答给解释，笔记给长期迁移。",
+    board: ["资料库不是答案机，而是实验室。", "学习闭环：提出问题 -> 导师查证解释 -> 产出 -> 复盘。", "读者不看召回列表，只检查回答是否能支撑理解和作品。"],
   },
   math_pytorch_nlp: {
     question: "为什么大模型学习必须从张量、优化和语言建模目标开始？",
@@ -837,7 +837,7 @@ function startApiWarmup() {
     if (!document.hidden) api("ping").catch(() => {});
   };
   const warmStatic = () => {
-    Promise.all([loadStaticEvidence(), loadStaticSearchIndex()]).catch(() => {});
+    loadStaticEvidence().catch(() => {});
   };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(warmStatic, { timeout: 1200 });
@@ -869,27 +869,8 @@ async function loadStaticEvidence() {
 }
 
 async function loadStaticSearchIndex() {
-  if (state.staticSearchIndex) return state.staticSearchIndex;
-  if (!state.staticSearchIndexPromise) {
-    state.staticSearchIndexPromise = fetch(`./search_index.json?v=${APP_VERSION}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-        return res.json();
-      })
-      .then((data) => {
-        state.staticSearchIndex = prepareStaticSearchIndex(data);
-        state.staticIndexReadyAt = performance.now();
-        if (el("retrievalStatus") && /连接中|离线|检查中/.test(el("retrievalStatus").textContent)) {
-          el("retrievalStatus").textContent = `检索：本地索引 ${state.staticSearchIndex.items.length}`;
-        }
-        return state.staticSearchIndex;
-      })
-      .catch(() => {
-        state.staticSearchIndex = { items: [] };
-        return state.staticSearchIndex;
-      });
-  }
-  return state.staticSearchIndexPromise;
+  state.staticSearchIndex = state.staticSearchIndex || { items: [] };
+  return state.staticSearchIndex;
 }
 
 function prepareStaticSearchIndex(data) {
@@ -1132,7 +1113,7 @@ function researchBriefFor(module, bp, pack, worked) {
     specs: [
       ["研究问题", `用一句可证伪的话重写本章判断：${bp.thesis}`],
       ["Baseline", `设置一个不用 ${main} 或替换 ${supporting} 的朴素对照，避免只展示漂亮结论。`],
-      ["数据 / 证据", `至少保存 3 条来源：一条课程讲义、一条论文/代码、一条失败或局限证据。优先检索：${query}。`],
+      ["数据 / 证据", `至少写清 3 类依据需求：课程讲义、论文/代码、失败或局限证据。让导师后台围绕这些线索查证：${query}。`],
       ["方法", `沿用 worked example：${worked.problem} 把变量、输入、输出和关键步骤写清楚。`],
       ["评测指标", "选择一个主指标和两个辅助观察：质量、延迟、显存、成功率、引用准确性或人工评分。"],
       ["失败复盘", `主动解释一个反例：${risk} 写出你下一轮会如何改变数据、模型、检索或评测。`],
@@ -1200,15 +1181,15 @@ function mechanismSimulatorFor(module, bp, pack) {
 function blueprintFor(module) {
   const fallback = {
     thesis: module.summary,
-    frame: `这一章围绕「${module.title}」建立可讲清、可检索、可实践的学习闭环。先抓住问题，再读数据库证据，最后用项目验证。`,
+    frame: `这一章围绕「${module.title}」建立可讲清、可查证、可实践的学习闭环。先抓住问题，再让导师结合数据库证据解释，最后用项目验证。`,
     concepts: module.queries.slice(0, 7),
     route: module.outcomes.map((item, idx) => [`第 ${idx + 1} 步`, item]),
-    misconceptions: ["不要只收藏资料，要把资料转成自己的解释。", "不要只问模型，要先定位数据库证据。"],
+    misconceptions: ["不要只收藏资料，要把资料转成自己的解释。", "不要只问模型要结论，要让导师结合数据库证据讲清依据。"],
     checks: [
       [module.outcomes[0] || "本章最重要的能力是什么？", "回到本章目标和项目。", module.summary],
       [module.project, "尝试把任务拆成输入、方法、评测。", "先定义目标，再列资料来源，最后给出可验证产物。"],
     ],
-    labSteps: ["定位本章三条证据。", "写下一个机制解释。", "完成项目的最小版本。"],
+    labSteps: ["写出本章三个证据需求。", "让导师围绕问题查证并解释。", "完成项目的最小版本。"],
   };
   return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
 }
@@ -1224,7 +1205,7 @@ function seminarFor(module, bp, pack) {
     `这章的核心问题是：${guide.question} 先不要急着查零散名词，而要把它放进整条“大模型学习之路”的位置里：${bp.frame}`,
     `从机制上看，${pack.principles.join(" ")} ${pack.mechanisms.join(" ")} 读任何论文或代码时，都用“输入是什么、变换是什么、瓶颈是什么、如何评测”这四个问题压住细节。`,
     `对齐名课的读法是：${anchors.slice(0, 2).join(" ")} 本网页把这些公开名课的学习方式压缩成本章的讲义、证据精读、练习闭环和研究工作台。`,
-    `完成本章的标准不是“看懂了”，而是能交付一个可检查产物：${module.project} 如果这个产物做不出来，就回到证据精读保存来源，再请导师只解释卡住的那一段。`,
+    `完成本章的标准不是“看懂了”，而是能交付一个可检查产物：${module.project} 如果这个产物做不出来，就回到导师导读，把卡住的问题交给导师结合资料解释。`,
   ];
   return {
     ...guide,
@@ -1263,7 +1244,7 @@ function sessionFor(module, bp, pack, seminar) {
       {
         time: "40-65",
         title: "证据诊断",
-        body: `从本地资料库取 2-3 条证据，判断它们分别支持概念、机制还是实验结论。优先检索：${evidenceQuery}。`,
+        body: `向导师提出一个具体证据问题，让它在后台查找 2-3 类资料，并综合说明它们分别支持概念、机制还是实验结论。线索：${evidenceQuery}。`,
         query: evidenceQuery,
         ask: `请帮我把「${module.title}」的证据分成概念证据、机制证据和实验证据，并说明每类应如何阅读。`,
       },
@@ -1278,7 +1259,7 @@ function sessionFor(module, bp, pack, seminar) {
     artifacts: [
       ["一句话定理", `用一句话写出本章最重要判断：${bp.thesis}`],
       ["机制表", "至少填满“输入 / 变换 / 约束 / 瓶颈 / 失败模式”五列。"],
-      ["证据卡", "保存 2 条来源：一条支持机制，一条支持实验或评测。"],
+      ["问题卡", "写出 2 个证据问题：一个支持机制，一个支持实验或评测。"],
       ["小作品", module.project],
     ],
   };
@@ -1324,7 +1305,7 @@ function lessonDashboardFor(module, bp, pack, manuscript, seminar, worked, brief
     flow: [
       ["01", "抓问题", `先写出本章要证明或解释的判断：${bp.thesis}`],
       ["02", "画机制", `把 ${main} 和 ${second} 放进输入、变换、约束、瓶颈、失败模式五栏。`],
-      ["03", "读证据", `优先沿「${sourceQuery}」检索本地资料，并保存支持机制与实验的来源。`],
+      ["03", "问证据", `围绕「${sourceQuery}」向导师提问，让它后台查证后解释机制与实验依据。`],
       ["04", "做作品", `完成：${module.project}`],
       ["05", "过口试", "能讲清反例、baseline、指标和下一步消融，才算真正掌握。"],
     ],
@@ -1378,10 +1359,10 @@ function lectureDeckFor(module, bp, pack, manuscript, seminar, worked, brief) {
     },
     {
       kicker: "Evidence",
-      title: "先检索证据，再相信结论",
-      body: `本章证据入口是：${evidenceQuery}。阅读时把资料分成概念证据、机制证据、实验证据和局限证据，先保存来源，再请导师解释卡住的片段。`,
+      title: "先让导师查证，再相信结论",
+      body: `本章证据线索是：${evidenceQuery}。阅读时把问题分成概念证据、机制证据、实验证据和局限证据，交给导师后台查证后解释。`,
       board: ["概念证据", "机制证据", "实验证据", "局限证据"],
-      checkpoint: "能否保存两条来源，并说明它们分别支持什么 claim？",
+      checkpoint: "能否提出两个证据问题，并说明它们分别要验证什么 claim？",
       query: evidenceQuery,
       ask: `请把「${module.title}」的证据阅读顺序拆成 4 步，并说明每步看什么。`,
     },
@@ -1456,7 +1437,7 @@ function textbookFor(module, bp, pack, manuscript, worked, brief) {
       `能否用 90 秒讲清 ${main} 的输入、变换、约束和失败模式？`,
       `能否画出黑板式：${manuscript.blackboard.formula}？`,
       `能否给出一个 baseline，并说明它为什么公平？`,
-      `能否保存两条本地证据，分别支持机制和实验结论？`,
+      `能否提出两个本地资料问题，分别验证机制和实验结论？`,
       `能否把本章连接到最终作品：${module.project}？`,
     ],
     matrix: [
@@ -1479,7 +1460,7 @@ function courseStandardFor(module, bp, pack, manuscript, worked, brief) {
       steps: [
         `用一句话写出本章判断：${bp.thesis}`,
         `把 ${concepts.slice(0, 4).join(" / ")} 分成“对象、机制、指标、失败条件”。`,
-        `点击 2 个证据按钮，保存一条概念证据和一条机制证据。`,
+        `向导师提 2 个证据问题：一条概念线索，一条机制线索。`,
       ],
       query: concepts.slice(0, 3).join(" ") || module.title,
       ask: `我现在只想先懂概念，请用 45 分钟学习计划讲清「${module.title}」：心智地图、最小术语表、必须读的证据。`,
@@ -1498,7 +1479,7 @@ function courseStandardFor(module, bp, pack, manuscript, worked, brief) {
       title: "研究推进：把本章变成一个可证伪 claim",
       steps: [
         `提出一个能被实验反驳的 claim：${brief.claim}`,
-        "检索 baseline、benchmark、ablation、failure mode，避免只做主观总结。",
+        "让导师后台查找 baseline、benchmark、ablation、failure mode，避免只做主观总结。",
         "写出一个小研究计划：假设、数据、模型/系统、指标、风险、下一步。",
       ],
       query: brief.searchQuery || assignmentQuery,
@@ -1516,16 +1497,16 @@ function courseStandardFor(module, bp, pack, manuscript, worked, brief) {
       {
         label: "作业题",
         title: `把「${module.title}」做成一份可复查课程作业`,
-        body: `提交物必须包含：一句话 claim、机制图、2 条本地证据、一个 baseline、一个失败样例、下一步 ablation。`,
+        body: `提交物必须包含：一句话 claim、机制图、2 个证据问题、一个 baseline、一个失败样例、下一步 ablation。`,
       },
       {
         label: "评分线",
         title: "按顶级课程标准自评",
-        body: "A 档：能解释机制并复现实验；B 档：能引用证据并画出机制；C 档：只会复述概念；不及格：没有来源、没有指标、没有失败样例。",
+        body: "A 档：能解释机制并复现实验；B 档：能说明依据并画出机制；C 档：只会复述概念；不及格：没有依据问题、没有指标、没有失败样例。",
       },
       {
         label: "快速入口",
-        title: "先用即时检索找材料",
+        title: "先让导师定位材料",
         body: `推荐查询：${assignmentQuery}`,
         query: assignmentQuery,
       },
@@ -1573,7 +1554,7 @@ function conceptMapFor(module, bp, pack, manuscript, worked, brief) {
         tone: "evidence",
         label: "证据入口",
         title: third,
-        body: `读资料时先判断证据类型：${third} 支持的是概念、机制、实验，还是局限？先定位证据，再让导师解释。`,
+        body: `读资料时先判断证据类型：${third} 支持的是概念、机制、实验，还是局限？把问题交给导师后台查证后解释。`,
         query: evidenceQuery,
         ask: `请把「${module.title}」的本地证据分成概念、机制、实验、局限四类，并告诉我怎么读。`,
       },
@@ -1598,7 +1579,7 @@ function conceptMapFor(module, bp, pack, manuscript, worked, brief) {
       ["01", "对象", `定义 ${main} 的输入、输出和边界。`, `${main} definition input output`],
       ["02", "状态", `说明 ${second} 如何改变模型、数据、环境或评测状态。`, `${main} ${second}`],
       ["03", "机制", `把机制压缩成：${manuscript.blackboard.formula}`, manuscript.blackboard.formula],
-      ["04", "证据", `检索并保存两条来源，判断它们支持哪种结论。`, evidenceQuery],
+      ["04", "证据", `提出两个证据问题，判断它们需要支持哪种结论。`, evidenceQuery],
       ["05", "作品", `完成一个可检查版本：${module.project}`, worked.searchQuery || module.project],
     ],
     debugQuestions: [
@@ -1623,9 +1604,9 @@ function masteryFor(module, bp) {
   return {
     protocol: [
       `用自己的话写出本章一句话判断：${bp.thesis}`,
-      `从证据精读中保存 2 条来源，并说明它们分别支持哪个机制或实验结论。`,
+      `向导师提出 2 个证据问题，并说明它们分别验证哪个机制或实验结论。`,
       `完成实践任务的最小版本：${module.project}`,
-      `记录 1 个失败案例或反例，再写出下一轮要检索的关键词。`,
+      `记录 1 个失败案例或反例，再写出下一轮要追问导师的关键词。`,
     ],
     rubric: [
       {
@@ -1650,8 +1631,8 @@ function masteryFor(module, bp) {
 function readingProtocolFor(module, bp) {
   return [
     ["Claim", `先写出资料想回答的问题，并对照本章核心判断：${bp.thesis}`],
-    ["Evidence", "保存 2 条来源到证据篮，标注它们分别支持概念、机制、实验还是局限。"],
-    ["Mechanism", `把来源里的术语映射回本章概念：${bp.concepts.slice(0, 4).join(" / ")}。`],
+    ["Evidence", "提出 2 个证据问题，标注它们分别要验证概念、机制、实验还是局限。"],
+    ["Mechanism", `把导师回答里的术语映射回本章概念：${bp.concepts.slice(0, 4).join(" / ")}。`],
     ["Transfer", `把证据转成一个可检查动作：${module.project}`],
   ];
 }
@@ -1664,8 +1645,8 @@ function workbenchFor(module, bp) {
       id: "paper",
       title: "论文阅读线",
       kicker: "Paper trail",
-      body: `先用 ${concepts.slice(0, 3).join("、")} 定位核心论文或课程讲义，再写出“问题、方法、证据、局限”四格笔记。`,
-      action: "检索论文证据",
+      body: `先围绕 ${concepts.slice(0, 3).join("、")} 请导师定位核心论文或课程讲义，再写出“问题、方法、证据、局限”四格笔记。`,
+      action: "让导师查论文依据",
       query: queries.slice(0, 3).join(" ") || module.title,
       ask: `请帮我为「${module.title}」制定论文阅读顺序，并说明每篇资料要抓住什么问题。`,
     },
@@ -1674,7 +1655,7 @@ function workbenchFor(module, bp) {
       title: "代码实验线",
       kicker: "Code lab",
       body: `把本章产出物拆成最小可运行实验：${module.project} 先做 baseline，再记录 shape、指标、失败样例。`,
-      action: "检索代码资料",
+      action: "让导师查代码资料",
       query: `${queries[0] || module.title} implementation code notebook`,
       ask: `请把「${module.project}」拆成一个最小代码实验：文件结构、关键函数、输入输出和检查点。`,
     },
@@ -1683,7 +1664,7 @@ function workbenchFor(module, bp) {
       title: "评测闭环线",
       kicker: "Eval gate",
       body: `为本章定义至少 3 个检查项：一个概念题、一个实验指标、一个失败案例，避免只看模型回答是否顺眼。`,
-      action: "检索评测资料",
+      action: "让导师查评测资料",
       query: `${queries.slice(-2).join(" ") || module.title} benchmark evaluation`,
       ask: `请为「${module.title}」设计一个小型评测表：能力题、失败模式、通过标准和复盘方式。`,
     },
@@ -1719,7 +1700,7 @@ function examFor(module, bp) {
       ["A", "能独立推导机制，能用本地证据支撑 claim，并完成可复查的小作品。"],
       ["B", "能讲清主要概念和实验方案，但证据链或失败分析还不够完整。"],
       ["C", "能复述术语，但无法说明输入/变换/瓶颈，也没有可靠评测。"],
-      ["Redo", "只依赖导师问答，没有保存来源、没有实验产物、没有反例或失败记录。"],
+      ["Redo", "只依赖导师问答，没有形成自己的依据判断、实验产物、反例或失败记录。"],
     ],
   };
 }
@@ -1757,8 +1738,8 @@ function problemSetFor(module, bp) {
     {
       kind: "P4",
       title: "写作题",
-      body: `写一段 300-500 字课程笔记，说明本章如何连接到整条“大模型学习之路”，并引用至少两条本地证据。`,
-      deliverable: "短论文式笔记 + 2 条证据引用。",
+      body: `写一段 300-500 字课程笔记，说明本章如何连接到整条“大模型学习之路”，并概括导师回答中的两类依据。`,
+      deliverable: "短论文式笔记 + 2 类依据概括。",
       query: queries.slice(0, 3).join(" ") || module.title,
       ask: `请给我一份「${module.title}」短论文式笔记提纲，要求引用本地证据并连接到整条大模型学习路径。`,
     },
@@ -1769,7 +1750,7 @@ function quizFor(module, bp) {
   const concepts = bp.concepts || module.queries || [];
   const main = concepts[0] || module.title;
   const second = concepts[1] || main;
-  const misconception = bp.misconceptions[0] || "只复述术语，不保存证据，也不做最小实验。";
+  const misconception = bp.misconceptions[0] || "只复述术语，不理解依据，也不做最小实验。";
   const evidenceQuery = (module.queries || []).slice(0, 4).join(" ") || module.title;
   return [
     {
@@ -1828,14 +1809,14 @@ function quizFor(module, bp) {
       ask: `请帮我为「${module.title}」制定证据阅读顺序：先检索什么，再精读什么，最后问什么。`,
       options: [
         {
-          text: "先即时检索本地证据，保存来源，再把卡住的片段交给导师解释。",
+          text: "先把问题交给导师，让导师后台查证，再学习综合后的解释。",
           correct: true,
-          feedback: "对。这样模型回答会被证据约束，学习也能复盘。",
+          feedback: "对。这样模型回答会被证据约束，但读者不需要处理召回列表。",
         },
         {
-          text: "先问导师要完整答案，证据以后有空再看。",
+          text: "只要导师完整答案，不关心它是否基于本地资料。",
           correct: false,
-          feedback: "这会让问答变成替代学习。当前网页的目标是证据优先、导师辅助。",
+          feedback: "这会让问答变成闭卷生成。当前网页的目标是导师后台查证、读者学习解释。",
         },
         {
           text: "只看第一条搜索结果，不区分概念、机制、实验和局限。",
@@ -1919,7 +1900,7 @@ function renderGlobalCourseMap() {
         </div>
         <div class="global-course-foot">
           <small>${escapeHtml(item.modules.join(" / "))}</small>
-          <button class="text-button" type="button" data-course-map-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="text-button" type="button" data-course-map-search="${escapeHtml(item.query)}">问导师</button>
         </div>
       </article>
     `
@@ -2035,7 +2016,7 @@ function renderTeach() {
         <article>
           <span>${escapeHtml(label)}</span>
           <p>${escapeHtml(body)}</p>
-          <button class="text-button" type="button" data-briefing-search="${escapeHtml(query)}">检索这条线</button>
+          <button class="text-button" type="button" data-briefing-search="${escapeHtml(query)}">让导师讲这条线</button>
         </article>
       `
     )
@@ -2067,7 +2048,7 @@ function renderTeach() {
     </div>
     <div class="lecture-slide-actions">
       <button class="secondary" type="button" data-lecture-nav="prev" ${activeLectureIdx === 0 ? "disabled" : ""}>上一段</button>
-      <button class="secondary" type="button" data-deck-search="${escapeHtml(activeLecture.query)}">检索证据</button>
+      <button class="secondary" type="button" data-deck-search="${escapeHtml(activeLecture.query)}">让导师查证讲解</button>
       <button type="button" data-deck-ask="${escapeHtml(activeLecture.ask)}">问导师</button>
       <button type="button" data-lecture-nav="next" ${activeLectureIdx === lectureDeck.length - 1 ? "disabled" : ""}>下一段</button>
     </div>
@@ -2081,7 +2062,7 @@ function renderTeach() {
             <h4>${escapeHtml(item.label)}</h4>
             <p>${escapeHtml(item.body)}</p>
           </div>
-          <button class="text-button" type="button" data-textbook-search="${escapeHtml(item.query)}">检索证据</button>
+          <button class="text-button" type="button" data-textbook-search="${escapeHtml(item.query)}">问导师</button>
         </article>
       `
     )
@@ -2111,7 +2092,7 @@ function renderTeach() {
           <h4>${escapeHtml(item.title)}</h4>
           <p>${escapeHtml(item.body)}</p>
           <div class="standard-actions">
-            <button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">检索本地证据</button>
+            <button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">让导师查证</button>
             <button class="text-button" type="button" data-standard-ask="${escapeHtml(item.ask)}">导师按此检查</button>
           </div>
         </article>
@@ -2127,7 +2108,7 @@ function renderTeach() {
       ${standard.active.steps.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
     </ol>
     <div class="diagnostic-actions">
-      <button class="secondary" type="button" data-standard-search="${escapeHtml(standard.active.query)}">按处方检索</button>
+      <button class="secondary" type="button" data-standard-search="${escapeHtml(standard.active.query)}">让导师按处方讲解</button>
       <button type="button" data-standard-ask="${escapeHtml(standard.active.ask)}">让导师制定计划</button>
     </div>
   `;
@@ -2140,7 +2121,7 @@ function renderTeach() {
           <p>${escapeHtml(item.body)}</p>
           ${
             item.query
-              ? `<button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">检索作业资料</button>`
+              ? `<button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">问导师</button>`
               : ""
           }
         </article>
@@ -2158,7 +2139,7 @@ function renderTeach() {
             <p>${escapeHtml(item.body)}</p>
           </div>
           <div class="concept-node-actions">
-            <button class="text-button" type="button" data-map-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="text-button" type="button" data-map-search="${escapeHtml(item.query)}">问导师</button>
             <button class="text-button" type="button" data-map-ask="${escapeHtml(item.ask)}">问导师</button>
           </div>
         </article>
@@ -2392,7 +2373,7 @@ function renderTeach() {
             <p>${escapeHtml(item.body)}</p>
           </div>
           <div class="session-actions">
-            <button class="text-button" type="button" data-session-search="${escapeHtml(item.query)}">检索</button>
+            <button class="text-button" type="button" data-session-search="${escapeHtml(item.query)}">问导师</button>
             <button class="text-button" type="button" data-session-ask="${escapeHtml(item.ask)}">追问</button>
           </div>
         </article>
@@ -2431,7 +2412,7 @@ function renderTeach() {
       <p>${escapeHtml(lensBodies[lens.id] || lensBodies.intuition)}</p>
     </div>
     <div class="lens-actions">
-      <button class="secondary" type="button" data-lens-search="${escapeHtml(bp.concepts.slice(0, 2).join(" "))}">检索这条线</button>
+      <button class="secondary" type="button" data-lens-search="${escapeHtml(bp.concepts.slice(0, 2).join(" "))}">让导师讲这条线</button>
       <button type="button" data-lens-ask="${escapeHtml(`${lens.prompt}\n\n章节：${state.active.title}\n核心判断：${bp.thesis}`)}">请导师重讲</button>
     </div>
   `;
@@ -2452,7 +2433,7 @@ function renderTeach() {
             <p>${escapeHtml(body)}</p>
           </div>
           <div class="ladder-actions">
-            <button class="text-button" type="button" data-ladder-search="${escapeHtml(query)}">检索</button>
+            <button class="text-button" type="button" data-ladder-search="${escapeHtml(query)}">问导师</button>
             <button class="text-button" type="button" data-ladder-ask="${escapeHtml(`请围绕「${title}」讲解 ${state.active.title}：${body}`)}">追问</button>
           </div>
         </article>
@@ -2537,7 +2518,7 @@ function renderPractice() {
             ${answered ? escapeHtml(selectedOption.feedback) : "先选一个答案；系统会立刻给出离线反馈。"}
           </div>
           <div class="quiz-actions">
-            <button class="text-button" type="button" data-quiz-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="text-button" type="button" data-quiz-search="${escapeHtml(item.query)}">问导师</button>
             <button class="text-button" type="button" data-quiz-ask="${escapeHtml(item.ask)}">让导师追问</button>
           </div>
         </article>
@@ -2552,7 +2533,7 @@ function renderPractice() {
           <h4>${escapeHtml(item.question)}</h4>
           <p>${escapeHtml(item.answer)}</p>
           <div class="oral-actions">
-            <button class="secondary" type="button" data-oral-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="secondary" type="button" data-oral-search="${escapeHtml(item.query)}">让导师查证追问</button>
             <button type="button" data-oral-ask="${escapeHtml(`请按严格口试官标准追问我：${item.question}\n\n章节：${state.active.title}\n本章项目：${state.active.project}`)}">导师追问</button>
           </div>
         </article>
@@ -2581,7 +2562,7 @@ function renderPractice() {
             <small>${escapeHtml(item.deliverable)}</small>
           </div>
           <div class="problem-actions">
-            <button class="secondary" type="button" data-problem-search="${escapeHtml(item.query)}">检索资料</button>
+            <button class="secondary" type="button" data-problem-search="${escapeHtml(item.query)}">让导师补充资料</button>
             <button type="button" data-problem-ask="${escapeHtml(item.ask)}">导师审题</button>
           </div>
         </article>
@@ -2629,7 +2610,7 @@ function renderNotes() {
     `本章一句话结论：${bp.thesis}`,
     `我最不懂的概念：${bp.concepts.slice(0, 3).join(" / ")}`,
     `我能否不用术语解释：${state.active.project}`,
-    "我找到的来源路径和证据片段：",
+    "我仍没读懂、需要导师结合资料解释的问题：",
   ]
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
@@ -2872,8 +2853,8 @@ function renderEvidence(results, message = "") {
           <div class="source-meta">
             <span>${escapeHtml(item.source_label || "本章课程证据")}</span>
             <div class="source-actions">
-              <button class="text-button pin-source" type="button" data-source="${idx}">存证据</button>
-              <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
+              <button class="text-button pin-source" type="button" data-source="${idx}">内部记录</button>
+              <button class="text-button ask-source" type="button" data-source="${idx}">内部提问</button>
             </div>
           </div>
           <h4>${escapeHtml(item.title || "未命名资料")}</h4>
@@ -2895,7 +2876,7 @@ function renderPinnedSources() {
   const pinned = currentPinnedSources();
   el("sourceBasketTitle").textContent = `${pinned.length} 条已保存`;
   if (!pinned.length) {
-    el("pinnedSources").innerHTML = `<div class="empty-state compact">从检索结果中点击“存证据”，把关键来源放到这里。</div>`;
+    el("pinnedSources").innerHTML = `<div class="empty-state compact">内部记录区不向读者展示。</div>`;
     return;
   }
   el("pinnedSources").innerHTML = pinned
@@ -2939,10 +2920,15 @@ function renderRead() {
   document.querySelectorAll("[data-search-mode]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.searchMode === state.searchMode);
   });
-  el("retrievalHint").textContent =
-    state.searchMode === "semantic"
-      ? "即时检索不等网络；点“后台全库补充”时会调用 qwen3-embedding 语义重排，适合模糊问题。"
-      : "即时检索默认只扫浏览器静态检索包、课程证据和课程讲义；点“后台全库补充”才访问 83 万片段数据库。";
+  el("retrievalHint").textContent = "检索仅供导师后台生成回答使用，不向读者展示召回列表。";
+  const questionChips = [
+    `请先后台检索课程资料，再讲清楚：${bp.thesis}`,
+    `我不懂 ${bp.concepts.slice(0, 2).join(" 和 ")}，请结合资料解释机制和例子。`,
+    `请根据本章资料给我安排学习顺序：${state.active.project}`,
+  ];
+  el("readerQuestionChips").innerHTML = questionChips
+    .map((prompt) => `<button type="button" data-prompt="${escapeHtml(prompt)}">${escapeHtml(prompt)}</button>`)
+    .join("");
   el("queryChips").innerHTML = state.active.queries
     .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
     .join("");
@@ -2959,12 +2945,8 @@ function renderRead() {
       `
     )
     .join("");
-  renderPinnedSources();
-  if (!state.lesson) {
-    renderEvidence([], "正在从本地数据库抽取本章必读证据...");
-    return;
-  }
-  renderEvidence(state.lesson.evidence || []);
+  state.visibleEvidence = [];
+  el("evidenceResults").innerHTML = "";
 }
 
 function renderLessonEvidenceIfSafe() {
@@ -2990,7 +2972,7 @@ function renderAll() {
   renderTeach();
   renderPractice();
   renderNotes();
-  if (!state.manualSearchActive || state.activeTab !== "read") renderRead();
+  renderRead();
   renderQuickPrompts();
 }
 
@@ -3019,9 +3001,7 @@ async function loadLesson(moduleId) {
     renderLessonEvidenceIfSafe();
   } catch (err) {
     if (requestId !== state.lessonRequest) return;
-    if (!state.manualSearchActive || state.activeTab !== "read") {
-      renderEvidence([], `课程证据加载失败：${err.message}`);
-    }
+    renderRead();
   }
 }
 
@@ -3041,79 +3021,27 @@ function setQuestion(text, submit = false) {
   if (submit) ask();
 }
 
+function askWithInternalRetrieval(query, intent = "请先在后台检索本地课程资料，再用教授口吻回答。") {
+  const q = String(query || "").trim();
+  if (!q) return;
+  setQuestion(`${intent}\n\n问题或资料线索：${q}`, true);
+}
+
 async function runSearch(queryOverride = "", options = {}) {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
-  state.manualSearchActive = true;
-  el("searchInput").value = q;
-  const requestId = ++state.searchRequest;
-  const deep = options.deep === true;
-  const semantic = state.searchMode === "semantic" ? "1" : "0";
-  const moduleId = state.active ? state.active.id : "";
-  const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
-  const instantMessage =
-    state.staticSearchIndex
-      ? "已使用浏览器静态检索包、课程证据和讲义索引即时检索；需要 83 万片段深挖时，再点“后台全库补充”。"
-      : "正在加载浏览器静态检索包；先显示课程讲义索引，加载完成后自动补充更多证据。";
-  const previewMessage =
-    state.searchMode === "semantic"
-      ? "正在后台请求公网语义重排；先显示浏览器静态证据库和课程索引，数据库证据返回后再补充。"
-      : "正在后台请求公网极速 FTS；先显示浏览器静态证据库和课程索引，数据库证据返回后再补充。";
-  const preview = instantSearchPreview(q, moduleId);
-  if (!deep) {
-    renderEvidence(preview, instantMessage);
-    Promise.all([loadStaticEvidence(), loadStaticSearchIndex()]).then(() => {
-      if (requestId !== state.searchRequest) return;
-      renderEvidence(
-        instantSearchPreview(q, moduleId),
-        "已使用浏览器静态检索包、课程证据和讲义索引即时检索；这一步不等待公网 API。"
-      );
-    });
-    el("retrievalHint").textContent = "即时检索只扫浏览器静态检索包、课程证据和讲义索引；后台全库补充才调用远端 FTS/语义重排。";
-    showTab("read");
-    return;
-  }
-  if (state.searchCache.has(cacheKey)) {
-    const cached = state.searchCache.get(cacheKey);
-    el("retrievalHint").textContent =
-      cached.retrieval_mode === "semantic"
-        ? "已从本机页面缓存复用语义重排结果。"
-        : "已从本机页面缓存复用极速 FTS 结果。";
-    renderEvidence(cached.results || []);
-    showTab("read");
-    return;
-  }
-  renderEvidence(preview, previewMessage);
-  Promise.all([loadStaticEvidence(), loadStaticSearchIndex()]).then(() => {
-    if (requestId !== state.searchRequest || state.searchCache.has(cacheKey)) return;
-    const upgradedPreview = instantSearchPreview(q, moduleId);
-    renderEvidence(upgradedPreview, `${previewMessage} 已先命中浏览器静态检索包。`);
-  });
-  const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
-  try {
-    const timeoutMs = state.searchMode === "semantic" ? 5000 : 1500;
-    const data = await api(`search?q=${encodeURIComponent(q)}&limit=8&semantic=${semantic}${module}`, { timeoutMs });
-    state.searchCache.set(cacheKey, data);
-    if (state.searchCache.size > 80) state.searchCache.delete(state.searchCache.keys().next().value);
-    const timing = typeof data.elapsed_ms === "number" ? `，远端 ${data.elapsed_ms}ms` : "";
-    const cache = data.cache_hit ? "，命中服务端缓存" : "";
-    el("retrievalHint").textContent =
-      data.retrieval_mode === "semantic"
-        ? `已使用语义重排：适合解释型问题，但会比极速 FTS 慢${timing}${cache}。`
-        : `已使用极速 FTS：关键词召回优先，适合快速定位原始证据${timing}${cache}。`;
-    renderEvidence(data.results || []);
-  } catch (err) {
-    renderEvidence(
-      instantSearchPreview(q, moduleId),
-      `公网全库补充超过等待预算，已保留浏览器即时证据。需要更深召回时可再次点“后台全库补充”：${err.message}`
-    );
-  }
+  askWithInternalRetrieval(
+    q,
+    options.deep === true
+      ? "请做一次更深的后台资料检索，但只把综合后的导师回答给我。"
+      : "请先在后台检索课程资料，但不要展示检索列表；直接给我可学习的解释。"
+  );
 }
 
 async function ask() {
   const question = el("questionInput").value.trim();
   if (!question) return;
-  el("answerBox").textContent = "正在检索本地数据库，并尝试调用可用模型...";
+  el("answerBox").textContent = "正在后台检索课程资料，并调用导师模型生成回答...";
   const body = {
     question,
     module_id: state.active ? state.active.id : null,
@@ -3121,8 +3049,7 @@ async function ask() {
   };
   try {
     const data = await api("ask", { method: "POST", body: JSON.stringify(body) });
-    const sources = (data.sources || []).map((item, idx) => `[${idx + 1}] ${sourcePathLabel(item.path)}`).join("\n");
-    el("answerBox").textContent = `${data.answer}\n\n来源：\n${sources || "无"}`;
+    el("answerBox").textContent = data.answer || "导师没有返回可显示回答。";
   } catch (err) {
     el("answerBox").textContent = `问答失败：${err.message}`;
   }
@@ -3188,7 +3115,7 @@ async function load() {
     el("dbStatus").textContent = "知识库：离线课程";
     el("modelStatus").textContent = "模型：暂未连接";
     el("retrievalStatus").textContent = "检索：离线";
-    el("answerBox").textContent = `课程内容已离线加载，可以先正常学习。证据检索和问答暂时连接不到公网 API：${err.message}`;
+    el("answerBox").textContent = `课程内容已离线加载，可以先正常学习。导师问答暂时连接不到公网 API：${err.message}`;
   }
 }
 
@@ -3464,12 +3391,17 @@ el("quickPrompts").addEventListener("click", (event) => {
   if (btn) setQuestion(btn.dataset.prompt);
 });
 
+el("readerQuestionChips").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-prompt]");
+  if (btn) setQuestion(btn.dataset.prompt, true);
+});
+
 el("searchBtn").addEventListener("click", () => runSearch());
 el("deepSearchBtn").addEventListener("click", () => runSearch("", { deep: true }));
 el("askBtn").addEventListener("click", ask);
 el("clearAnswer").addEventListener("click", () => {
   el("questionInput").value = "";
-  el("answerBox").textContent = "导师回答会显示在这里；没有本地模型时，会先返回检索式讲解和来源。";
+  el("answerBox").textContent = "导师回答会显示在这里；系统会在后台检索课程资料，但不会把检索列表展示给读者。";
 });
 el("projectAskBtn").addEventListener("click", () => {
   if (!state.active) return;
