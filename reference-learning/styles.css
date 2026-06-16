@@ -995,6 +995,124 @@ p {
   gap: 8px;
 }
 
+.research-brief {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid #cddbd5;
+  border-radius: 8px;
+  background: #f7fbfa;
+  box-shadow: var(--shadow);
+}
+
+.brief-head,
+.brief-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.brief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.brief-main,
+.brief-gates,
+.brief-spec {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.brief-main {
+  min-height: 190px;
+  padding: 18px;
+}
+
+.brief-main h4 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.brief-main p {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.75;
+}
+
+.brief-gates {
+  display: grid;
+  gap: 8px;
+  width: min(360px, 100%);
+  padding: 16px;
+  align-content: start;
+}
+
+.brief-gate {
+  display: grid;
+  gap: 4px;
+  padding: 10px 0;
+  border-top: 1px solid #edf0eb;
+}
+
+.brief-gate:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.brief-gate strong {
+  color: var(--green);
+}
+
+.brief-gate p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.brief-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.brief-spec {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 10px;
+  min-height: 134px;
+  padding: 13px;
+}
+
+.brief-spec > span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: #fff5e5;
+  color: var(--amber);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.brief-spec strong {
+  color: var(--blue);
+}
+
+.brief-spec p {
+  margin: 5px 0 0;
+  color: #43504d;
+  line-height: 1.58;
+}
+
 .professor-session {
   display: grid;
   gap: 14px;
@@ -1978,6 +2096,9 @@ p {
   .roadmap-panel,
   .lecture-notes-grid,
   .worked-layout,
+  .brief-head,
+  .brief-layout,
+  .brief-spec-grid,
   .session-step,
   .session-artifacts,
   .lens-card,
@@ -2048,6 +2169,9 @@ p {
   .reader-main,
   .reader-side,
   .lecture-card,
+  .research-brief,
+  .brief-main,
+  .brief-gates,
   .seminar-lecture,
   .seminar-board,
   .concept-board,
@@ -2056,5 +2180,9 @@ p {
   .note-prompt,
   .mentor-dock {
     padding: 14px;
+  }
+
+  .brief-actions {
+    justify-content: flex-start;
   }
 }

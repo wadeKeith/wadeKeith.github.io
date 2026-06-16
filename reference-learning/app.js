@@ -804,7 +804,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ab")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ac")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -821,7 +821,7 @@ async function loadStaticEvidence() {
 async function loadStaticSearchIndex() {
   if (state.staticSearchIndex) return state.staticSearchIndex;
   if (!state.staticSearchIndexPromise) {
-    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ab")
+    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ac")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1044,6 +1044,35 @@ function workedExampleFor(module, bp, pack, manuscript) {
     ],
     searchQuery: `${main} ${supporting} baseline ablation evaluation`,
     askPrompt: `请像 CS336/研究生课程助教一样审这个 worked example。\n章节：${module.title}\n示范题：围绕 ${main} 证明它如何解决 ${supporting} 相关瓶颈。\n黑板式：${manuscript.blackboard.formula}\n请检查：变量定义、baseline、指标、失败样例和结论是否充分。`,
+  };
+}
+
+function researchBriefFor(module, bp, pack, worked) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const supporting = concepts[1] || main;
+  const risk = bp.misconceptions[0] || "证据不足时把相关性误读成因果性。";
+  const query = `${main} ${supporting} ${module.queries.slice(0, 3).join(" ")} benchmark baseline`;
+  return {
+    title: `${module.stage}｜研究任务书：${module.title}`,
+    claim: `证明「${main}」能在本章场景中改善「${supporting}」相关瓶颈，并明确它在哪些条件下会失效。`,
+    context: `这份任务书把讲义、证据精读和练习闭环合成一个可提交作品。最终作品不是“学习心得”，而是一个可以被复查的研究小包：问题定义、证据来源、baseline、实验/推导、评测、失败复盘。`,
+    specs: [
+      ["研究问题", `用一句可证伪的话重写本章判断：${bp.thesis}`],
+      ["Baseline", `设置一个不用 ${main} 或替换 ${supporting} 的朴素对照，避免只展示漂亮结论。`],
+      ["数据 / 证据", `至少保存 3 条来源：一条课程讲义、一条论文/代码、一条失败或局限证据。优先检索：${query}。`],
+      ["方法", `沿用 worked example：${worked.problem} 把变量、输入、输出和关键步骤写清楚。`],
+      ["评测指标", "选择一个主指标和两个辅助观察：质量、延迟、显存、成功率、引用准确性或人工评分。"],
+      ["失败复盘", `主动解释一个反例：${risk} 写出你下一轮会如何改变数据、模型、检索或评测。`],
+    ],
+    gates: [
+      ["可证伪", "claim 不是口号，至少能被一个 baseline 推翻。"],
+      ["可追溯", "每个关键判断都能回到本地资料或实验记录。"],
+      ["可复现", "别人能按你的步骤复做最小版本。"],
+      ["可迁移", `能说明本章如何连接到：${module.project}`],
+    ],
+    searchQuery: query,
+    askPrompt: `请像人工智能研究生课程教授一样，审阅这份「${module.title}」研究任务书。\n\n研究 claim：证明「${main}」能改善「${supporting}」相关瓶颈，并说明失效条件。\n本章产出物：${module.project}\n常见风险：${risk}\n\n请严格检查：1）claim 是否可证伪；2）baseline 是否足够；3）证据是否覆盖机制和实验；4）指标是否能支撑结论；5）还缺哪些失败样例。`,
   };
 }
 
@@ -1350,6 +1379,7 @@ function renderTeach() {
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   const manuscript = lectureManuscriptFor(state.active, bp, pack);
   const worked = workedExampleFor(state.active, bp, pack, manuscript);
+  const brief = researchBriefFor(state.active, bp, pack, worked);
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
@@ -1486,6 +1516,34 @@ function renderTeach() {
     .join("");
   el("workedSearchBtn").dataset.workedSearch = worked.searchQuery;
   el("workedAskBtn").dataset.workedAsk = worked.askPrompt;
+  el("briefTitle").textContent = brief.title;
+  el("briefClaim").textContent = brief.claim;
+  el("briefContext").textContent = brief.context;
+  el("briefGates").innerHTML = brief.gates
+    .map(
+      ([label, body]) => `
+        <article class="brief-gate">
+          <strong>${escapeHtml(label)}</strong>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("briefSpecGrid").innerHTML = brief.specs
+    .map(
+      ([label, body], idx) => `
+        <article class="brief-spec">
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <div>
+            <strong>${escapeHtml(label)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("briefSearchBtn").dataset.briefSearch = brief.searchQuery;
+  el("briefAskBtn").dataset.briefAsk = brief.askPrompt;
   el("sessionTimeline").innerHTML = session.timeline
     .map(
       (item) => `
@@ -2273,11 +2331,12 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
       searchBtn.dataset.workedSearch ||
+      searchBtn.dataset.briefSearch ||
       searchBtn.dataset.lensSearch ||
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
@@ -2288,11 +2347,12 @@ el("teachTab").addEventListener("click", (event) => {
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
       askBtn.dataset.workedAsk ||
+      askBtn.dataset.briefAsk ||
       askBtn.dataset.lensAsk ||
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||

@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ab" />
+    <link rel="stylesheet" href="./styles.css?v=20260616ac" />
   </head>
   <body>
     <header class="topbar">
@@ -181,6 +181,30 @@
                 </div>
               </aside>
             </div>
+          </section>
+          <section class="research-brief">
+            <div class="brief-head">
+              <div class="section-title">
+                <p class="eyebrow">研究任务书</p>
+                <h3 id="briefTitle">把本章学成可提交作品</h3>
+              </div>
+              <div class="brief-actions">
+                <button id="briefSearchBtn" class="secondary" type="button">检索任务证据</button>
+                <button id="briefAskBtn" type="button">让导师审任务书</button>
+              </div>
+            </div>
+            <div class="brief-layout">
+              <article class="brief-main">
+                <p class="eyebrow">Research claim</p>
+                <h4 id="briefClaim">选择模块后显示。</h4>
+                <p id="briefContext"></p>
+              </article>
+              <aside class="brief-gates">
+                <p class="eyebrow">提交门槛</p>
+                <div id="briefGates"></div>
+              </aside>
+            </div>
+            <div id="briefSpecGrid" class="brief-spec-grid"></div>
           </section>
           <section class="professor-session">
             <div class="section-title">
@@ -373,6 +397,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ab"></script>
+    <script src="./app.js?v=20260616ac"></script>
   </body>
 </html>
