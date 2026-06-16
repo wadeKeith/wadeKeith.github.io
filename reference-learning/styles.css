@@ -100,7 +100,11 @@ input[type="search"] {
 h1,
 h2,
 h3,
-h4,
+h4 {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
 p {
   overflow-wrap: anywhere;
 }
