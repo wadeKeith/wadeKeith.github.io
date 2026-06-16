@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reference Learning</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Reference Learning</h1>
+        <p>本地知识库 · 学习路径 · 检索问答 · 本地模型</p>
+      </div>
+      <div class="status-strip">
+        <span id="dbStatus">DB: checking</span>
+        <span id="modelStatus">Model: checking</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>学习路径</h2>
+          <div id="moduleList" class="module-list"></div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="hero-panel">
+          <div>
+            <p class="eyebrow">Local-first study system</p>
+            <h2 id="activeTitle">选择一个模块开始</h2>
+            <p id="activeSummary">路径会把 Reference 中的中文实战资料和公开前沿课程串成一个可执行的 PhD 级学习计划。</p>
+          </div>
+          <div class="stats-grid">
+            <div><strong id="statDocs">-</strong><span>documents</span></div>
+            <div><strong id="statChunks">-</strong><span>chunks</span></div>
+            <div><strong id="statModules">-</strong><span>modules</span></div>
+          </div>
+        </section>
+
+        <section class="split">
+          <section class="panel">
+            <div class="panel-head">
+              <h2>模块目标</h2>
+              <button id="markDone" class="ghost">标记完成</button>
+            </div>
+            <ul id="outcomeList" class="outcomes"></ul>
+            <div class="project-box">
+              <span>实践任务</span>
+              <p id="projectText">选择模块后显示。</p>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2>检索 Reference</h2>
+              <button id="searchBtn">检索</button>
+            </div>
+            <textarea id="searchInput" rows="3" placeholder="输入关键词，例如：FlashAttention 的核心思想是什么？"></textarea>
+            <div id="searchResults" class="results"></div>
+          </section>
+        </section>
+
+        <section class="panel chat-panel">
+          <div class="panel-head">
+            <div>
+              <h2>本地 RAG 导师</h2>
+              <p>优先调用本机 Ollama；没有模型时返回可引用的本地检索结果。</p>
+            </div>
+            <button id="askBtn">提问</button>
+          </div>
+          <textarea id="questionInput" rows="4" placeholder="问一个你不会的问题，系统会先检索 Reference，再交给本地模型讲解。"></textarea>
+          <div id="answerBox" class="answer"></div>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      window.REFERENCE_LEARNING_API_BASE = "http://127.0.0.1:8765/api";
+    </script>
+    <script src="./app.js"></script>
+  </body>
+</html>
