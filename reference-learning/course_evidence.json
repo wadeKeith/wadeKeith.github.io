@@ -1,5 +1,5 @@
 {
-  "version": "20260616x",
+  "version": "20260616y",
   "generated_at": "2026-06-16",
   "modules": {
     "orientation": {
@@ -28,7 +28,7 @@
           "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
           "category": "Frontier-AI-PhD-Curriculum/00_index",
           "score": -8.136903936417639e-06,
-          "excerpt": "12_alignment_interpretability_safety/courses | mlhp_book | webpage | https://mlhp.stanford.edu/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/mlhp_book.html | Machine Learning from Human Preferences book. 12_alignment_interpretability_safety/courses | arena_curriculum | webpage | https://www.arena.education/curriculum | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/arena_curriculum.html | ARENA AI safety curriculum...."
+          "excerpt": "12_alignment_interpretability_safety/courses | mlhp_book | webpage | https://mlhp.stanford.edu/ | downloaded | 资料库/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/mlhp_book.html | Machine Learning from Human Preferences book. 12_alignment_interpretability_safety/courses | arena_curriculum | webpage | https://www.arena.education/curriculum | downloaded | 资料库/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/arena_curriculum.html | ARENA AI safety curriculum...."
         },
         {
           "id": 821031,
@@ -36,7 +36,7 @@
           "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
           "category": "Frontier-AI-PhD-Curriculum/00_index",
           "score": -8.133148149624958e-06,
-          "excerpt": "_simulators_datasets/sites | maniskill_site | webpage | https://maniskill.ai/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_site.html | ManiSkill robot simulation site. 10_robotics_simulators_datasets/sites | maniskill_docs | webpage | https://maniskill.readthedocs.io/en/latest/user_guide/index.html | downloaded | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_docs.html | ManiSkill documentation. 10_robotics_simulators_datas..."
+          "excerpt": "_simulators_datasets/sites | maniskill_site | webpage | https://maniskill.ai/ | downloaded | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_site.html | ManiSkill robot simulation site. 10_robotics_simulators_datasets/sites | maniskill_docs | webpage | https://maniskill.readthedocs.io/en/latest/user_guide/index.html | downloaded | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_docs.html | ManiSkill documentation. 10_robotics_simulators_datas..."
         },
         {
           "id": 821038,
@@ -44,7 +44,7 @@
           "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
           "category": "Frontier-AI-PhD-Curriculum/00_index",
           "score": -8.08915988770309e-06,
-          "excerpt": "...d alignment toolkit. 12_alignment_interpretability_safety/repos | awesome_align_llm_human | git | https://github.com/GaryYufei/AlignLLMHumanSurvey.git | updated | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/awesome_align_llm_human Already up to date. | LLM-human alignment survey repo. 12_alignment_interpretability_safety/sites | transformer_circuits | webpage | https://transformer-circuits.pub/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safe..."
+          "excerpt": "...d alignment toolkit. 12_alignment_interpretability_safety/repos | awesome_align_llm_human | git | https://github.com/GaryYufei/AlignLLMHumanSurvey.git | updated | 资料库/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/awesome_align_llm_human Already up to date. | LLM-human alignment survey repo. 12_alignment_interpretability_safety/sites | transformer_circuits | webpage | https://transformer-circuits.pub/ | downloaded | 资料库/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safe..."
         },
         {
           "id": 821033,
@@ -52,7 +52,7 @@
           "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
           "category": "Frontier-AI-PhD-Curriculum/00_index",
           "score": -8.075055703216094e-06,
-          "excerpt": "...date. | DROID policy learning code. 10_robotics_simulators_datasets/repos | bridgedata_v2 | git | https://github.com/rail-berkeley/bridge_data_v2.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/bridgedata_v2 Already up to date. | BridgeData V2 policy code. 10_robotics_simulators_datasets/awesome_lists | awesome_robot_learning | git | https://github.com/RayYoh/Awesome-Robot-Learning.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/awesom..."
+          "excerpt": "...date. | DROID policy learning code. 10_robotics_simulators_datasets/repos | bridgedata_v2 | git | https://github.com/rail-berkeley/bridge_data_v2.git | updated | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/bridgedata_v2 Already up to date. | BridgeData V2 policy code. 10_robotics_simulators_datasets/awesome_lists | awesome_robot_learning | git | https://github.com/RayYoh/Awesome-Robot-Learning.git | updated | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/awesom..."
         },
         {
           "id": 821032,
@@ -60,7 +60,7 @@
           "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
           "category": "Frontier-AI-PhD-Curriculum/00_index",
           "score": -8.065793462463944e-06,
-          "excerpt": "s_datasets/repos | maniskill | git | https://github.com/mani-skill/ManiSkill.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/maniskill Already up to date. | ManiSkill 3 simulation and robot learning framework. 10_robotics_simulators_datasets/repos | isaac_lab | git | https://github.com/isaac-sim/IsaacLab.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/isaac_lab Already up to date. | Isaac Lab robot learning framework. 10_robotics_..."
+          "excerpt": "s_datasets/repos | maniskill | git | https://github.com/mani-skill/ManiSkill.git | updated | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/maniskill Already up to date. | ManiSkill 3 simulation and robot learning framework. 10_robotics_simulators_datasets/repos | isaac_lab | git | https://github.com/isaac-sim/IsaacLab.git | updated | 资料库/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/isaac_lab Already up to date. | Isaac Lab robot learning framework. 10_robotics_..."
         },
         {
           "id": 1999,

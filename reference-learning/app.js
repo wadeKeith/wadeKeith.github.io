@@ -794,7 +794,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616x")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616y")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1044,6 +1044,47 @@ function examFor(module, bp) {
   };
 }
 
+function problemSetFor(module, bp) {
+  const concepts = bp.concepts || module.queries || [];
+  const queries = module.queries || [];
+  const main = concepts[0] || module.title;
+  const supporting = concepts[1] || module.title;
+  return [
+    {
+      kind: "P1",
+      title: "推导题",
+      body: `把 ${main} 写成一页推导：定义输入、状态、目标函数或系统约束，并指出一个会导致结论失效的假设。`,
+      deliverable: "一页推导笔记 + 一个反例。",
+      query: main,
+      ask: `请像课程助教一样审题：我需要完成这道推导题：把 ${main} 写成一页推导，并指出一个会导致结论失效的假设。请给评分要点。`,
+    },
+    {
+      kind: "P2",
+      title: "实现题",
+      body: `围绕「${module.project}」做最小可运行版本。只允许保留必要输入、核心函数、输出检查和一个 baseline。`,
+      deliverable: "最小代码/伪代码 + baseline 对照。",
+      query: `${queries[0] || module.title} implementation code`,
+      ask: `请把「${module.project}」改写成一个最小实现题：输入、核心函数、输出、baseline、测试用例。`,
+    },
+    {
+      kind: "P3",
+      title: "实验题",
+      body: `针对 ${supporting} 设计一个 ablation：只改变一个变量，记录指标、失败样例和你对结果的解释。`,
+      deliverable: "实验表格 + 失败样例 + 解释。",
+      query: `${supporting} ablation benchmark evaluation`,
+      ask: `请为 ${supporting} 设计一个 ablation 实验，并列出变量、指标、失败样例和解释模板。`,
+    },
+    {
+      kind: "P4",
+      title: "写作题",
+      body: `写一段 300-500 字课程笔记，说明本章如何连接到整条“大模型学习之路”，并引用至少两条本地证据。`,
+      deliverable: "短论文式笔记 + 2 条证据引用。",
+      query: queries.slice(0, 3).join(" ") || module.title,
+      ask: `请给我一份「${module.title}」短论文式笔记提纲，要求引用本地证据并连接到整条大模型学习路径。`,
+    },
+  ];
+}
+
 function renderProgress() {
   const total = state.modules.length;
   const done = state.modules.filter((item) => state.done.has(item.id)).length;
@@ -1289,6 +1330,7 @@ function renderPractice() {
   const bp = blueprintFor(state.active);
   const mastery = masteryFor(state.active, bp);
   const exam = examFor(state.active, bp);
+  const problems = problemSetFor(state.active, bp);
   const checked = new Set(state.mastery[state.active.id] || []);
   el("protocolList").innerHTML = mastery.protocol.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("masteryChecklist").innerHTML = mastery.rubric
@@ -1328,6 +1370,25 @@ function renderPractice() {
         <article class="rubric-row">
           <strong>${escapeHtml(grade)}</strong>
           <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("problemSetCards").innerHTML = problems
+    .map(
+      (item) => `
+        <article class="problem-card">
+          <span>${escapeHtml(item.kind)}</span>
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.body)}</p>
+          <div class="problem-deliverable">
+            <strong>交付物</strong>
+            <small>${escapeHtml(item.deliverable)}</small>
+          </div>
+          <div class="problem-actions">
+            <button class="secondary" type="button" data-problem-search="${escapeHtml(item.query)}">检索资料</button>
+            <button type="button" data-problem-ask="${escapeHtml(item.ask)}">导师审题</button>
+          </div>
         </article>
       `
     )
@@ -2011,6 +2072,17 @@ el("oralExamCards").addEventListener("click", (event) => {
   }
   const askBtn = event.target.closest("[data-oral-ask]");
   if (askBtn) setQuestion(askBtn.dataset.oralAsk, true);
+});
+
+el("problemSetCards").addEventListener("click", (event) => {
+  const searchBtn = event.target.closest("[data-problem-search]");
+  if (searchBtn) {
+    showTab("read");
+    runSearch(searchBtn.dataset.problemSearch);
+    return;
+  }
+  const askBtn = event.target.closest("[data-problem-ask]");
+  if (askBtn) setQuestion(askBtn.dataset.problemAsk, true);
 });
 
 el("masteryChecklist").addEventListener("change", (event) => {
