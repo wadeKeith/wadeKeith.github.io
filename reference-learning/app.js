@@ -524,6 +524,51 @@ const COURSE_TRACKS = [
   },
 ];
 
+const GLOBAL_COURSE_MAP = [
+  {
+    source: "Stanford CS336",
+    title: "从零构建语言模型",
+    body: "按 tokenizer、PyTorch 资源核算、Transformer 架构、MoE、GPU kernel、并行、scaling、inference 的顺序建立硬核底层能力。",
+    modules: ["00", "01", "02", "03", "05"],
+    query: "CS336 tokenizer PyTorch resource accounting FlashAttention parallelism scaling inference",
+  },
+  {
+    source: "Stanford CS25",
+    title: "Transformer 前沿研讨",
+    body: "把 Transformer 放进 LLM、视觉、机器人、科学和生成系统的最新进展里读，训练学生追踪一线研究问题而不是背模型名。",
+    modules: ["02", "03", "08", "10", "15"],
+    query: "CS25 Transformers GPT robotics multimodal frontier AI",
+  },
+  {
+    source: "Berkeley LLM Agents",
+    title: "Agent 推理与工具系统",
+    body: "围绕 reasoning、planning、memory、tool use、code generation、program verification 学习可审计的智能体系统。",
+    modules: ["07"],
+    query: "Berkeley LLM Agents ReAct tool use planning code generation program verification",
+  },
+  {
+    source: "Full Stack / DeepLearning.AI",
+    title: "RAG、评测与产品化",
+    body: "从 prompt、retriever、vector database、reranking、evaluation、LLMOps、用户体验和安全回归进入真实应用构建。",
+    modules: ["04", "06", "07"],
+    query: "RAG retriever vector database reranking evaluation LLMOps prompt engineering",
+  },
+  {
+    source: "Hugging Face LLM Course",
+    title: "开源工具链实战",
+    body: "用 Transformers、Datasets、Tokenizers、Accelerate 和 Hub 把概念落到可运行实验，适合把讲义变成代码。",
+    modules: ["01", "02", "04"],
+    query: "Hugging Face Transformers Datasets Tokenizers Accelerate fine tuning",
+  },
+  {
+    source: "MIT / CMU 生成与多模态",
+    title: "生成模型、多模态与具身扩展",
+    body: "用 diffusion、autoregressive、flow、3D 表示、multimodal representation/alignment/fusion 连接视频、世界模型和机器人。",
+    modules: ["08", "09", "10", "12", "14", "15"],
+    query: "diffusion flow matching multimodal alignment fusion world models robotics",
+  },
+];
+
 const TEACHING_LENSES = [
   {
     id: "intuition",
@@ -749,7 +794,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616u")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616v")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -957,6 +1002,24 @@ function renderHero() {
   el("projectTitle").textContent = `${state.active.stage} 章项目`;
 }
 
+function renderGlobalCourseMap() {
+  el("globalCourseMap").innerHTML = GLOBAL_COURSE_MAP.map(
+    (item) => `
+      <article class="global-course-card">
+        <div>
+          <span>${escapeHtml(item.source)}</span>
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.body)}</p>
+        </div>
+        <div class="global-course-foot">
+          <small>${escapeHtml(item.modules.join(" / "))}</small>
+          <button class="text-button" type="button" data-course-map-search="${escapeHtml(item.query)}">检索证据</button>
+        </div>
+      </article>
+    `
+  ).join("");
+}
+
 function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
@@ -967,6 +1030,7 @@ function renderTeach() {
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
   const prev = activeIndex > 0 ? state.modules[activeIndex - 1] : null;
   const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
+  renderGlobalCourseMap();
   el("trackTitle").textContent = track.title;
   el("trackSummary").textContent = track.summary;
   el("trackModules").innerHTML = track.modules
@@ -1438,8 +1502,8 @@ function renderRead() {
   });
   el("retrievalHint").textContent =
     state.searchMode === "semantic"
-      ? "语义重排会调用本地 qwen3-embedding，适合模糊问题；首次唤醒可能慢一些。"
-      : "极速 FTS 是默认模式，适合论文名、算法名、课程名和代码关键词，通常毫秒级返回。";
+      ? "即时检索不等网络；点“全库检索”时会调用 qwen3-embedding 语义重排，适合模糊问题。"
+      : "即时检索默认只扫浏览器静态证据和课程讲义；点“全库检索”才访问 83 万片段数据库。";
   el("queryChips").innerHTML = state.active.queries
     .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
     .join("");
@@ -1530,19 +1594,37 @@ function setQuestion(text, submit = false) {
   if (submit) ask();
 }
 
-async function runSearch(queryOverride = "") {
+async function runSearch(queryOverride = "", options = {}) {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
   el("searchInput").value = q;
   const requestId = ++state.searchRequest;
+  const deep = options.deep === true;
   const semantic = state.searchMode === "semantic" ? "1" : "0";
   const moduleId = state.active ? state.active.id : "";
   const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
+  const instantMessage =
+    state.staticEvidence
+      ? "已使用浏览器静态证据库和课程讲义即时检索；需要 83 万片段全库召回时，再点“全库检索”。"
+      : "正在加载浏览器静态证据库；先显示课程讲义索引，加载完成后自动补充证据。";
   const previewMessage =
     state.searchMode === "semantic"
       ? "正在请求公网语义重排；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。"
       : "正在请求公网极速 FTS；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。";
   const preview = instantSearchPreview(q, moduleId);
+  if (!deep) {
+    renderEvidence(preview, instantMessage);
+    loadStaticEvidence().then(() => {
+      if (requestId !== state.searchRequest) return;
+      renderEvidence(
+        instantSearchPreview(q, moduleId),
+        "已使用浏览器静态证据库和课程讲义即时检索；这一步不等待公网 API。"
+      );
+    });
+    el("retrievalHint").textContent = "即时检索只扫本页静态证据和课程讲义，通常立刻返回；全库检索才调用远端 FTS/语义重排。";
+    showTab("read");
+    return;
+  }
   if (state.searchCache.has(cacheKey)) {
     const cached = state.searchCache.get(cacheKey);
     el("retrievalHint").textContent =
@@ -1684,9 +1766,13 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search]");
+  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search]");
   if (searchBtn) {
-    const query = searchBtn.dataset.lensSearch || searchBtn.dataset.ladderSearch || searchBtn.dataset.seminarSearch;
+    const query =
+      searchBtn.dataset.lensSearch ||
+      searchBtn.dataset.ladderSearch ||
+      searchBtn.dataset.seminarSearch ||
+      searchBtn.dataset.courseMapSearch;
     showTab("read");
     runSearch(query);
     return;
@@ -1814,6 +1900,7 @@ el("quickPrompts").addEventListener("click", (event) => {
 });
 
 el("searchBtn").addEventListener("click", () => runSearch());
+el("deepSearchBtn").addEventListener("click", () => runSearch("", { deep: true }));
 el("askBtn").addEventListener("click", ask);
 el("clearAnswer").addEventListener("click", () => {
   el("questionInput").value = "";
@@ -1852,7 +1939,7 @@ el("resetProgress").addEventListener("click", () => {
   renderModules();
 });
 el("searchInput").addEventListener("keydown", (event) => {
-  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") runSearch();
+  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") runSearch("", { deep: true });
 });
 el("questionInput").addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key === "Enter") ask();

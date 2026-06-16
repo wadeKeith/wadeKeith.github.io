@@ -387,6 +387,66 @@ p {
   gap: 16px;
 }
 
+.global-course-map {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.global-course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.global-course-card {
+  display: grid;
+  gap: 14px;
+  align-content: space-between;
+  min-height: 210px;
+  padding: 16px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.global-course-card span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.global-course-card h4 {
+  margin: 7px 0 8px;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.global-course-card p {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.65;
+}
+
+.global-course-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #e3e8e2;
+}
+
+.global-course-foot small {
+  color: var(--blue);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
 .roadmap-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
@@ -945,9 +1005,9 @@ p {
 
 .search-row {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) auto;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
   gap: 8px;
-  width: min(620px, 100%);
+  width: min(680px, 100%);
 }
 
 .retrieval-hint {
@@ -1418,6 +1478,7 @@ p {
   }
 
   .app-grid,
+  .global-course-grid,
   .syllabus-grid,
   .seminar-panel,
   .roadmap-panel,
