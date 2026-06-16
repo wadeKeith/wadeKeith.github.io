@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ag";
+const APP_VERSION = "20260616ah";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -2356,7 +2356,7 @@ function renderEvidence(results, message = "") {
       (item, idx) => `
         <article class="evidence-card">
           <div class="source-meta">
-            <span>${escapeHtml(item.source_label || `Source ${idx + 1}`)}</span>
+            <span>${escapeHtml(item.source_label || item.category || "本章课程证据")}</span>
             <div class="source-actions">
               <button class="text-button pin-source" type="button" data-source="${idx}">存证据</button>
               <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
@@ -2427,8 +2427,8 @@ function renderRead() {
   });
   el("retrievalHint").textContent =
     state.searchMode === "semantic"
-      ? "即时检索不等网络；点“全库检索”时会调用 qwen3-embedding 语义重排，适合模糊问题。"
-      : "即时检索默认只扫浏览器静态检索包、课程证据和课程讲义；点“全库检索”才访问 83 万片段数据库。";
+      ? "即时检索不等网络；点“后台全库补充”时会调用 qwen3-embedding 语义重排，适合模糊问题。"
+      : "即时检索默认只扫浏览器静态检索包、课程证据和课程讲义；点“后台全库补充”才访问 83 万片段数据库。";
   el("queryChips").innerHTML = state.active.queries
     .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
     .join("");
@@ -2530,7 +2530,7 @@ async function runSearch(queryOverride = "", options = {}) {
   const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
   const instantMessage =
     state.staticSearchIndex
-      ? "已使用浏览器静态检索包、课程证据和讲义索引即时检索；需要 83 万片段深挖时，再点“全库检索”。"
+      ? "已使用浏览器静态检索包、课程证据和讲义索引即时检索；需要 83 万片段深挖时，再点“后台全库补充”。"
       : "正在加载浏览器静态检索包；先显示课程讲义索引，加载完成后自动补充更多证据。";
   const previewMessage =
     state.searchMode === "semantic"
@@ -2546,7 +2546,7 @@ async function runSearch(queryOverride = "", options = {}) {
         "已使用浏览器静态检索包、课程证据和讲义索引即时检索；这一步不等待公网 API。"
       );
     });
-    el("retrievalHint").textContent = "即时检索只扫浏览器静态检索包、课程证据和讲义索引；全库检索才调用远端 FTS/语义重排。";
+    el("retrievalHint").textContent = "即时检索只扫浏览器静态检索包、课程证据和讲义索引；后台全库补充才调用远端 FTS/语义重排。";
     showTab("read");
     return;
   }
@@ -2582,7 +2582,7 @@ async function runSearch(queryOverride = "", options = {}) {
   } catch (err) {
     renderEvidence(
       instantSearchPreview(q, moduleId),
-      `公网全库检索超过等待预算，已保留浏览器即时证据。需要更深召回时可再次点“全库检索”：${err.message}`
+      `公网全库补充超过等待预算，已保留浏览器即时证据。需要更深召回时可再次点“后台全库补充”：${err.message}`
     );
   }
 }
