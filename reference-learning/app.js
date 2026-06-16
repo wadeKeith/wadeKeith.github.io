@@ -107,7 +107,15 @@ async function load() {
     el("statChunks").textContent = stats.chunks ?? "-";
     el("statModules").textContent = stats.modules ?? state.modules.length;
     el("dbStatus").textContent = stats.ready ? `DB: ${stats.documents} docs` : "DB: not built";
-    el("modelStatus").textContent = model.available ? `Model: ${model.models.length} local` : "Model: Ollama offline";
+    if (!model.available) {
+      el("modelStatus").textContent = "Model: Ollama offline";
+    } else if (!model.models.length) {
+      el("modelStatus").textContent = `Model: none installed (${model.default_model})`;
+    } else if (model.models.includes(model.default_model)) {
+      el("modelStatus").textContent = `Model: ${model.default_model}`;
+    } else {
+      el("modelStatus").textContent = `Model: ${model.models.length} local, default missing`;
+    }
     renderModules();
     if (state.modules.length) selectModule(state.modules[0].id);
   } catch (err) {
