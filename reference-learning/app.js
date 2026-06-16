@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ai";
+const APP_VERSION = "20260616aj";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -31,6 +31,7 @@ const state = {
   visibleEvidence: [],
   searchCache: new Map(),
   lessonCache: new Map(),
+  manualSearchActive: false,
   staticEvidence: null,
   staticEvidencePromise: null,
   staticSearchIndex: null,
@@ -2453,6 +2454,10 @@ function renderRead() {
   renderEvidence(state.lesson.evidence || []);
 }
 
+function renderLessonEvidenceIfSafe() {
+  if (!state.manualSearchActive || state.activeTab !== "read") renderRead();
+}
+
 function renderQuickPrompts() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
@@ -2480,17 +2485,17 @@ async function loadLesson(moduleId) {
   const requestId = ++state.lessonRequest;
   if (state.lessonCache.has(moduleId)) {
     state.lesson = state.lessonCache.get(moduleId);
-    renderRead();
+    renderLessonEvidenceIfSafe();
     return;
   }
   state.lesson = null;
-  renderRead();
+  renderLessonEvidenceIfSafe();
   const staticLesson = await staticLessonFor(moduleId);
   if (requestId !== state.lessonRequest) return;
   if (staticLesson) {
     state.lesson = staticLesson;
     state.lessonCache.set(moduleId, staticLesson);
-    renderRead();
+    renderLessonEvidenceIfSafe();
     return;
   }
   try {
@@ -2498,10 +2503,12 @@ async function loadLesson(moduleId) {
     if (requestId !== state.lessonRequest) return;
     state.lesson = lesson;
     state.lessonCache.set(moduleId, lesson);
-    renderRead();
+    renderLessonEvidenceIfSafe();
   } catch (err) {
     if (requestId !== state.lessonRequest) return;
-    renderEvidence([], `课程证据加载失败：${err.message}`);
+    if (!state.manualSearchActive || state.activeTab !== "read") {
+      renderEvidence([], `课程证据加载失败：${err.message}`);
+    }
   }
 }
 
@@ -2509,6 +2516,8 @@ function selectModule(id) {
   const next = state.modules.find((item) => item.id === id) || state.modules[0];
   if (!next) return;
   state.active = next;
+  state.manualSearchActive = false;
+  state.searchRequest += 1;
   renderAll();
   loadLesson(next.id);
 }
@@ -2522,6 +2531,7 @@ function setQuestion(text, submit = false) {
 async function runSearch(queryOverride = "", options = {}) {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
+  state.manualSearchActive = true;
   el("searchInput").value = q;
   const requestId = ++state.searchRequest;
   const deep = options.deep === true;
