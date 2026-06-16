@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ah";
+const APP_VERSION = "20260616ai";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -2356,7 +2356,7 @@ function renderEvidence(results, message = "") {
       (item, idx) => `
         <article class="evidence-card">
           <div class="source-meta">
-            <span>${escapeHtml(item.source_label || item.category || "本章课程证据")}</span>
+            <span>${escapeHtml(item.source_label || "本章课程证据")}</span>
             <div class="source-actions">
               <button class="text-button pin-source" type="button" data-source="${idx}">存证据</button>
               <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
