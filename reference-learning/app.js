@@ -771,7 +771,7 @@ async function ask() {
   const body = {
     question,
     module_id: state.active ? state.active.id : null,
-    top_k: 8,
+    top_k: 5,
   };
   try {
     const data = await api("ask", { method: "POST", body: JSON.stringify(body) });
@@ -802,6 +802,7 @@ async function load() {
   el("statModules").textContent = formatNumber(FALLBACK_STATS.modules);
   el("dbStatus").textContent = "知识库：课程已加载";
   el("modelStatus").textContent = "模型：连接中";
+  el("retrievalStatus").textContent = "检索：连接中";
   renderModules();
   if (state.modules.length) selectModule((state.active && state.active.id) || state.modules[0].id);
 
@@ -813,14 +814,22 @@ async function load() {
     el("statChunks").textContent = formatNumber(stats.chunks);
     el("statModules").textContent = formatNumber(stats.modules == null ? state.modules.length : stats.modules);
     el("dbStatus").textContent = stats.ready ? `知识库：${formatNumber(stats.documents)} 文档` : "知识库：未构建";
+    const modelNames = Array.isArray(model.models) ? model.models : [];
     if (!model.available) {
       el("modelStatus").textContent = `模型：${model.provider || "服务"} 离线`;
-    } else if (!model.models.length) {
+    } else if (!modelNames.length) {
       el("modelStatus").textContent = `模型：未安装（默认 ${model.default_model}）`;
-    } else if (model.models.includes(model.default_model)) {
+    } else if (modelNames.includes(model.default_model)) {
       el("modelStatus").textContent = `模型：${model.default_model}`;
     } else {
-      el("modelStatus").textContent = `模型：${model.models.length} 个可用，默认模型缺失`;
+      el("modelStatus").textContent = `模型：${modelNames.length} 个可用，默认模型缺失`;
+    }
+    if (model.embedding_enabled && model.embedding_available) {
+      el("retrievalStatus").textContent = "检索：语义就绪";
+    } else if (model.embedding_enabled) {
+      el("retrievalStatus").textContent = "检索：FTS 备用";
+    } else {
+      el("retrievalStatus").textContent = "检索：FTS";
     }
     if (activeId && state.modules.some((item) => item.id === activeId)) {
       state.active = state.modules.find((item) => item.id === activeId);
@@ -831,6 +840,7 @@ async function load() {
   } catch (err) {
     el("dbStatus").textContent = "知识库：离线课程";
     el("modelStatus").textContent = "模型：暂未连接";
+    el("retrievalStatus").textContent = "检索：离线";
     el("answerBox").textContent = `课程内容已离线加载，可以先正常学习。证据检索和问答暂时连接不到公网 API：${err.message}`;
   }
 }
