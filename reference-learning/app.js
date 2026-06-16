@@ -32,6 +32,7 @@ const state = {
   staticEvidence: null,
   staticEvidencePromise: null,
   apiWarmupStarted: false,
+  searchRequest: 0,
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
   mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
@@ -748,7 +749,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616t")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616u")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1185,6 +1186,12 @@ function sourcePathLabel(path) {
   return path.replace(/^\/Users\/yin\/Documents_local\/Github\/LLM-learn\/Reference\//, "");
 }
 
+function sourceExcerptLabel(text) {
+  return String(text || "")
+    .replace(/\/Users\/yin\/Documents_local\/Github\/LLM-learn\/Reference\//g, "")
+    .replace(/\bReference\//g, "资料库/");
+}
+
 function clientQueryTerms(query) {
   return (query.toLowerCase().match(/[a-z0-9][a-z0-9_.-]{1,}|[\u4e00-\u9fff]{2,}/g) || [])
     .filter((term) => !["and", "or", "the", "what", "how", "why"].includes(term))
@@ -1266,6 +1273,77 @@ function localPreviewResults(query, activeModuleId = "") {
   }).slice(0, 6);
 }
 
+function evidenceKey(item) {
+  return `${item.title || ""}::${item.path || ""}`;
+}
+
+function mergeEvidenceResults(...lists) {
+  const seen = new Set();
+  const merged = [];
+  lists.flat().forEach((item) => {
+    if (!item) return;
+    const key = evidenceKey(item);
+    if (seen.has(key)) return;
+    seen.add(key);
+    merged.push(item);
+  });
+  return merged.slice(0, 10);
+}
+
+function staticEvidenceResults(query, activeModuleId = "") {
+  const data = state.staticEvidence;
+  if (!data || !data.modules) return [];
+  const modules = state.modules.length ? state.modules : FALLBACK_MODULES;
+  const terms = clientQueryTerms(query);
+  const wholeQuery = query.trim().toLowerCase();
+  const scored = [];
+
+  Object.entries(data.modules).forEach(([moduleId, lesson]) => {
+    const module = lesson.module || modules.find((item) => item.id === moduleId) || {};
+    const moduleContext = [module.stage, module.title, module.summary, moduleId, lesson.evidence_query].join(" ");
+    (lesson.evidence || []).forEach((item, idx) => {
+      const title = item.title || "";
+      const path = item.path || "";
+      const category = item.category || "";
+      const excerpt = item.excerpt || "";
+      const titleLower = title.toLowerCase();
+      const pathLower = path.toLowerCase();
+      const excerptLower = excerpt.toLowerCase();
+      const contextLower = `${moduleContext} ${category}`.toLowerCase();
+      let score = moduleId === activeModuleId ? 2.5 : 0;
+
+      terms.forEach((term) => {
+        if (titleLower.includes(term)) score += 6;
+        if (pathLower.includes(term)) score += 4;
+        if (contextLower.includes(term)) score += 2.5;
+        if (excerptLower.includes(term)) score += 1.5;
+      });
+      if (wholeQuery && `${titleLower} ${pathLower} ${excerptLower}`.includes(wholeQuery)) score += 6;
+
+      if (score > 0) {
+        scored.push({
+          ...item,
+          score,
+          module_id: moduleId,
+          source_label: moduleId === activeModuleId ? "本章静态证据" : "课程静态证据",
+          category: category || "浏览器本地证据库",
+          excerpt: excerpt.slice(0, 700),
+          _rank: idx,
+        });
+      }
+    });
+  });
+
+  return scored
+    .sort((a, b) => b.score - a.score || a._rank - b._rank)
+    .slice(0, 8)
+    .map(({ _rank, ...item }) => item);
+}
+
+function instantSearchPreview(query, activeModuleId = "") {
+  return mergeEvidenceResults(staticEvidenceResults(query, activeModuleId), localPreviewResults(query, activeModuleId));
+}
+
 function renderEvidence(results, message = "") {
   const box = el("evidenceResults");
   if (message) {
@@ -1297,7 +1375,7 @@ function renderEvidence(results, message = "") {
           </div>
           <h4>${escapeHtml(item.title || "未命名资料")}</h4>
           <code>${escapeHtml(sourcePathLabel(item.path || ""))}</code>
-          <p>${escapeHtml(item.excerpt || "")}</p>
+          <p>${escapeHtml(sourceExcerptLabel(item.excerpt || ""))}</p>
         </article>
       `
     )
@@ -1324,7 +1402,7 @@ function renderPinnedSources() {
           <button class="text-button remove-pinned" type="button" data-pinned="${idx}">移除</button>
           <strong>${escapeHtml(item.title || "未命名资料")}</strong>
           <code>${escapeHtml(sourcePathLabel(item.path || ""))}</code>
-          <p>${escapeHtml(item.excerpt || "")}</p>
+          <p>${escapeHtml(sourceExcerptLabel(item.excerpt || ""))}</p>
         </article>
       `
     )
@@ -1456,10 +1534,15 @@ async function runSearch(queryOverride = "") {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
   el("searchInput").value = q;
+  const requestId = ++state.searchRequest;
   const semantic = state.searchMode === "semantic" ? "1" : "0";
   const moduleId = state.active ? state.active.id : "";
   const cacheKey = `${activeApiBase}|${moduleId}|${state.searchMode}|${q}`;
-  const preview = localPreviewResults(q, moduleId);
+  const previewMessage =
+    state.searchMode === "semantic"
+      ? "正在请求公网语义重排；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。"
+      : "正在请求公网极速 FTS；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。";
+  const preview = instantSearchPreview(q, moduleId);
   if (state.searchCache.has(cacheKey)) {
     const cached = state.searchCache.get(cacheKey);
     el("retrievalHint").textContent =
@@ -1470,12 +1553,12 @@ async function runSearch(queryOverride = "") {
     showTab("read");
     return;
   }
-  renderEvidence(
-    preview,
-    state.searchMode === "semantic"
-      ? "正在请求公网语义重排；先显示课程内即时索引，数据库证据返回后自动替换。"
-      : "正在请求公网极速 FTS；先显示课程内即时索引，数据库证据返回后自动替换。"
-  );
+  renderEvidence(preview, previewMessage);
+  loadStaticEvidence().then(() => {
+    if (requestId !== state.searchRequest || state.searchCache.has(cacheKey)) return;
+    const upgradedPreview = instantSearchPreview(q, moduleId);
+    renderEvidence(upgradedPreview, `${previewMessage} 已先命中浏览器静态证据库。`);
+  });
   const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
   try {
     const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=${semantic}${module}`);
@@ -1487,7 +1570,7 @@ async function runSearch(queryOverride = "") {
         : "已使用极速 FTS：关键词召回优先，适合快速定位原始证据。";
     renderEvidence(data.results || []);
   } catch (err) {
-    renderEvidence(preview, `公网数据库检索失败，保留课程内即时索引：${err.message}`);
+    renderEvidence(instantSearchPreview(q, moduleId), `公网数据库检索失败，保留浏览器静态证据库和课程索引：${err.message}`);
   }
 }
 
