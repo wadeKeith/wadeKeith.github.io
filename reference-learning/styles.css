@@ -802,6 +802,96 @@ p {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
 }
 
+.mastery-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 12px;
+}
+
+.mastery-protocol,
+.mastery-rubric {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mastery-protocol ol {
+  margin: 14px 0 0;
+  padding-left: 22px;
+}
+
+.mastery-protocol li {
+  margin: 8px 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.mastery-rubric {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  background: var(--paper);
+}
+
+.mastery-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.mastery-head h3 {
+  margin: 0;
+}
+
+.mastery-meter {
+  height: 9px;
+  overflow: hidden;
+  border: 1px solid #cbd6d0;
+  border-radius: 999px;
+  background: #edf0eb;
+}
+
+.mastery-meter span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--amber), var(--green));
+  transition: width 180ms ease;
+}
+
+.mastery-checklist {
+  display: grid;
+  gap: 10px;
+}
+
+.mastery-item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mastery-item input {
+  margin-top: 4px;
+  accent-color: var(--green);
+}
+
+.mastery-item span {
+  display: grid;
+  gap: 4px;
+}
+
+.mastery-item small {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .research-workbench {
   display: grid;
   gap: 14px;
@@ -971,6 +1061,7 @@ p {
   .lens-card,
   .ladder-step,
   .workbench-grid,
+  .mastery-panel,
   .teaching-layout,
   .practice-layout,
   .notes-layout,

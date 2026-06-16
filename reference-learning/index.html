@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616m" />
+    <link rel="stylesheet" href="./styles.css?v=20260616n" />
   </head>
   <body>
     <header class="topbar">
@@ -156,6 +156,26 @@
         </section>
 
         <section id="practiceTab" class="tab-panel">
+          <section class="mastery-panel">
+            <div class="mastery-protocol">
+              <div class="section-title">
+                <p class="eyebrow">学习协议</p>
+                <h3>本章不是看完，而是完成一组可检查动作</h3>
+              </div>
+              <ol id="protocolList"></ol>
+            </div>
+            <aside class="mastery-rubric">
+              <div class="mastery-head">
+                <div>
+                  <p class="eyebrow">掌握度</p>
+                  <h3 id="masteryScore">0/3 达标</h3>
+                </div>
+                <button id="askMasteryBtn" class="secondary" type="button">导师检查</button>
+              </div>
+              <div class="mastery-meter" aria-hidden="true"><span id="masteryMeterBar"></span></div>
+              <div id="masteryChecklist" class="mastery-checklist"></div>
+            </aside>
+          </section>
           <section class="research-workbench">
             <div class="section-title">
               <p class="eyebrow">研究工作台</p>
@@ -216,6 +236,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616m"></script>
+    <script src="./app.js?v=20260616n"></script>
   </body>
 </html>

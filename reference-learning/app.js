@@ -28,6 +28,7 @@ const state = {
   lessonRequest: 0,
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
+  mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
 };
 
 const FALLBACK_STATS = {
@@ -628,6 +629,10 @@ function saveNotes() {
   localStorage.setItem("llmRoadNotes", JSON.stringify(state.notes));
 }
 
+function saveMastery() {
+  localStorage.setItem("llmRoadMastery", JSON.stringify(state.mastery));
+}
+
 function blueprintFor(module) {
   const fallback = {
     thesis: module.summary,
@@ -642,6 +647,35 @@ function blueprintFor(module) {
     labSteps: ["定位本章三条证据。", "写下一个机制解释。", "完成项目的最小版本。"],
   };
   return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
+}
+
+function masteryFor(module, bp) {
+  const concept = (bp.concepts && bp.concepts[0]) || module.title;
+  return {
+    protocol: [
+      `用自己的话写出本章一句话判断：${bp.thesis}`,
+      `从证据精读中保存 2 条来源，并说明它们分别支持哪个机制或实验结论。`,
+      `完成实践任务的最小版本：${module.project}`,
+      `记录 1 个失败案例或反例，再写出下一轮要检索的关键词。`,
+    ],
+    rubric: [
+      {
+        id: "explain",
+        title: "能讲清机制",
+        body: `不用照抄术语，能解释 ${concept} 的输入、变换、约束和常见误区。`,
+      },
+      {
+        id: "build",
+        title: "有最小作品",
+        body: `至少产出一段代码、一个实验计划、一张系统图或一页论文笔记，可被别人复查。`,
+      },
+      {
+        id: "evaluate",
+        title: "会设计评测",
+        body: `能写出通过标准、失败样例和下一步消融/对比，而不是只说“理解了”。`,
+      },
+    ],
+  };
 }
 
 function workbenchFor(module, bp) {
@@ -803,6 +837,25 @@ function renderTeach() {
 function renderPractice() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
+  const mastery = masteryFor(state.active, bp);
+  const checked = new Set(state.mastery[state.active.id] || []);
+  el("protocolList").innerHTML = mastery.protocol.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("masteryChecklist").innerHTML = mastery.rubric
+    .map(
+      (item) => `
+        <label class="mastery-item">
+          <input type="checkbox" data-mastery="${escapeHtml(item.id)}" ${checked.has(item.id) ? "checked" : ""} />
+          <span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <small>${escapeHtml(item.body)}</small>
+          </span>
+        </label>
+      `
+    )
+    .join("");
+  const score = checked.size;
+  el("masteryScore").textContent = `${score}/${mastery.rubric.length} 达标`;
+  el("masteryMeterBar").style.width = `${Math.round((score / mastery.rubric.length) * 100)}%`;
   el("workbenchCards").innerHTML = workbenchFor(state.active, bp)
     .map(
       (card) => `
@@ -1124,6 +1177,32 @@ el("workbenchCards").addEventListener("click", (event) => {
   }
   const askBtn = event.target.closest("[data-workbench-ask]");
   if (askBtn) setQuestion(askBtn.dataset.workbenchAsk, true);
+});
+
+el("masteryChecklist").addEventListener("change", (event) => {
+  const checkbox = event.target.closest("[data-mastery]");
+  if (!checkbox || !state.active) return;
+  const current = new Set(state.mastery[state.active.id] || []);
+  if (checkbox.checked) current.add(checkbox.dataset.mastery);
+  else current.delete(checkbox.dataset.mastery);
+  state.mastery[state.active.id] = [...current];
+  saveMastery();
+  renderPractice();
+});
+
+el("askMasteryBtn").addEventListener("click", () => {
+  if (!state.active) return;
+  const bp = blueprintFor(state.active);
+  const mastery = masteryFor(state.active, bp);
+  const checked = new Set(state.mastery[state.active.id] || []);
+  const pending = mastery.rubric.filter((item) => !checked.has(item.id));
+  const pendingText = pending.length
+    ? pending.map((item) => `- ${item.title}：${item.body}`).join("\n")
+    : "三项达标都已勾选，请用严格标准复查是否真的过关。";
+  setQuestion(
+    `请像严格课程助教一样检查我在「${state.active.title}」是否真正掌握。\n\n本章核心：${bp.thesis}\n本章项目：${state.active.project}\n需要重点检查的达标项：\n${pendingText}\n\n请给出：1）是否达标；2）还缺什么证据；3）下一步必须做的一个动作。`,
+    true
+  );
 });
 
 el("quickPrompts").addEventListener("click", (event) => {
