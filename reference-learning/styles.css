@@ -518,6 +518,145 @@ p {
   padding: 13px;
 }
 
+.textbook-chapter {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.textbook-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+  gap: 14px;
+}
+
+.textbook-main,
+.textbook-side {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.textbook-main {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.textbook-main h3 {
+  margin: 0;
+  font-size: clamp(24px, 2.7vw, 34px);
+  line-height: 1.18;
+}
+
+.textbook-sections,
+.textbook-side,
+.textbook-case,
+.textbook-checks,
+.textbook-matrix {
+  display: grid;
+  gap: 10px;
+}
+
+.textbook-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid #e0e6e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.textbook-section h4 {
+  margin: 0 0 7px;
+  color: var(--green);
+  font-size: 18px;
+  line-height: 1.28;
+}
+
+.textbook-section p,
+.textbook-case p,
+.textbook-checks p,
+.textbook-matrix p {
+  margin: 0;
+  color: #3d4845;
+  line-height: 1.72;
+}
+
+.textbook-side {
+  align-content: start;
+  padding: 16px;
+  background: var(--paper);
+}
+
+.textbook-case article,
+.textbook-checks article,
+.textbook-matrix article {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.textbook-case article {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+}
+
+.textbook-case strong {
+  color: var(--blue);
+}
+
+.textbook-checks article {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 11px;
+}
+
+.textbook-checks span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.textbook-matrix {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.textbook-matrix article {
+  display: grid;
+  gap: 7px;
+  min-height: 132px;
+  padding: 13px;
+}
+
+.textbook-matrix span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.textbook-matrix strong {
+  color: var(--ink);
+  line-height: 1.35;
+}
+
 .course-reader {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
@@ -2570,6 +2709,9 @@ p {
   .lesson-compass,
   .lesson-flow-wrap,
   .source-spine,
+  .textbook-layout,
+  .textbook-section,
+  .textbook-matrix,
   .course-reader,
   .global-course-grid,
   .course-atlas-grid,
@@ -2663,6 +2805,9 @@ p {
 
   .lesson-hero,
   .lesson-dashboard,
+  .textbook-chapter,
+  .textbook-main,
+  .textbook-side,
   .reader-main,
   .reader-side,
   .lecture-card,

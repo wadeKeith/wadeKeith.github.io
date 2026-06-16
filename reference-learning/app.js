@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616af";
+const APP_VERSION = "20260616ag";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -1300,6 +1300,68 @@ function lessonDashboardFor(module, bp, pack, manuscript, seminar, worked, brief
   };
 }
 
+function textbookFor(module, bp, pack, manuscript, worked, brief) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const second = concepts[1] || main;
+  const third = concepts[2] || second;
+  const anchors = COURSE_ANCHORS[module.id] || COURSE_ANCHORS.orientation;
+  return {
+    title: `${module.stage}｜${module.title}：从直觉到可复现实验`,
+    sections: [
+      {
+        label: "1. 本章为什么重要",
+        body: `本章要解决的不是“知道 ${main} 这个名词”，而是把它放进大模型系统的因果链里：${bp.frame} 顶级课程通常不会让学生先背模型名，而是先建立问题、机制、证据和实验之间的约束关系。`,
+        query: main,
+      },
+      {
+        label: "2. 核心概念如何连接",
+        body: `把本章概念压成一条线：${concepts.slice(0, 5).join(" -> ")}。学习时先问 ${main} 的输入是什么，再问 ${second} 如何改变中间状态，最后问 ${third} 会怎样影响指标、成本或失败模式。`,
+        query: concepts.slice(0, 4).join(" ") || module.title,
+      },
+      {
+        label: "3. 机制与黑板推导",
+        body: `${pack.mechanisms.join(" ")} 黑板上只保留一个式子：${manuscript.blackboard.formula}。如果你能解释这个式子里每个符号对应的数据、参数、缓存、动作或评测对象，就已经越过了“看过材料”的最低线。`,
+        query: manuscript.blackboard.formula,
+      },
+      {
+        label: "4. 工程实现与调试",
+        body: `把机制落到工程时，先做最小闭环，再扩大规模。本章最小作品是：${module.project} 你需要写清输入、关键函数、输出、baseline、指标和一个失败样例；否则即使问答模型讲得很好，也无法证明你真正掌握。`,
+        query: worked.searchQuery,
+      },
+      {
+        label: "5. 研究阅读与证据",
+        body: `推荐按这条阅读顺序推进：${pack.readings.join(" ")} 参考课程包括：${anchors.slice(0, 2).join(" ")} 阅读时每条资料都标注它是支持概念、机制、实验、局限还是工程复现。`,
+        query: brief.searchQuery,
+      },
+      {
+        label: "6. 失败模式与边界",
+        body: `最常见的误区是：${bp.misconceptions.join(" ")} 顶级课程训练的不是“讲得顺”，而是知道什么时候不能下结论；你必须能提出一个让本章方法失效的场景，并说明下一步如何做 ablation。`,
+        query: `${main} ${second} failure mode ablation`,
+      },
+    ],
+    caseStudy: [
+      ["场景", `你正在用「${module.title}」解决一个真实研究/工程问题，目标不是证明自己懂了，而是产出可复查作品。`],
+      ["Baseline", `先禁用或替换 ${main}，保留其它条件，形成一个朴素对照。`],
+      ["变量", `只改变 ${second} 的实现或强度，观察质量、成本、延迟、成功率或引用准确性。`],
+      ["结论", `只有当结果能支持「${bp.thesis}」并解释失败样例时，才能进入下一章。`],
+    ],
+    checks: [
+      `能否用 90 秒讲清 ${main} 的输入、变换、约束和失败模式？`,
+      `能否画出黑板式：${manuscript.blackboard.formula}？`,
+      `能否给出一个 baseline，并说明它为什么公平？`,
+      `能否保存两条本地证据，分别支持机制和实验结论？`,
+      `能否把本章连接到最终作品：${module.project}？`,
+    ],
+    matrix: [
+      ["概念", `${main} / ${second}`, "讲清定义、输入输出和适用边界"],
+      ["机制", manuscript.blackboard.title, "画出数据流、状态变化或优化目标"],
+      ["工程", module.project, "做出最小实现、baseline 和失败记录"],
+      ["研究", brief.claim, "提出可证伪 claim、指标和消融计划"],
+    ],
+  };
+}
+
 function trackFor(moduleId) {
   return COURSE_TRACKS.find((track) => track.modules.includes(moduleId)) || COURSE_TRACKS[0];
 }
@@ -1562,6 +1624,7 @@ function renderTeach() {
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
   const dashboard = lessonDashboardFor(state.active, bp, pack, manuscript, seminar, worked, brief);
+  const textbook = textbookFor(state.active, bp, pack, manuscript, worked, brief);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -1614,6 +1677,37 @@ function renderTeach() {
           <span>${escapeHtml(label)}</span>
           <p>${escapeHtml(body)}</p>
           <button class="text-button" type="button" data-briefing-search="${escapeHtml(query)}">检索这条线</button>
+        </article>
+      `
+    )
+    .join("");
+  el("textbookTitle").textContent = textbook.title;
+  el("textbookSections").innerHTML = textbook.sections
+    .map(
+      (item) => `
+        <article class="textbook-section">
+          <div>
+            <h4>${escapeHtml(item.label)}</h4>
+            <p>${escapeHtml(item.body)}</p>
+          </div>
+          <button class="text-button" type="button" data-textbook-search="${escapeHtml(item.query)}">检索证据</button>
+        </article>
+      `
+    )
+    .join("");
+  el("textbookCase").innerHTML = textbook.caseStudy
+    .map(([label, body]) => `<article><strong>${escapeHtml(label)}</strong><p>${escapeHtml(body)}</p></article>`)
+    .join("");
+  el("textbookChecks").innerHTML = textbook.checks
+    .map((item, idx) => `<article><span>${String(idx + 1).padStart(2, "0")}</span><p>${escapeHtml(item)}</p></article>`)
+    .join("");
+  el("textbookMatrix").innerHTML = textbook.matrix
+    .map(
+      ([label, title, body]) => `
+        <article>
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(title)}</strong>
+          <p>${escapeHtml(body)}</p>
         </article>
       `
     )
@@ -2440,8 +2534,8 @@ async function runSearch(queryOverride = "", options = {}) {
       : "正在加载浏览器静态检索包；先显示课程讲义索引，加载完成后自动补充更多证据。";
   const previewMessage =
     state.searchMode === "semantic"
-      ? "正在请求公网语义重排；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。"
-      : "正在请求公网极速 FTS；先显示浏览器静态证据库和课程索引，数据库证据返回后自动替换。";
+      ? "正在后台请求公网语义重排；先显示浏览器静态证据库和课程索引，数据库证据返回后再补充。"
+      : "正在后台请求公网极速 FTS；先显示浏览器静态证据库和课程索引，数据库证据返回后再补充。";
   const preview = instantSearchPreview(q, moduleId);
   if (!deep) {
     renderEvidence(preview, instantMessage);
@@ -2474,14 +2568,16 @@ async function runSearch(queryOverride = "", options = {}) {
   });
   const module = moduleId ? `&module=${encodeURIComponent(moduleId)}` : "";
   try {
-    const timeoutMs = state.searchMode === "semantic" ? 8000 : 3500;
+    const timeoutMs = state.searchMode === "semantic" ? 5000 : 1500;
     const data = await api(`search?q=${encodeURIComponent(q)}&limit=8&semantic=${semantic}${module}`, { timeoutMs });
     state.searchCache.set(cacheKey, data);
     if (state.searchCache.size > 80) state.searchCache.delete(state.searchCache.keys().next().value);
+    const timing = typeof data.elapsed_ms === "number" ? `，远端 ${data.elapsed_ms}ms` : "";
+    const cache = data.cache_hit ? "，命中服务端缓存" : "";
     el("retrievalHint").textContent =
       data.retrieval_mode === "semantic"
-        ? "已使用语义重排：适合解释型问题，但会比极速 FTS 慢。"
-        : "已使用极速 FTS：关键词召回优先，适合快速定位原始证据。";
+        ? `已使用语义重排：适合解释型问题，但会比极速 FTS 慢${timing}${cache}。`
+        : `已使用极速 FTS：关键词召回优先，适合快速定位原始证据${timing}${cache}。`;
     renderEvidence(data.results || []);
   } catch (err) {
     renderEvidence(
@@ -2611,7 +2707,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -2624,6 +2720,7 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.courseMapSearch ||
       searchBtn.dataset.atlasSearch ||
       searchBtn.dataset.briefingSearch ||
+      searchBtn.dataset.textbookSearch ||
       searchBtn.dataset.sessionSearch ||
       searchBtn.dataset.concept;
     showTab("read");

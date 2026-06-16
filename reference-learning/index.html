@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616af" />
+    <link rel="stylesheet" href="./styles.css?v=20260616ag" />
   </head>
   <body>
     <header class="topbar">
@@ -80,6 +80,30 @@
               </aside>
             </div>
             <div id="lessonSourceSpine" class="source-spine"></div>
+          </section>
+          <section class="textbook-chapter">
+            <div class="section-title">
+              <p class="eyebrow">章节教材页</p>
+              <h3>像读一章教材一样学习：概念、机制、工程、研究问题连成正文</h3>
+            </div>
+            <div class="textbook-layout">
+              <article class="textbook-main">
+                <p class="eyebrow">Textbook chapter</p>
+                <h3 id="textbookTitle">选择模块后显示章节教材。</h3>
+                <div id="textbookSections" class="textbook-sections"></div>
+              </article>
+              <aside class="textbook-side">
+                <div>
+                  <p class="eyebrow">课堂案例</p>
+                  <div id="textbookCase" class="textbook-case"></div>
+                </div>
+                <div>
+                  <p class="eyebrow">读完自检</p>
+                  <div id="textbookChecks" class="textbook-checks"></div>
+                </div>
+              </aside>
+            </div>
+            <div id="textbookMatrix" class="textbook-matrix"></div>
           </section>
           <section class="course-reader">
             <article class="reader-main">
@@ -309,7 +333,7 @@
               <div class="search-row">
                 <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
                 <button id="searchBtn" type="button">即时检索</button>
-                <button id="deepSearchBtn" class="secondary" type="button">全库检索</button>
+                <button id="deepSearchBtn" class="secondary" type="button">后台全库补充</button>
               </div>
             </div>
           </div>
@@ -445,6 +469,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616af"></script>
+    <script src="./app.js?v=20260616ag"></script>
   </body>
 </html>
