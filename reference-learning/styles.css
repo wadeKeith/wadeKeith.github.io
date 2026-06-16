@@ -657,6 +657,140 @@ p {
   line-height: 1.35;
 }
 
+.course-standard-lab {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fff 0%, #f7fbfa 100%);
+  box-shadow: var(--shadow);
+  scroll-margin-top: 118px;
+}
+
+.standard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 14px;
+}
+
+.standard-benchmarks,
+.standard-assignment,
+.diagnostic-prescription {
+  display: grid;
+  gap: 10px;
+}
+
+.standard-benchmarks {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.standard-card,
+.diagnostic-panel,
+.standard-assignment article {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.standard-card {
+  display: grid;
+  gap: 9px;
+  align-content: start;
+  min-height: 196px;
+  padding: 15px;
+}
+
+.standard-card span,
+.standard-assignment span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.standard-card h4 {
+  margin: 0;
+  color: var(--green);
+  font-size: 19px;
+  line-height: 1.28;
+}
+
+.standard-card p,
+.diagnostic-prescription li,
+.standard-assignment p {
+  margin: 0;
+  color: #3d4845;
+  line-height: 1.68;
+}
+
+.standard-actions,
+.diagnostic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 3px;
+}
+
+.diagnostic-panel {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 16px;
+  background: var(--paper);
+}
+
+.diagnostic-panel h3 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.24;
+}
+
+.diagnostic-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.diagnostic-tabs button {
+  min-height: 42px;
+  border: 1px solid #cfd9d3;
+  background: #fff;
+  color: #46524e;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.diagnostic-tabs button.active {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.diagnostic-prescription ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.standard-assignment {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.standard-assignment article {
+  display: grid;
+  gap: 7px;
+  min-height: 138px;
+  padding: 13px;
+}
+
+.standard-assignment strong {
+  color: var(--ink);
+  line-height: 1.35;
+}
+
 .course-reader {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
@@ -2712,6 +2846,9 @@ p {
   .textbook-layout,
   .textbook-section,
   .textbook-matrix,
+  .standard-layout,
+  .standard-benchmarks,
+  .standard-assignment,
   .course-reader,
   .global-course-grid,
   .course-atlas-grid,
@@ -2806,6 +2943,7 @@ p {
   .lesson-hero,
   .lesson-dashboard,
   .textbook-chapter,
+  .course-standard-lab,
   .textbook-main,
   .textbook-side,
   .reader-main,
@@ -2825,6 +2963,10 @@ p {
   .note-prompt,
   .mentor-dock {
     padding: 14px;
+  }
+
+  .diagnostic-tabs {
+    grid-template-columns: 1fr;
   }
 
   .brief-actions {

@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616aj";
+const APP_VERSION = "20260616ak";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -24,6 +24,7 @@ const state = {
   active: null,
   activeTab: "teach",
   activeLens: "intuition",
+  studyLevel: localStorage.getItem("llmRoadStudyLevel") || "concept",
   mechanismKnobs: { component: 55, evidence: 55, budget: 45, pressure: 40 },
   searchMode: "fts",
   lesson: null,
@@ -572,6 +573,41 @@ const GLOBAL_COURSE_MAP = [
     body: "用 diffusion、autoregressive、flow、3D 表示、multimodal representation/alignment/fusion 连接视频、世界模型和机器人。",
     modules: ["08", "09", "10", "12", "14", "15"],
     query: "diffusion flow matching multimodal alignment fusion world models robotics",
+  },
+];
+
+const COURSE_STANDARD_BENCHMARKS = [
+  {
+    id: "from_scratch",
+    source: "Stanford CS336",
+    title: "从零构建，而不是只会调用",
+    body: "每章都要能落到一个可运行或可复查的最小系统：数据、模型、训练/推理、评测至少有一条链路被亲手打通。",
+    query: "CS336 language modeling from scratch tokenizer transformer training evaluation",
+    ask: "请按 Stanford CS336 的 from-scratch 标准检查我这一章：哪些部分必须亲手实现，哪些可以只读证据？",
+  },
+  {
+    id: "frontier_seminar",
+    source: "Stanford CS25",
+    title: "用前沿 seminar 视野追问题",
+    body: "不要把模型名当结论；把每个概念放进当前 Transformer / multimodal / robotics / systems 的前沿问题里。",
+    query: "CS25 Transformers frontier LLM multimodal robotics seminar",
+    ask: "请按 Stanford CS25 的前沿研讨方式，把本章整理成 3 个研究问题和 3 个值得追踪的方向。",
+  },
+  {
+    id: "agent_reasoning",
+    source: "Berkeley LLM Agents",
+    title: "把能力放进任务、工具与验证",
+    body: "凡是 RAG、agent、reasoning、code、robotics 相关内容，都要问：状态如何表示，工具如何调用，失败如何恢复，结果如何验证。",
+    query: "Berkeley LLM Agents reasoning planning tool use code generation verification",
+    ask: "请按 Berkeley LLM Agents 的标准，把本章内容转成状态、动作、工具、记忆、验证五栏。",
+  },
+  {
+    id: "open_toolchain",
+    source: "Hugging Face LLM Course",
+    title: "工具链必须能跑起来",
+    body: "把抽象概念连接到 Transformers、Datasets、Tokenizers、Accelerate、Hub 或可替代工具，形成可分享 demo 或 notebook。",
+    query: "Hugging Face LLM course Transformers Datasets Tokenizers Accelerate demo",
+    ask: "请按 Hugging Face LLM Course 的工具链标准，给我这一章的最小 notebook 或 demo 设计。",
   },
 ];
 
@@ -1363,6 +1399,71 @@ function textbookFor(module, bp, pack, manuscript, worked, brief) {
   };
 }
 
+function courseStandardFor(module, bp, pack, manuscript, worked, brief) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const queries = module.queries || [];
+  const assignmentQuery = `${queries.slice(0, 3).join(" ") || module.title} baseline benchmark ablation implementation`;
+  const prescriptions = {
+    concept: {
+      title: "先懂概念：用 45 分钟建立这章的心智地图",
+      steps: [
+        `用一句话写出本章判断：${bp.thesis}`,
+        `把 ${concepts.slice(0, 4).join(" / ")} 分成“对象、机制、指标、失败条件”。`,
+        `点击 2 个证据按钮，保存一条概念证据和一条机制证据。`,
+      ],
+      query: concepts.slice(0, 3).join(" ") || module.title,
+      ask: `我现在只想先懂概念，请用 45 分钟学习计划讲清「${module.title}」：心智地图、最小术语表、必须读的证据。`,
+    },
+    builder: {
+      title: "动手实现：用 90 分钟做出最小可检查作品",
+      steps: [
+        `把项目写成输入、函数、输出：${module.project}`,
+        `先做 baseline，再只改变 ${main} 相关变量，记录指标和失败样例。`,
+        "把关键代码、实验表和一条反例写进学习笔记。",
+      ],
+      query: worked.searchQuery || assignmentQuery,
+      ask: `我想动手实现，请把「${module.project}」拆成 90 分钟可执行实验：文件、函数、baseline、指标、失败记录。`,
+    },
+    research: {
+      title: "研究推进：把本章变成一个可证伪 claim",
+      steps: [
+        `提出一个能被实验反驳的 claim：${brief.claim}`,
+        "检索 baseline、benchmark、ablation、failure mode，避免只做主观总结。",
+        "写出一个小研究计划：假设、数据、模型/系统、指标、风险、下一步。",
+      ],
+      query: brief.searchQuery || assignmentQuery,
+      ask: `请把「${module.title}」升级成一个小研究计划：claim、相关工作、baseline、benchmark、ablation、风险。`,
+    },
+  };
+  return {
+    benchmarks: COURSE_STANDARD_BENCHMARKS.map((item) => ({
+      ...item,
+      query: `${item.query} ${queries.slice(0, 2).join(" ")}`,
+      ask: `${item.ask}\n\n当前章节：${module.title}\n本章核心：${bp.thesis}\n本章项目：${module.project}`,
+    })),
+    active: prescriptions[state.studyLevel] || prescriptions.concept,
+    assignment: [
+      {
+        label: "作业题",
+        title: `把「${module.title}」做成一份可复查课程作业`,
+        body: `提交物必须包含：一句话 claim、机制图、2 条本地证据、一个 baseline、一个失败样例、下一步 ablation。`,
+      },
+      {
+        label: "评分线",
+        title: "按顶级课程标准自评",
+        body: "A 档：能解释机制并复现实验；B 档：能引用证据并画出机制；C 档：只会复述概念；不及格：没有来源、没有指标、没有失败样例。",
+      },
+      {
+        label: "快速入口",
+        title: "先用即时检索找材料",
+        body: `推荐查询：${assignmentQuery}`,
+        query: assignmentQuery,
+      },
+    ],
+  };
+}
+
 function trackFor(moduleId) {
   return COURSE_TRACKS.find((track) => track.modules.includes(moduleId)) || COURSE_TRACKS[0];
 }
@@ -1626,6 +1727,7 @@ function renderTeach() {
   const session = sessionFor(state.active, bp, pack, seminar);
   const dashboard = lessonDashboardFor(state.active, bp, pack, manuscript, seminar, worked, brief);
   const textbook = textbookFor(state.active, bp, pack, manuscript, worked, brief);
+  const standard = courseStandardFor(state.active, bp, pack, manuscript, worked, brief);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -1709,6 +1811,50 @@ function renderTeach() {
           <span>${escapeHtml(label)}</span>
           <strong>${escapeHtml(title)}</strong>
           <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("standardBenchmarks").innerHTML = standard.benchmarks
+    .map(
+      (item) => `
+        <article class="standard-card">
+          <span>${escapeHtml(item.source)}</span>
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.body)}</p>
+          <div class="standard-actions">
+            <button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">检索本地证据</button>
+            <button class="text-button" type="button" data-standard-ask="${escapeHtml(item.ask)}">导师按此检查</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  document.querySelectorAll("[data-study-level]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.studyLevel === state.studyLevel);
+  });
+  el("diagnosticTitle").textContent = standard.active.title;
+  el("diagnosticPrescription").innerHTML = `
+    <ol>
+      ${standard.active.steps.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+    </ol>
+    <div class="diagnostic-actions">
+      <button class="secondary" type="button" data-standard-search="${escapeHtml(standard.active.query)}">按处方检索</button>
+      <button type="button" data-standard-ask="${escapeHtml(standard.active.ask)}">让导师制定计划</button>
+    </div>
+  `;
+  el("standardAssignment").innerHTML = standard.assignment
+    .map(
+      (item) => `
+        <article>
+          <span>${escapeHtml(item.label)}</span>
+          <strong>${escapeHtml(item.title)}</strong>
+          <p>${escapeHtml(item.body)}</p>
+          ${
+            item.query
+              ? `<button class="text-button" type="button" data-standard-search="${escapeHtml(item.query)}">检索作业资料</button>`
+              : ""
+          }
         </article>
       `
     )
@@ -2701,6 +2847,13 @@ el("teachTab").addEventListener("click", (event) => {
     selectModule(trackBtn.dataset.trackModule);
     return;
   }
+  const levelBtn = event.target.closest("[data-study-level]");
+  if (levelBtn) {
+    state.studyLevel = levelBtn.dataset.studyLevel;
+    localStorage.setItem("llmRoadStudyLevel", state.studyLevel);
+    renderTeach();
+    return;
+  }
   const lensBtn = event.target.closest("[data-lens]");
   if (lensBtn) {
     state.activeLens = lensBtn.dataset.lens;
@@ -2717,7 +2870,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-textbook-search], [data-standard-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -2731,13 +2884,14 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.atlasSearch ||
       searchBtn.dataset.briefingSearch ||
       searchBtn.dataset.textbookSearch ||
+      searchBtn.dataset.standardSearch ||
       searchBtn.dataset.sessionSearch ||
       searchBtn.dataset.concept;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-standard-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
@@ -2748,6 +2902,7 @@ el("teachTab").addEventListener("click", (event) => {
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||
       askBtn.dataset.briefingAsk ||
+      askBtn.dataset.standardAsk ||
       askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }

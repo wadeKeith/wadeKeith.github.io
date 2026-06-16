@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616aj" />
+    <link rel="stylesheet" href="./styles.css?v=20260616ak" />
   </head>
   <body>
     <header class="topbar">
@@ -104,6 +104,28 @@
               </aside>
             </div>
             <div id="textbookMatrix" class="textbook-matrix"></div>
+          </section>
+          <section class="course-standard-lab">
+            <div class="section-title">
+              <p class="eyebrow">名课标准工作台</p>
+              <h3>把顶级公开课的训练方式压成本章的学习处方</h3>
+            </div>
+            <div class="standard-layout">
+              <div id="standardBenchmarks" class="standard-benchmarks"></div>
+              <aside class="diagnostic-panel">
+                <div>
+                  <p class="eyebrow">学习者诊断</p>
+                  <h3 id="diagnosticTitle">选择你的进入方式</h3>
+                </div>
+                <div class="diagnostic-tabs" id="diagnosticTabs">
+                  <button class="active" type="button" data-study-level="concept">先懂概念</button>
+                  <button type="button" data-study-level="builder">动手实现</button>
+                  <button type="button" data-study-level="research">研究推进</button>
+                </div>
+                <div id="diagnosticPrescription" class="diagnostic-prescription"></div>
+              </aside>
+            </div>
+            <div id="standardAssignment" class="standard-assignment"></div>
           </section>
           <section class="course-reader">
             <article class="reader-main">
@@ -469,6 +491,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616aj"></script>
+    <script src="./app.js?v=20260616ak"></script>
   </body>
 </html>
