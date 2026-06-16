@@ -4,7 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>大模型 AI 交互教授</title>
-    <link rel="stylesheet" href="./styles.css?v=20260616f" />
+    <script>
+      if (location.protocol === "https:" && /^(www\.)?yincheng429\.cn$/.test(location.hostname)) {
+        location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
+      }
+    </script>
+    <link rel="stylesheet" href="./styles.css?v=20260616g" />
   </head>
   <body>
     <header class="topbar">
@@ -151,6 +156,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616f"></script>
+    <script src="./app.js?v=20260616g"></script>
   </body>
 </html>

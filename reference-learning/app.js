@@ -1,11 +1,22 @@
-function defaultApiBase() {
-  const host = window.location.hostname;
-  if (["localhost", "127.0.0.1"].includes(host)) return "./api";
-  if (["yincheng429.cn", "www.yincheng429.cn"].includes(host)) return "http://47.111.133.184:61135/api";
-  return `${window.location.origin}/api`;
+const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
+const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
+
+if (window.location.protocol === "https:" && SITE_HOSTS.includes(window.location.hostname)) {
+  window.location.replace(`http://${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`);
+  throw new Error("Redirecting to the HTTP site so the public teaching API can be reached.");
 }
 
-const API_BASE = (window.REFERENCE_LEARNING_API_BASE || defaultApiBase()).replace(/\/$/, "");
+function apiCandidates() {
+  const host = window.location.hostname;
+  const override = window.REFERENCE_LEARNING_API_BASE;
+  if (override) return [override.replace(/\/$/, "")];
+  if (["localhost", "127.0.0.1"].includes(host)) return ["./api", PUBLIC_API_BASE];
+  if (SITE_HOSTS.includes(host)) return [PUBLIC_API_BASE];
+  return [`${window.location.origin}/api`, PUBLIC_API_BASE];
+}
+
+const API_CANDIDATES = apiCandidates().map((base) => base.replace(/\/$/, ""));
+let activeApiBase = API_CANDIDATES[0];
 
 const state = {
   modules: [],
@@ -27,210 +38,146 @@ const FALLBACK_MODULES = [
   {
     id: "orientation",
     stage: "00",
-    title: "Reference orientation and study system",
-    summary: "Understand the local archive, how the database is built, and how to study with retrieval-backed notes.",
-    outcomes: [
-      "Know the major Reference folders and what each contributes.",
-      "Use search, source citations, and module progress deliberately.",
-      "Distinguish Chinese hands-on material from frontier public course material.",
-    ],
+    title: "导学与学习系统",
+    summary: "先把本地资料库当成研究实验室：理解目录、数据库和检索式学习方法。",
+    outcomes: ["知道 Reference 资料库的主要目录和各自承担的学习角色。", "能主动使用检索、来源引用、模块进度和学习笔记。", "区分中文实战材料、论文材料和前沿公开课程材料。"],
     queries: ["Reference contents map", "Frontier AI PhD Curriculum", "学习路径", "LLM 综述"],
-    project: "Create a personal map of the folders you will use every week.",
+    project: "画出你每周会使用的个人 Reference 资料地图。",
   },
   {
     id: "math_pytorch_nlp",
     stage: "01",
-    title: "Math, PyTorch, NLP, and deep learning prerequisites",
-    summary: "Build the foundations needed to implement and debug transformer models.",
-    outcomes: [
-      "Review tensor shapes, autograd, optimization, and training loops.",
-      "Understand tokenization, embeddings, language modeling, and NLP datasets.",
-      "Read notebooks and code without treating them as black boxes.",
-    ],
+    title: "数学、PyTorch、NLP 与深度学习基础",
+    summary: "补齐实现和调试 Transformer 所需的张量、优化、NLP 与训练循环基础。",
+    outcomes: ["复习张量形状、自动微分、优化器和训练循环。", "理解分词、Embedding、语言建模和 NLP 数据集。", "能阅读 notebook 与代码，而不是把它们当黑盒。"],
     queries: ["PyTorch", "自然语言处理", "Word2Vec", "Embedding", "大模型必备的深度学习基础"],
-    project: "Reproduce a tiny text classifier or language-model training loop.",
+    project: "复现一个极小文本分类器或语言模型训练循环。",
   },
   {
     id: "transformer_gpt_llama",
     stage: "02",
-    title: "Transformer, GPT, and LLaMA from scratch",
-    summary: "Move from attention mechanics to decoder-only LLM implementation.",
-    outcomes: [
-      "Derive scaled dot-product attention, masking, MHA, MLP, residuals, and layer norm.",
-      "Implement GPT-style training and sampling.",
-      "Understand LLaMA choices such as RoPE, RMSNorm, SwiGLU, and GQA.",
-    ],
+    title: "从零实现 Transformer、GPT 与 LLaMA",
+    summary: "从注意力机制推到 decoder-only 大模型实现，建立可调试的底层理解。",
+    outcomes: ["推导 scaled dot-product attention、mask、MHA、MLP、残差和归一化。", "实现 GPT 风格训练与采样。", "理解 RoPE、RMSNorm、SwiGLU、GQA 等 LLaMA 设计选择。"],
     queries: ["Transformer", "手撕GPT", "LLaMA", "RoPE", "RMSNorm", "Grouped Query Attention", "CS336 assignment1"],
-    project: "Implement a minimal decoder-only transformer and compare it with nanoGPT or CS336 basics.",
+    project: "实现一个最小 decoder-only Transformer，并和 nanoGPT 或 CS336 基础实现对照。",
   },
   {
     id: "llm_training_scaling_data",
     stage: "03",
-    title: "LLM training, data, scaling, and DeepSeek-style architecture",
-    summary: "Study modern pretraining choices, data pipelines, scaling laws, and MoE/MLA style design.",
-    outcomes: [
-      "Explain scaling laws and data quality tradeoffs.",
-      "Understand deduplication, filtering, and curriculum/data mixtures.",
-      "Study MoE, MLA, YaRN, load balancing, and multi-token prediction.",
-    ],
+    title: "大模型预训练、数据、Scaling 与 DeepSeek 架构",
+    summary: "系统学习现代预训练决策、数据流水线、Scaling Law 与 MoE/MLA 等架构设计。",
+    outcomes: ["解释 Scaling Law 与数据质量/规模之间的权衡。", "理解去重、过滤、课程式数据配比和数据混合。", "学习 MoE、MLA、YaRN、负载均衡和 multi-token prediction。"],
     queries: ["scaling laws", "CS336 scaling", "CS336 data", "DeepSeek-V3", "Mixture-of-Experts", "Multi Latent Attention", "YaRN"],
-    project: "Design a small pretraining run plan with data, model size, and evaluation checkpoints.",
+    project: "设计一个小型预训练实验计划：数据、模型规模、训练预算和评测节点。",
   },
   {
     id: "sft_peft_lora",
     stage: "04",
-    title: "SFT, PEFT, LoRA, QLoRA, and instruction tuning",
-    summary: "Learn practical adaptation methods for making pretrained LLMs useful.",
-    outcomes: [
-      "Understand SFT data formats and loss masking.",
-      "Compare full fine-tuning, LoRA, QLoRA, Adapter, and prompt tuning.",
-      "Know when quantization and PEFT are appropriate.",
-    ],
+    title: "SFT、PEFT、LoRA、QLoRA 与指令微调",
+    summary: "学习把预训练模型变成可用助手的核心后训练与参数高效微调方法。",
+    outcomes: ["理解 SFT 数据格式、loss mask 和监督微调流程。", "比较全量微调、LoRA、QLoRA、Adapter 和 prompt tuning。", "判断何时适合使用量化与 PEFT。"],
     queries: ["LoRA", "QLoRA", "PEFT", "SFT", "Adapter", "Prompting", "Supervised FineTuning"],
-    project: "Prepare a small instruction-tuning dataset and outline an SFT/LoRA experiment.",
+    project: "准备一个小型指令微调数据集，并写出 SFT/LoRA 实验方案。",
   },
   {
     id: "inference_systems",
     stage: "05",
-    title: "Inference, serving, acceleration, and distributed systems",
-    summary: "Connect model internals to real latency, throughput, memory, and serving constraints.",
-    outcomes: [
-      "Explain KV cache, batching, prefill/decode, chunk prefill, and speculative decoding.",
-      "Understand FlashAttention, vLLM, tensor parallelism, and distributed training basics.",
-      "Read profiling results and identify bottlenecks.",
-    ],
+    title: "推理、服务化、加速与分布式系统",
+    summary: "把模型内部机制连接到真实延迟、吞吐、显存和服务约束。",
+    outcomes: ["解释 KV cache、batching、prefill/decode、chunk prefill 和 speculative decoding。", "理解 FlashAttention、vLLM、张量并行和分布式训练基础。", "能阅读 profiling 结果并定位系统瓶颈。"],
     queries: ["Inference", "FlashAttention", "vLLM", "KV cache", "speculative decoding", "DeepSpeed", "Tensor Model Parallelism", "CS336 systems"],
-    project: "Write a deployment note for serving a 7B model under a latency and memory budget.",
+    project: "写一份 7B 模型部署说明：延迟、吞吐、显存预算与优化策略。",
   },
   {
     id: "alignment_rlhf_eval",
     stage: "06",
-    title: "RLHF, DPO, reward models, evaluation, and safety",
-    summary: "Study post-training, preference learning, evaluation harnesses, and safety checks.",
-    outcomes: [
-      "Understand reward modeling, PPO, DPO, GRPO, and constitutional AI.",
-      "Use benchmark harnesses and simple local evals.",
-      "Separate capability evals, safety evals, and regression tests.",
-    ],
+    title: "RLHF、DPO、奖励模型、评测与安全",
+    summary: "学习偏好学习、后训练、评测体系和安全检查如何共同塑造可用模型。",
+    outcomes: ["理解 reward modeling、PPO、DPO、GRPO 和 Constitutional AI。", "使用 benchmark harness 和简单本地评测。", "区分能力评测、安全评测和回归测试。"],
     queries: ["RLHF", "PPO", "DPO", "reward model", "OpenAI Evals", "HELM", "HarmBench", "Constitutional AI", "CS329H"],
-    project: "Define an eval suite for a local assistant that studies this Reference archive.",
+    project: "为这个 Reference 学习助手定义一套本地评测题和回归测试。",
   },
   {
     id: "rag_agents",
     stage: "07",
-    title: "RAG, agents, tools, and code agents",
-    summary: "Build systems that retrieve, reason, and act with language models.",
-    outcomes: [
-      "Understand chunking, retrieval, reranking, source citation, and hallucination failure modes.",
-      "Study tool use, planning, memory, ReAct, and code-agent workflows.",
-      "Relate this app's database design to production RAG patterns.",
-    ],
+    title: "RAG、Agent、工具调用与代码智能体",
+    summary: "构建能检索、推理、调用工具并完成任务的大模型系统。",
+    outcomes: ["理解切分、检索、重排、来源引用和幻觉失败模式。", "学习工具调用、规划、记忆、ReAct 和代码 Agent 工作流。", "把本应用的数据库设计映射到生产级 RAG 模式。"],
     queries: ["RAG", "ReAct", "Agent", "LangChain", "Berkeley LLM Agents", "Code Agents", "SWE-bench"],
-    project: "Improve one retrieval prompt and test it on five questions from this archive.",
+    project: "改进一个检索提示词，并用资料库里的五个问题测试效果。",
   },
   {
     id: "vlm_multimodal",
     stage: "08",
-    title: "VLM and multimodal foundations",
-    summary: "Study vision-language representation learning and LLM-centered multimodal models.",
-    outcomes: [
-      "Understand ViT, CLIP, BLIP-2, LLaVA, multimodal alignment, and VQA-style tasks.",
-      "Compare contrastive, captioning, and instruction-tuned VLM routes.",
-      "Know how image tokens connect to LLM context.",
-    ],
+    title: "VLM 与多模态基础",
+    summary: "学习视觉语言表征、图文对齐和以 LLM 为中心的多模态模型。",
+    outcomes: ["理解 ViT、CLIP、BLIP-2、LLaVA、多模态对齐和 VQA 任务。", "比较对比学习、图像描述和指令微调 VLM 路线。", "知道图像 token 如何接入 LLM 上下文。"],
     queries: ["ViT", "CLIP", "BLIP2", "LLaVA", "多模态", "CMU MMML", "CS25", "VLM"],
-    project: "Explain the LLaVA training pipeline from image encoder to language model output.",
+    project: "解释 LLaVA 从图像编码器到语言模型输出的训练流水线。",
   },
   {
     id: "streaming_video_vlm",
     stage: "09",
-    title: "Streaming VLM and online video understanding",
-    summary: "Focus on long-horizon, real-time, and online video-language systems.",
-    outcomes: [
-      "Understand online video benchmarks and temporal reasoning needs.",
-      "Compare streaming memory, frame selection, and hierarchical video understanding.",
-      "Relate streaming VLMs to embodied and robot settings.",
-    ],
+    title: "流式 VLM 与在线视频理解",
+    summary: "聚焦长时序、实时输入和在线视频语言系统。",
+    outcomes: ["理解在线视频 benchmark 与时间推理需求。", "比较流式记忆、帧选择和层次化视频理解。", "把 streaming VLM 与具身智能、机器人场景联系起来。"],
     queries: ["StreamingVLM", "VideoLLM-online", "StreamingBench", "OVO-Bench", "online video", "hierarchical streaming video"],
-    project: "Design a streaming VLM benchmark question set for a robot or egocentric video scenario.",
+    project: "为机器人或第一视角视频场景设计一组 streaming VLM 评测题。",
   },
   {
     id: "vla_robotics",
     stage: "10",
-    title: "VLA, robot learning, and embodied policies",
-    summary: "Study how vision-language models become robot action policies.",
-    outcomes: [
-      "Understand OpenVLA, RT-1/RT-2, Octo, pi0, action tokenization, and policy fine-tuning.",
-      "Connect robot datasets, simulators, and real-world manipulation.",
-      "Know what changes when outputs are actions rather than text.",
-    ],
+    title: "VLA、机器人学习与具身策略",
+    summary: "学习视觉语言模型如何进一步成为机器人动作策略。",
+    outcomes: ["理解 OpenVLA、RT-1/RT-2、Octo、pi0、动作 token 化和策略微调。", "连接机器人数据集、模拟器与真实世界操作任务。", "知道输出从文本变成动作后，建模和评测会发生什么变化。"],
     queries: ["OpenVLA", "OpenVLA-OFT", "RT-1", "RT-2", "Octo", "pi0", "action tokenization", "CS224R", "CS285"],
-    project: "Sketch an experiment to fine-tune a VLA on a new manipulation task.",
+    project: "草拟一个在新操作任务上微调 VLA 的实验方案。",
   },
   {
     id: "robot_sim_data",
     stage: "11",
-    title: "Robot simulators, datasets, and reproducible embodied AI",
-    summary: "Learn the tooling needed to run robot learning experiments locally or on a workstation.",
-    outcomes: [
-      "Compare ManiSkill, Isaac Lab, Habitat, RoboCasa, RLBench, robosuite, DROID, and BridgeData.",
-      "Understand benchmark/task design and dataset collection tradeoffs.",
-      "Know how simulators support VLA and world-model research.",
-    ],
+    title: "机器人模拟器、数据集与可复现实验",
+    summary: "学习在本地或工作站上运行机器人学习实验所需的工具链。",
+    outcomes: ["比较 ManiSkill、Isaac Lab、Habitat、RoboCasa、RLBench、robosuite、DROID 和 BridgeData。", "理解 benchmark/任务设计与数据采集权衡。", "知道模拟器如何支撑 VLA 与 world model 研究。"],
     queries: ["ManiSkill", "Isaac Lab", "Habitat", "RoboCasa", "RLBench", "robosuite", "DROID", "BridgeData"],
-    project: "Choose one simulator and define the minimal steps to reproduce a manipulation benchmark.",
+    project: "选择一个模拟器，写出复现一个操作 benchmark 的最小步骤。",
   },
   {
     id: "world_models",
     stage: "12",
-    title: "World models and model-based RL",
-    summary: "Study latent dynamics, imagination rollouts, predictive representations, and planning.",
-    outcomes: [
-      "Understand World Models, Dreamer, MuZero, V-JEPA, JEPA-WM, Genie, and model-based RL.",
-      "Compare reconstruction-based and joint-embedding predictive models.",
-      "Connect world models to robotics and autonomous driving.",
-    ],
+    title: "World Model 与模型式强化学习",
+    summary: "学习潜变量动力学、想象 rollout、预测表征和规划。",
+    outcomes: ["理解 World Models、Dreamer、MuZero、V-JEPA、JEPA-WM、Genie 和 model-based RL。", "比较重建式模型与 joint-embedding predictive model。", "把 world model 与机器人、自动驾驶联系起来。"],
     queries: ["World Models", "DreamerV3", "MuZero", "V-JEPA", "JEPA-WM", "Genie", "LightZero", "CS330"],
-    project: "Explain why latent imagination can improve sample efficiency in control.",
+    project: "解释为什么潜空间想象可以提升控制任务的样本效率。",
   },
   {
     id: "driving_world_models",
     stage: "13",
-    title: "Autonomous-driving world models and VLMs",
-    summary: "Study driving-specific generative simulation, planning, and VLM reasoning.",
-    outcomes: [
-      "Understand GAIA-1, DriveDreamer, Vista, CarDreamer, Waymax, DriveLM, and OpenEMMA.",
-      "Connect scene generation, closed-loop evaluation, and planning.",
-      "Identify how driving world models differ from general video generation.",
-    ],
+    title: "自动驾驶 World Model 与 VLM",
+    summary: "学习面向驾驶的生成式仿真、规划和视觉语言推理。",
+    outcomes: ["理解 GAIA-1、DriveDreamer、Vista、CarDreamer、Waymax、DriveLM 和 OpenEMMA。", "连接场景生成、闭环评测和规划。", "识别驾驶 world model 与通用视频生成的差异。"],
     queries: ["GAIA-1", "DriveDreamer", "Vista", "CarDreamer", "Waymax", "DriveLM", "OpenEMMA", "autonomous driving world model"],
-    project: "Write a short survey comparing two driving world-model approaches.",
+    project: "写一篇短综述，比较两种自动驾驶 world model 路线。",
   },
   {
     id: "diffusion_video_3d",
     stage: "14",
-    title: "Diffusion, flow matching, video generation, and 3D spatial intelligence",
-    summary: "Add modern generative modeling and spatial representations to the LLM/VLM stack.",
-    outcomes: [
-      "Understand DDPM, score SDEs, latent diffusion, DiT, flow matching, and stable video diffusion.",
-      "Understand NeRF, 3D Gaussian Splatting, PyTorch3D, Nerfstudio, and spatial VLMs.",
-      "Relate generative video to world simulators.",
-    ],
+    title: "扩散、Flow Matching、视频生成与 3D 空间智能",
+    summary: "把现代生成建模和空间表征加入 LLM/VLM 技术栈。",
+    outcomes: ["理解 DDPM、score SDE、latent diffusion、DiT、flow matching 和视频扩散。", "理解 NeRF、3D Gaussian Splatting、PyTorch3D、Nerfstudio 和空间 VLM。", "把生成式视频与世界模拟器联系起来。"],
     queries: ["DDPM", "Score SDE", "Latent Diffusion", "DiT", "Flow Matching", "Stable Video Diffusion", "NeRF", "Gaussian Splatting", "VLM-3R"],
-    project: "Explain how video generation and 3D scene representations can support world-model training.",
+    project: "解释视频生成和 3D 场景表征如何支持 world model 训练。",
   },
   {
     id: "omni_audio_capstone",
     stage: "15",
-    title: "Omni-modal models and final capstone",
-    summary: "Track audio/omni-modal models and integrate the whole curriculum into a research artifact.",
-    outcomes: [
-      "Understand Qwen3-Omni, Ola, InternLM OmniLive, SLAM-LLM, SenseVoice, and CosyVoice directions.",
-      "Design a research project that uses at least two modalities and one evaluation suite.",
-      "Use this local learning app as an open-source study companion.",
-    ],
+    title: "全模态模型与最终 Capstone",
+    summary: "跟踪音频/全模态模型，并把整条课程线整合成一个研究作品。",
+    outcomes: ["理解 Qwen3-Omni、Ola、InternLM OmniLive、SLAM-LLM、SenseVoice 和 CosyVoice 方向。", "设计一个至少使用两种模态和一套评测的研究项目。", "把这个本地学习网页作为开源学习伴侣继续迭代。"],
     queries: ["Qwen3-Omni", "Ola", "InternLM OmniLive", "SLAM-LLM", "SenseVoice", "CosyVoice", "audio language model"],
-    project: "Build a capstone proposal: problem, data, model, eval, baseline, risks, and compute plan.",
+    project: "完成一份 Capstone 提案：问题、数据、模型、评测、baseline、风险和算力计划。",
   },
 ];
 
@@ -511,12 +458,21 @@ const LESSON_BLUEPRINTS = {
 
 const el = (id) => document.getElementById(id);
 
-function api(path, options = {}) {
+async function api(path, options = {}) {
   const headers = options.body ? { "Content-Type": "application/json", ...(options.headers || {}) } : options.headers || {};
-  return fetch(`${API_BASE}/${path}`, { ...options, headers }).then((res) => {
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-    return res.json();
-  });
+  const bases = [activeApiBase, ...API_CANDIDATES.filter((base) => base !== activeApiBase)];
+  const failures = [];
+  for (const base of bases) {
+    try {
+      const res = await fetch(`${base}/${path}`, { ...options, headers });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      activeApiBase = base;
+      return res.json();
+    } catch (err) {
+      failures.push(`${base}: ${err.message}`);
+    }
+  }
+  throw new Error(failures.join("；"));
 }
 
 function escapeHtml(value) {
