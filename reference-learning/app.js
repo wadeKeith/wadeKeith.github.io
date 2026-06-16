@@ -8,7 +8,7 @@ if (window.location.protocol === "https:" && SITE_HOSTS.includes(window.location
 
 function apiCandidates() {
   const host = window.location.hostname;
-  const override = window.REFERENCE_LEARNING_API_BASE;
+  const override = window.LLM_ROAD_API_BASE;
   if (override) return [override.replace(/\/$/, "")];
   if (["localhost", "127.0.0.1"].includes(host)) return ["./api", PUBLIC_API_BASE];
   if (SITE_HOSTS.includes(host)) return [PUBLIC_API_BASE];
