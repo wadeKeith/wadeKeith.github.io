@@ -423,6 +423,43 @@ p {
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
 }
 
+.deep-lecture {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.lecture-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lecture-note {
+  padding: 16px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.lecture-note h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.lecture-note ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.lecture-note li {
+  color: #3d4845;
+  line-height: 1.7;
+}
+
 .lecture-card,
 .concept-board,
 .route-card,
@@ -732,6 +769,7 @@ p {
 
   .app-grid,
   .syllabus-grid,
+  .lecture-notes-grid,
   .teaching-layout,
   .practice-layout,
   .notes-layout,
@@ -768,6 +806,7 @@ p {
 
   .tab-strip,
   .syllabus-grid,
+  .lecture-notes-grid,
   .hero-metrics,
   .search-row,
   .check-card {

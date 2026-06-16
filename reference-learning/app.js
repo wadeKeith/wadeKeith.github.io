@@ -475,6 +475,89 @@ const COURSE_ANCHORS = {
   omni_audio_capstone: ["Omni 模型路线：音频、语音、视觉、文本统一接口。", "Capstone 研究训练：问题、数据、baseline、评测。", "系统整合：检索、模型、工具和多模态输入协作。"],
 };
 
+const LECTURE_PACKS = {
+  orientation: {
+    principles: ["把资料库理解为可复现研究环境：目录负责边界，索引负责定位，笔记负责迁移。", "每章按“核心问题 -> 证据 -> 机制解释 -> 小实验 -> 复盘”的顺序学习。"],
+    mechanisms: ["FTS 适合快速定位术语和路径，embedding 适合语义相近问题；二者混合才适合大型资料库。", "引用来源不是装饰，而是防止模型把常识、猜测和资料证据混在一起。"],
+    readings: ["先读课程矩阵和目录，再读本章证据卡片，最后把卡住的问题交给导师追问。", "每周固定产出一页学习地图：本周概念、来源路径、实验记录、仍未解决的问题。"],
+  },
+  math_pytorch_nlp: {
+    principles: ["大模型的第一语言是张量形状：batch、sequence、hidden、head 维度必须能在脑中流动。", "语言建模把文本转成 token 序列，再通过 next-token prediction 学习条件分布。"],
+    mechanisms: ["反向传播不是抽象公式：loss 对 logits、embedding、attention 权重的梯度共同决定表示如何移动。", "Tokenizer 的压缩率直接影响上下文预算，多语言和代码场景尤其明显。"],
+    readings: ["先复现一个小训练循环，再读 CS224N/深度学习材料里的 embedding 与语言模型章节。", "实验：换 tokenizer 或 vocab 后比较同一段中英文/代码文本的 token 数。"],
+  },
+  transformer_gpt_llama: {
+    principles: ["Decoder-only LLM 是自回归概率模型：每个位置只能基于过去 token 预测下一个 token。", "现代 LLaMA 系结构是在标准 Transformer 上围绕稳定性、上下文和推理效率做系统取舍。"],
+    mechanisms: ["Attention 的核心是 QK^T 形成内容寻址，mask 保证不泄露未来，softmax 决定信息混合权重。", "RoPE 把相对位置信息注入 Q/K 相似度；RMSNorm 与 SwiGLU 改善训练稳定性和表达效率。"],
+    readings: ["按 CS336 路线：tokenizer -> attention -> MLP -> residual/norm -> sampling。", "实验：手写单头 attention，打印 mask 前后 logits 与 attention map。"],
+  },
+  llm_training_scaling_data: {
+    principles: ["预训练是模型容量、数据质量、token 数、算力预算之间的联合优化。", "Scaling law 是预算分配工具，不是替代数据治理和评测的魔法公式。"],
+    mechanisms: ["数据去重和质量过滤减少冲突梯度；课程式混合决定模型先学基础模式还是专业能力。", "MoE 用稀疏激活提高容量效率，代价是路由、通信和负载均衡复杂度。"],
+    readings: ["先读 CS336 data/scaling，再读 DeepSeek 类架构材料，最后把每个设计映射到成本或质量指标。", "实验：写一个 1B 级训练计划，明确数据比例、token 预算、checkpoint eval。"],
+  },
+  sft_peft_lora: {
+    principles: ["后训练不是灌知识，而是改变模型在任务格式、偏好和安全边界下调用已有能力的方式。", "SFT 决定基本指令遵循，偏好优化决定回答风格和取舍。"],
+    mechanisms: ["Loss masking 控制哪些 token 真正参与学习；LoRA 通过低秩增量近似权重更新。", "QLoRA 的节省来自冻结量化基座，只训练少量 adapter 参数。"],
+    readings: ["先看数据模板和 loss，再比较 full FT、LoRA、QLoRA、adapter 的更新范围。", "实验：构造 100 条 instruction 数据，检查训练前后同一问题的格式、事实和拒答变化。"],
+  },
+  inference_systems: {
+    principles: ["推理系统的主要瓶颈常常不是 FLOPs，而是内存带宽、KV cache、调度和批处理。", "Prefill 是并行大矩阵计算，decode 是逐 token 小批量延迟瓶颈。"],
+    mechanisms: ["FlashAttention 是 exact attention 的 IO-aware 算法：分块、在线 softmax、减少 HBM/SRAM 读写。", "PagedAttention/vLLM 把 KV cache 管理做成系统问题，减少碎片并提高批处理吞吐。"],
+    readings: ["按 CS336 systems 路线读 FlashAttention、parallelism、serving，再看 vLLM 设计。", "实验：估算 7B 模型在不同 batch/sequence 下的 KV cache 显存。"],
+  },
+  alignment_rlhf_eval: {
+    principles: ["对齐是数据、目标函数、参考模型、评测和安全策略共同构成的系统。", "高 benchmark 分数不能替代回归测试和真实用户场景评估。"],
+    mechanisms: ["Reward model 把偏好对转成标量信号；DPO 直接用偏好对优化策略相对参考模型的概率。", "安全评测要覆盖拒答、越狱、幻觉、偏见和工具滥用，不能混在能力分数里。"],
+    readings: ["先读 RLHF/PPO/DPO 基本目标，再看 HELM、OpenAI Evals 或本地 eval harness。", "实验：为学习助手写 10 个能力题和 10 个幻觉/安全回归题。"],
+  },
+  rag_agents: {
+    principles: ["RAG 的核心不是接向量库，而是资料治理、召回质量、上下文压缩和引用约束。", "Agent 的价值来自可审计工具调用和状态管理，不是无限自主。"],
+    mechanisms: ["Chunk 粒度影响召回和上下文噪声；rerank 决定有限窗口里放哪些证据。", "ReAct 通过 thought/action/observation 循环，把推理和外部工具反馈交替起来。"],
+    readings: ["参考 Berkeley LLM Agents：foundation abilities、tools、memory、planning、applications。", "实验：固定 5 个问题，比较 FTS、semantic、rerank 后的来源质量。"],
+  },
+  vlm_multimodal: {
+    principles: ["VLM 的关键是让视觉表示进入语言模型可操作的语义空间。", "图文对齐、视觉编码器、连接器和指令数据共同决定多模态能力。"],
+    mechanisms: ["ViT 把图像切成 patch token；CLIP 用对比学习对齐图文；LLaVA 用投影层连接视觉特征和 LLM。", "OCR、空间关系和细粒度定位是 VLM 评测里最容易暴露短板的能力。"],
+    readings: ["先读 ViT/CLIP，再读 BLIP-2/LLaVA，最后看 VQA 与多模态 instruction tuning。", "实验：设计 5 个会让 VLM 混淆空间关系或文字识别的问题。"],
+  },
+  streaming_video_vlm: {
+    principles: ["在线视频理解要处理不断到来的帧、有限上下文和实时延迟。", "长视频不是更多帧，而是事件抽象、状态更新和记忆压缩。"],
+    mechanisms: ["短期缓存保留局部运动，长期摘要保留事件；帧选择策略决定计算是否浪费在冗余画面。", "在线 benchmark 要测模型在观察过程中的答案更新，而不只是最终离线答案。"],
+    readings: ["读 StreamingBench/online video 任务，关注 temporal reasoning、state change、causal order。", "实验：为第一视角视频写 10 个必须依赖历史状态的问题。"],
+  },
+  vla_robotics: {
+    principles: ["VLA 把语言和视觉理解变成动作条件，输出不再只是文本而是会改变环境的策略。", "机器人任务的难点是数据分布、动作空间、控制频率和安全约束。"],
+    mechanisms: ["Action tokenization 把连续控制转成模型可预测的离散或结构化输出。", "Fine-tuning 要同时看成功率、泛化、失败轨迹和物理安全。"],
+    readings: ["按 OpenVLA/RT-2/Octo/pi0 路线读：输入表示、动作接口、数据集、评测。", "实验：定义一个 manipulation 任务的 observation、instruction、action 和 success metric。"],
+  },
+  robot_sim_data: {
+    principles: ["仿真和数据决定机器人实验能否复现，模型只是其中一个变量。", "成功率必须和任务分布、种子、资产版本、失败案例一起报告。"],
+    mechanisms: ["Sim-to-real gap 来自物理、视觉、控制器和任务分布不一致。", "Demonstration 数据覆盖不足会让策略记住场景而不是学到可迁移技能。"],
+    readings: ["比较 ManiSkill、Isaac Lab、RoboCasa、RLBench、robosuite 的任务生态和复现成本。", "实验：为一个模拟器写环境版本、初始状态分布、评测脚本和失败记录模板。"],
+  },
+  world_models: {
+    principles: ["世界模型学习环境动力学，使智能体可以在潜空间想象未来并训练策略。", "像素逼真不等于可规划；控制任务更看重状态是否可预测、可干预。"],
+    mechanisms: ["Dreamer 学 latent dynamics 并在 imagination rollout 中训练 actor-critic。", "MuZero 学可用于搜索的模型，不需要完全重构真实观察。"],
+    readings: ["先读 World Models/Dreamer/MuZero，再看 V-JEPA、JEPA-WM、Genie 的预测表征路线。", "实验：画出观察 -> latent -> dynamics -> reward/value -> policy 的数据流。"],
+  },
+  driving_world_models: {
+    principles: ["驾驶 world model 必须服务规划和安全，不能只追求视频生成质量。", "闭环评测比开环预测更能暴露累积错误和危险动作。"],
+    mechanisms: ["未来场景生成需要保持道路结构、交通参与者运动和相机几何一致。", "动作会改变未来状态，所以规划模型要能评估候选动作的后果。"],
+    readings: ["读 GAIA-1、DriveDreamer、Vista、Waymax、DriveLM/OpenEMMA，区分生成、规划和语言推理角色。", "实验：设计一个危险切入场景，列出开环指标和闭环指标。"],
+  },
+  diffusion_video_3d: {
+    principles: ["扩散、flow matching、视频和 3D 表示是现代生成式世界建模的基础工具。", "生成质量、采样速度、控制性和几何一致性必须一起评估。"],
+    mechanisms: ["Diffusion 通过加噪/去噪学习 score 或噪声预测；flow matching 学连续变换路径。", "NeRF/3DGS 把多视角图像转成可渲染空间表示，支持新视角和几何推理。"],
+    readings: ["参考 MIT 6.S978：VAE/GAN/diffusion/autoregressive/flow 的统一生成视角。", "实验：比较 DDPM 与 flow matching 的训练目标，并画 latent diffusion pipeline。"],
+  },
+  omni_audio_capstone: {
+    principles: ["全模态系统的目标是统一多种输入输出，而不是堆更多模型名。", "Capstone 要提出可验证假设，并用数据、baseline、评测和风险约束它。"],
+    mechanisms: ["音频/语音模型需要处理时间连续性、说话人、语义和生成质量。", "多模态消融能证明某个模态是否真的提供独立增益。"],
+    readings: ["读 Qwen3-Omni、SLAM-LLM、SenseVoice、CosyVoice 等方向，关注接口和评测。", "实验：写一页 proposal，包括问题、数据、模型路线、baseline、指标、风险和算力预算。"],
+  },
+};
+
 const el = (id) => document.getElementById(id);
 
 async function api(path, options = {}) {
@@ -572,11 +655,15 @@ function renderHero() {
 function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
+  const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   el("outcomeList").innerHTML = (state.active.outcomes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("courseAnchorList").innerHTML = (COURSE_ANCHORS[state.active.id] || COURSE_ANCHORS.orientation)
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
   el("deliverableText").textContent = state.active.project || bp.labSteps[0] || "";
+  el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("lectureThesis").textContent = bp.thesis;
   el("lectureFrame").textContent = bp.frame;
   el("conceptMap").innerHTML = bp.concepts

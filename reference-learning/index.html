@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616h" />
+    <link rel="stylesheet" href="./styles.css?v=20260616i" />
   </head>
   <body>
     <header class="topbar">
@@ -95,6 +95,26 @@
             </div>
           </div>
           <div id="lectureRoute" class="route-grid"></div>
+          <section class="deep-lecture">
+            <div class="section-title">
+              <p class="eyebrow">核心讲义</p>
+              <h3>先读这里：本章的概念、机制、实验与阅读顺序</h3>
+            </div>
+            <div class="lecture-notes-grid">
+              <article class="lecture-note">
+                <h4>概念主线</h4>
+                <ul id="principleList"></ul>
+              </article>
+              <article class="lecture-note">
+                <h4>机制 / 推导</h4>
+                <ul id="mechanismList"></ul>
+              </article>
+              <article class="lecture-note">
+                <h4>实验 / 阅读</h4>
+                <ul id="readingList"></ul>
+              </article>
+            </div>
+          </section>
           <div class="misconception-band">
             <div>
               <p class="eyebrow">常见误区</p>
@@ -146,6 +166,7 @@
                 <button id="saveNote" type="button">保存笔记</button>
                 <button id="askFromNote" class="secondary" type="button">用笔记追问导师</button>
               </div>
+            </div>
             <aside class="note-prompt">
               <p class="eyebrow">写作脚手架</p>
               <ul id="notePrompts"></ul>
@@ -172,6 +193,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616h"></script>
+    <script src="./app.js?v=20260616i"></script>
   </body>
 </html>
