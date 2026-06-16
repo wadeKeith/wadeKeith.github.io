@@ -29,6 +29,9 @@ const state = {
   visibleEvidence: [],
   searchCache: new Map(),
   lessonCache: new Map(),
+  staticEvidence: null,
+  staticEvidencePromise: null,
+  apiWarmupStarted: false,
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
   mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
@@ -732,6 +735,38 @@ async function api(path, options = {}) {
   throw new Error(failures.join("；"));
 }
 
+function startApiWarmup() {
+  if (state.apiWarmupStarted) return;
+  state.apiWarmupStarted = true;
+  const warm = () => {
+    if (!document.hidden) api("ping").catch(() => {});
+  };
+  setTimeout(warm, 600);
+  setInterval(warm, 25000);
+}
+
+async function loadStaticEvidence() {
+  if (state.staticEvidence) return state.staticEvidence;
+  if (!state.staticEvidencePromise) {
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616t")
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        return res.json();
+      })
+      .then((data) => {
+        state.staticEvidence = data;
+        return data;
+      })
+      .catch(() => null);
+  }
+  return state.staticEvidencePromise;
+}
+
+async function staticLessonFor(moduleId) {
+  const data = await loadStaticEvidence();
+  return data && data.modules ? data.modules[moduleId] : null;
+}
+
 function escapeHtml(value) {
   return String(value == null ? "" : value)
     .replace(/&/g, "&amp;")
@@ -1383,6 +1418,14 @@ async function loadLesson(moduleId) {
   }
   state.lesson = null;
   renderRead();
+  const staticLesson = await staticLessonFor(moduleId);
+  if (requestId !== state.lessonRequest) return;
+  if (staticLesson) {
+    state.lesson = staticLesson;
+    state.lessonCache.set(moduleId, staticLesson);
+    renderRead();
+    return;
+  }
   try {
     const lesson = await api(`lesson?module=${encodeURIComponent(moduleId)}`);
     if (requestId !== state.lessonRequest) return;
@@ -1480,6 +1523,7 @@ function showTab(tab) {
 }
 
 async function load() {
+  startApiWarmup();
   state.modules = FALLBACK_MODULES;
   el("statDocs").textContent = formatNumber(FALLBACK_STATS.documents);
   el("statChunks").textContent = formatNumber(FALLBACK_STATS.chunks);

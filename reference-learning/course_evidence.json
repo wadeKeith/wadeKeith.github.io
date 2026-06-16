@@ -1,0 +1,1707 @@
+{
+  "version": "20260616t",
+  "generated_at": "2026-06-16",
+  "modules": {
+    "orientation": {
+      "module": {
+        "id": "orientation",
+        "stage": "00",
+        "title": "导学与学习系统",
+        "summary": "先把本地资料库当成研究实验室：理解目录、数据库和检索式学习方法。",
+        "outcomes": [
+          "知道本地知识库的主要目录和各自承担的学习角色。",
+          "能主动使用检索、来源引用、模块进度和学习笔记。",
+          "区分中文实战材料、论文材料和前沿公开课程材料。"
+        ],
+        "queries": [
+          "知识库目录地图",
+          "Frontier AI PhD Curriculum",
+          "学习路径",
+          "LLM 综述"
+        ],
+        "project": "画出你每周会使用的个人大模型学习资料地图。"
+      },
+      "evidence": [
+        {
+          "id": 821037,
+          "title": "download_manifest",
+          "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+          "category": "Frontier-AI-PhD-Curriculum/00_index",
+          "score": -8.136903936417639e-06,
+          "excerpt": "12_alignment_interpretability_safety/courses | mlhp_book | webpage | https://mlhp.stanford.edu/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/mlhp_book.html | Machine Learning from Human Preferences book. 12_alignment_interpretability_safety/courses | arena_curriculum | webpage | https://www.arena.education/curriculum | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/courses/arena_curriculum.html | ARENA AI safety curriculum...."
+        },
+        {
+          "id": 821031,
+          "title": "download_manifest",
+          "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+          "category": "Frontier-AI-PhD-Curriculum/00_index",
+          "score": -8.133148149624958e-06,
+          "excerpt": "_simulators_datasets/sites | maniskill_site | webpage | https://maniskill.ai/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_site.html | ManiSkill robot simulation site. 10_robotics_simulators_datasets/sites | maniskill_docs | webpage | https://maniskill.readthedocs.io/en/latest/user_guide/index.html | downloaded | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_docs.html | ManiSkill documentation. 10_robotics_simulators_datas..."
+        },
+        {
+          "id": 821038,
+          "title": "download_manifest",
+          "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+          "category": "Frontier-AI-PhD-Curriculum/00_index",
+          "score": -8.08915988770309e-06,
+          "excerpt": "...d alignment toolkit. 12_alignment_interpretability_safety/repos | awesome_align_llm_human | git | https://github.com/GaryYufei/AlignLLMHumanSurvey.git | updated | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/awesome_align_llm_human Already up to date. | LLM-human alignment survey repo. 12_alignment_interpretability_safety/sites | transformer_circuits | webpage | https://transformer-circuits.pub/ | downloaded | Reference/Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safe..."
+        },
+        {
+          "id": 821033,
+          "title": "download_manifest",
+          "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+          "category": "Frontier-AI-PhD-Curriculum/00_index",
+          "score": -8.075055703216094e-06,
+          "excerpt": "...date. | DROID policy learning code. 10_robotics_simulators_datasets/repos | bridgedata_v2 | git | https://github.com/rail-berkeley/bridge_data_v2.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/bridgedata_v2 Already up to date. | BridgeData V2 policy code. 10_robotics_simulators_datasets/awesome_lists | awesome_robot_learning | git | https://github.com/RayYoh/Awesome-Robot-Learning.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/awesom..."
+        },
+        {
+          "id": 821032,
+          "title": "download_manifest",
+          "path": "Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+          "category": "Frontier-AI-PhD-Curriculum/00_index",
+          "score": -8.065793462463944e-06,
+          "excerpt": "s_datasets/repos | maniskill | git | https://github.com/mani-skill/ManiSkill.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/maniskill Already up to date. | ManiSkill 3 simulation and robot learning framework. 10_robotics_simulators_datasets/repos | isaac_lab | git | https://github.com/isaac-sim/IsaacLab.git | updated | Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/isaac_lab Already up to date. | Isaac Lab robot learning framework. 10_robotics_..."
+        },
+        {
+          "id": 1999,
+          "title": "1_LLM综述",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/1章_手撕LLM_LLM综述/1_LLM综述.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -38.226366823191796,
+          "excerpt": "小冬瓜AIGC xiaodongguaAIGC 手撕LLM：一、综述 1. LLM概述 2. LLM实现 3 实践PEFT-QLoRA+LLaMA2-7B 4. 数据预处理Token+Word2Vec+Embedding+评价指标 小冬瓜AIGC xiaodongguaAIGC1. LLM概述 • 1.1 LLM应用 • 1.2 LLM技术路线 • 1.3 LLM技术选型 • 1.4 LLM软硬件环境 小冬瓜AIGC xiaodongguaAIGC1.1 LLM应用-闭源 ChatGPT：通用语言 大模型 -翻译 -文本生成、 -文章总结 -。。。 MidJourney： 文-图大模型 小冬瓜AIGC xiaodongguaAIGC1.1 LLM应用-开源 Meta：LLaMA2 开源语言大模型 羊驼家族Alpaca/Redpajame/Vicuna Stable Diffusion 开源文-图大模型 adapter/LoRA.... Civitai社区 Transformers库 model zoo datasets .... 小冬瓜AIGC xiaodongguaAIGC1.2 技术路线-LLM Transformer-..."
+        },
+        {
+          "id": 829643,
+          "title": "1_LLM综述",
+          "path": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述/1_LLM综述.pdf",
+          "category": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述",
+          "score": -38.226366823191796,
+          "excerpt": "小冬瓜AIGC xiaodongguaAIGC 手撕LLM：一、综述 1. LLM概述 2. LLM实现 3 实践PEFT-QLoRA+LLaMA2-7B 4. 数据预处理Token+Word2Vec+Embedding+评价指标 小冬瓜AIGC xiaodongguaAIGC1. LLM概述 • 1.1 LLM应用 • 1.2 LLM技术路线 • 1.3 LLM技术选型 • 1.4 LLM软硬件环境 小冬瓜AIGC xiaodongguaAIGC1.1 LLM应用-闭源 ChatGPT：通用语言 大模型 -翻译 -文本生成、 -文章总结 -。。。 MidJourney： 文-图大模型 小冬瓜AIGC xiaodongguaAIGC1.1 LLM应用-开源 Meta：LLaMA2 开源语言大模型 羊驼家族Alpaca/Redpajame/Vicuna Stable Diffusion 开源文-图大模型 adapter/LoRA.... Civitai社区 Transformers库 model zoo datasets .... 小冬瓜AIGC xiaodongguaAIGC1.2 技术路线-LLM Transformer-..."
+        },
+        {
+          "id": 2091,
+          "title": "1_LLM综述",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/1章_手撕LLM_LLM综述/1_LLM综述.pptx",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -41.90197715618733,
+          "excerpt": ".../www.hardware-corner.net/guides/computer-to-run-llama-ai-model/ 3090 24 GB Colab T4 16 G 1.4 软硬件环境 -Colab PEFT + LLaMA2-7B + QLoRA + SFT-Fintune 使用 Nvidia T4 16GB (Colab) 2 LLM 实现 2.1 LLM 实现 流程 2.2 LLaMA2 技术架构 2.3 ChatGPT 技术架构 2.4 LLM 技术实现 - 本 课程 2.5 Agent 2.1 LLM 实现流程 Pretrained Model Fintune Model RLHF 数据集 openchat_sharegpt4_dataset (GPT) RedPajama-Data-1T (RepPajame) open WebText (GPT-2) Common Crawl(LLaMA ） ... nlp_Chinese_Corpus CLUECorpus .. https://github.com/Zjh-819/LLMDataHub https://magazine.sebastianrasc..."
+        },
+        {
+          "id": 829735,
+          "title": "1_LLM综述",
+          "path": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述/1_LLM综述.pptx",
+          "category": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述",
+          "score": -41.90197715618733,
+          "excerpt": ".../www.hardware-corner.net/guides/computer-to-run-llama-ai-model/ 3090 24 GB Colab T4 16 G 1.4 软硬件环境 -Colab PEFT + LLaMA2-7B + QLoRA + SFT-Fintune 使用 Nvidia T4 16GB (Colab) 2 LLM 实现 2.1 LLM 实现 流程 2.2 LLaMA2 技术架构 2.3 ChatGPT 技术架构 2.4 LLM 技术实现 - 本 课程 2.5 Agent 2.1 LLM 实现流程 Pretrained Model Fintune Model RLHF 数据集 openchat_sharegpt4_dataset (GPT) RedPajama-Data-1T (RepPajame) open WebText (GPT-2) Common Crawl(LLaMA ） ... nlp_Chinese_Corpus CLUECorpus .. https://github.com/Zjh-819/LLMDataHub https://magazine.sebastianrasc..."
+        },
+        {
+          "id": 2090,
+          "title": "1_LLM综述",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/1章_手撕LLM_LLM综述/1_LLM综述.pptx",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -37.36834510662216,
+          "excerpt": "手撕 LLM ： 一、综述 1. LLM 概述 2. LLM 实现 3 实践 PEFT-QLoRA+LLaMA2-7B 4. 数据预处理 Token+Word2Vec+Embedding+ 评价 指标 1.3 建模 方式 BERT Encoder Only Masked Language Modeling Loss ： CPC 对比学习 GPT-2 Decoder Only Causal Language Modeling 因果语言建模 - 预测下一个词 Loss: Cross entropy Loss 都能实现无监督大规模训练 从建模方式区分： CLM - MLM 1.3 技术选型 Q1: 为什么选 Decoder-Only ？ https://arxiv.org/abs/2204.05832 : decoder-only模型在没有任何tuning数据的情况下、zero-shot /few-shot 表现最好 https://arxiv.org/abs/2103.03404 : decoder-only 满秩， 下三角 mask 矩阵 encoder-decoder 非满秩 Q2: 为什么选 Causal Language..."
+        }
+      ],
+      "evidence_query": "知识库目录地图 Frontier AI PhD Curriculum 学习路径 LLM 综述"
+    },
+    "math_pytorch_nlp": {
+      "module": {
+        "id": "math_pytorch_nlp",
+        "stage": "01",
+        "title": "数学、PyTorch、NLP 与深度学习基础",
+        "summary": "补齐实现和调试 Transformer 所需的张量、优化、NLP 与训练循环基础。",
+        "outcomes": [
+          "复习张量形状、自动微分、优化器和训练循环。",
+          "理解分词、Embedding、语言建模和 NLP 数据集。",
+          "能阅读 notebook 与代码，而不是把它们当黑盒。"
+        ],
+        "queries": [
+          "PyTorch",
+          "自然语言处理",
+          "Word2Vec",
+          "Embedding",
+          "大模型必备的深度学习基础"
+        ],
+        "project": "复现一个极小文本分类器或语言模型训练循环。"
+      },
+      "evidence": [
+        {
+          "id": 124818,
+          "title": "7368-on-the-dimensionality-of-word-embedding",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs224n/cs224n_site_linked_files/7368-on-the-dimensionality-of-word-embedding.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -37.24416163090354,
+          "excerpt": "tributions of our paper: 1. We introduce the PIP loss, a novel metric on the dissimilarity between word embeddings; 2. We develop a mathematical framework that reveals a fundamental bias-variance trade-off in dimensionality selection. We explain the existence of an optimal dimensionality, a phe- nomenon commonly observed but lacked explanations; 3. We quantify the robustness of embedding algorithms using the exponent parameter α, and establish that many widely used embedding algorithms, including skip-gram and GloV..."
+        },
+        {
+          "id": 150821,
+          "title": "pytorch",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/stanford_cs231n/cs231n_github_pages/pytorch.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -36.689994282401635,
+          "excerpt": "[markdown] # Introduction to PyTorch [markdown] Pytorch is a popular neural net framework with the following features: * Automatic differentation * Compiling computation graphs * Libraries of algorithms and network primitives. Provides a high-level abstractions for working with neural networks. * Support for graphics processing units (GPU) In this lesson, we will learn the basics of PyTorch. We will cover the following topics: 1. Tensors 2. Automatic differentation 3. Building a simple neural network 4. PyTorch Dat..."
+        },
+        {
+          "id": 124787,
+          "title": "cs224n_winter2023_lecture1_notes_draft",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs224n/cs224n_site_linked_files/cs224n_winter2023_lecture1_notes_draft.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -16.366701412256983,
+          "excerpt": "...bout what is wrong with the raw co-occurrence method by introducing GloVe (Pennington et al., 2014) a co-occurence-based word representation algorithm that works as well as word2vec, the method we’ll introduce in the next section. However, many of the details of word2vec will hold true in methods that we’ll proceed to further in the course, so we’ll focus our time on that. 3.2 Word2vec model and objective The word2vec model represents each word in a fixed vocabulary as a low-dimensional (much smaller than vocabular..."
+        },
+        {
+          "id": 124246,
+          "title": "a2",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs224n/cs224n_site_linked_files/a2.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -15.505942435973811,
+          "excerpt": "CS 224N Winter 2026 Assignment 2 Word2Vec and Dependency Parsing Due date: January 22nd, Thursday, 4:30 PM PST In this assignment, you will review the mathematics behind Word2Vec and build a neural dependency parser using PyTorch. For a review of the fundamentals of PyTorch, please check out the PyTorch review session on Canvas. In Part 1, you will explore the partial derivatives involved in training a Word2vec model using the naive softmax loss. In Part 2, you will learn about two general neural network techniques..."
+        },
+        {
+          "id": 124670,
+          "title": "cs224n-2026-lecture02-wordvecs",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs224n/cs224n_site_linked_files/cs224n-2026-lecture02-wordvecs.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -15.293135322335148,
+          "excerpt": "...entations They are a distributed representation banking = 0.286 0.792 −0.177 −0.107 0.109 −0.542 0.349 0.271 monetary = 0.413 0.582 −0.007 0.247 0.216 −0.718 0.147 0.051 3. Word2vec: Overview Word2vec is a framework for learning word vectors (Mikolov et al. 2013) Idea: • We have a large corpus (“body”) of text: a long list of words • Every word in a fixed vocabulary is represented by a vector • Go through each position t in the text, which has a center word c and context (“outside”) words o • Use the similarity of..."
+        },
+        {
+          "id": 829801,
+          "title": "Transformer-skip",
+          "path": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述/transformer_xiaodongguaAIGC/Transformer-skip.ipynb",
+          "category": "手撕LLM2.0-MAC/1章_手撕LLM_LLM综述",
+          "score": -14.910561142872647,
+          "excerpt": "...candidate_transcription) print(\"WER score:\", wer) [markdown] ## 2. 手撕Transformer模型 这个章节主要理解模型构造的过程，第3章会自顶向下debug 数据流 [markdown] ### 2.1.1 Token Embedding 目的将1个token转成一串向量 参照Word2Vec算法原理如下图示 Embdding Vec 数据类型流向 word(string) -> 【token(int) -> vec(list(float))】 以下为两个词对应的vec进行比较， 越相近的向量，词性相同 ![0](image/embeddings-cosine-personality.png) Word2Vec embedding 纵轴词表数量， 横轴vec词向量维度， 期望找出当前单词和右边相近的单词向量 ![1](image/word2vec-lookup-embeddings.png) SkipGram: 假设\"我是小冬瓜\", 对于\"冬\"单词与\"小\"和\"瓜\"相近positive，与\"我\"间隔较远 ![2](image/skipgram-sliding-..."
+        },
+        {
+          "id": 16795,
+          "title": "nndl-book",
+          "path": "手撕llm/丁师兄大模型训练营/阶段1：大模型必备的深度学习基础/2.【原理】深度学习必看/nndl-book.pdf",
+          "category": "手撕llm/丁师兄大模型训练营",
+          "score": -25.40447056727691,
+          "excerpt": ". . . . . . . . . . . . 261 11.1.6 有向图和无向图之间的转换 . . . . . . . . . . . . . . . . . 262 11.2 学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 263 11.2.1 不含隐变量的参数估计 . . . . . . . . . . . . . . . . . . . 263 11.2.2 含隐变量的参数估计 . . . . . . . . . . . . . . . . . . . . 265 11.3 推断 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 271 11.3.1 精确推断 . . . . . . . . . . . . . . . . . . . . . . . . . . . 271 11.3.2 近似推断 . . . . . . . . . . . . . . . . . . . . . . . . . . . 274 目录 XII 11.4 变..."
+        },
+        {
+          "id": 16789,
+          "title": "nndl-book",
+          "path": "手撕llm/丁师兄大模型训练营/阶段1：大模型必备的深度学习基础/2.【原理】深度学习必看/nndl-book.pdf",
+          "category": "手撕llm/丁师兄大模型训练营",
+          "score": -25.37833561613153,
+          "excerpt": "表示和分布式表示 . . . . . . . . . . . . . . . . . . . 8 1.3.2 表示学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . 10 1.4 深度学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10 1.4.1 端到端学习 . . . . . . . . . . . . . . . . . . . . . . . . . . 11 1.5 神经网络 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12 1.5.1 人脑神经网络 . . . . . . . . . . . . . . . . . . . . . . . . 12 1.5.2 人工神经网络 . . . . . . . . . . . . . . . . . . . . . . . . 13 1.5.3 神经网络的发展历史 . . . . . . . . . . . . . . . . . . . . 14 1..."
+        },
+        {
+          "id": 16790,
+          "title": "nndl-book",
+          "path": "手撕llm/丁师兄大模型训练营/阶段1：大模型必备的深度学习基础/2.【原理】深度学习必看/nndl-book.pdf",
+          "category": "手撕llm/丁师兄大模型训练营",
+          "score": -25.37833561613153,
+          "excerpt": ". . . . . . . . . . . . . . . . . . . . . . . . . . . . 56 3.2 Logistic 回归 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57 3.2.1 参数学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . 58 3.3 Softmax 回归 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59 3.3.1 参数学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . 60 3.4 感知器 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62 3.4.1 参数学习 . . . . . . . . . . . . . . . . . . . . . . . . . . . 62 3.4.2 感知器的收敛性 . . . . . . ...."
+        },
+        {
+          "id": 16793,
+          "title": "nndl-book",
+          "path": "手撕llm/丁师兄大模型训练营/阶段1：大模型必备的深度学习基础/2.【原理】深度学习必看/nndl-book.pdf",
+          "category": "手撕llm/丁师兄大模型训练营",
+          "score": -25.37833561613153,
+          "excerpt": ". . . . . . . . . . . . . . 169 7.3.3 正交初始化 . . . . . . . . . . . . . . . . . . . . . . . . . . 171 7.4 数据预处理 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 172 7.5 逐层归一化 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 174 7.5.1 批量归一化 . . . . . . . . . . . . . . . . . . . . . . . . . . 175 7.5.2 层归一化 . . . . . . . . . . . . . . . . . . . . . . . . . . . 177 7.5.3 权重归一化 . . . . . . . . . . . . . . . . . . . . . . . . . . 178 7.5.4 局部响应归一化 . . . . . . . . . . . . . . . . . . . . . . . 178 7.6..."
+        }
+      ],
+      "evidence_query": "PyTorch 自然语言处理 Word2Vec Embedding 大模型必备的深度学习基础"
+    },
+    "transformer_gpt_llama": {
+      "module": {
+        "id": "transformer_gpt_llama",
+        "stage": "02",
+        "title": "从零实现 Transformer、GPT 与 LLaMA",
+        "summary": "从注意力机制推到 decoder-only 大模型实现，建立可调试的底层理解。",
+        "outcomes": [
+          "推导 scaled dot-product attention、mask、MHA、MLP、残差和归一化。",
+          "实现 GPT 风格训练与采样。",
+          "理解 RoPE、RMSNorm、SwiGLU、GQA 等 LLaMA 设计选择。"
+        ],
+        "queries": [
+          "Transformer",
+          "手撕GPT",
+          "LLaMA",
+          "RoPE",
+          "RMSNorm",
+          "Grouped Query Attention",
+          "CS336 assignment1"
+        ],
+        "project": "实现一个最小 decoder-only Transformer，并和 nanoGPT 或 CS336 基础实现对照。"
+      },
+      "evidence": [
+        {
+          "id": 830573,
+          "title": "RMSNorm",
+          "path": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/lc4_llama/RMSNorm.ipynb",
+          "category": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA",
+          "score": -43.22868693317787,
+          "excerpt": ", marker='o', label='Origin') ax.text(0, 0, -0.5, \"O(0,0,0)\", fontsize=10, color='black') ax.set_proj_type('ortho') plt.tight_layout() plt.show() [markdown] ## 总结 [markdown] 1. RMS 是 scaled 式的归一化方案，以 RMS统计量导数 为缩放因子，变换后的数据统计量RMS值恒为1 2. RMSNorm 较 LayerNorm，计算简便、易求导、尺度不变性、梯度方差更小 3. RMSNorm 更易保留特征分布 4. RMSNorm 减轻学习预训练任务偏置 进一步推导：* 1. RMSNorm 求导 2. 输入缩放后，RMSNorm 数据输入x和参数w的梯度不变性分析"
+        },
+        {
+          "id": 830424,
+          "title": "RoPE",
+          "path": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/paper_list/RoPE.pdf",
+          "category": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA",
+          "score": -38.18684504720004,
+          "excerpt": "...are reported in Table(2). As can be seen, RoFormer can signiﬁcantly outperform BERT in three out of six datasets, and the improvements are considerable. 4.4 Performer with RoPE Performer Choromanski et al. [2020] introduces an alternative attention mechanism, linear attention, which is designed to avoid quadratic computation cost that scales with input sequence length. As discussed in Section (3.3), the proposed RoPE can be easily implemented in the PerFormer model to realize the relative position encoding while k..."
+        },
+        {
+          "id": 830564,
+          "title": "RoPE",
+          "path": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/lc4_llama/RoPE.ipynb",
+          "category": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA",
+          "score": -39.0687437576543,
+          "excerpt": "...2 self.ffn self.attn() def forward(X, mask, sin, cos): # ... X = self.attn(X, mask, sin, cos) # ... class model def __init__(): self.embd = nn.Embedding() sin, cos = create_rope_cache(head_dim, max_len) self.register_buffer('rope_sin', sin) # 不计梯度 self.register_buffer('rope_cos', cos) self.decoder = [ blocks(dim) for i in range(n_layers)] def forward(x,mask): bsz, seq_len = x.shape X = self.embd(x) for block in self.decoder: X = block(X, mask, self.rope_sin[:seq_len], self.rope_cos[:seq_len]) # 只传序列部分数据 # ... ``` [..."
+        },
+        {
+          "id": 830557,
+          "title": "NTK-aware-RoPE",
+          "path": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/lc4_llama/NTK-aware-RoPE.ipynb",
+          "category": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA",
+          "score": -39.04752552580123,
+          "excerpt": "...elf.max_pos, self.dim) cos[:, 0::2] = cos[:, 1::2] = torch.cos(m_theta) # cos(theta1), cos sin[:, 0::2] = sin[:, 1::2] = torch.sin(m_theta) # sin, sin self.register_buffer('rope_cos', cos) self.register_buffer('rope_sin', sin) def apply_rope(self, X): ''' input: X[bs, n_heads, seq_len, head_dim] ''' bs, n_heads, seq_len, d = X.shape X_shift = torch.zeros_like(X) X_shift[..., 0::2] = -X[..., 1::2] X_shift[..., 1::2] = X[..., 0::2] Y = self.rope_cos[None, None, :seq_len, :] * X + \\ self.rope_sin[None, None, :seq_len,..."
+        },
+        {
+          "id": 54203,
+          "title": "LLaMA",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/transformer_lens/demos/LLaMA.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -32.60200197418055,
+          "excerpt": "...ne, **kwargs): x = utils.to_numpy(x) y = utils.to_numpy(y) px.scatter(y=y, x=x, labels={\"x\":xaxis, \"y\":yaxis, \"color\":caxis}, **kwargs).show(renderer) [markdown] ## Loading LLaMA [markdown] LLaMA weights are not available on HuggingFace, so you'll need to download and convert them manually: 1. Get LLaMA weights here: https://docs.google.com/forms/d/e/1FAIpQLSfqNECQnMkycAp2jP4Z9TFX0cGR4uf7b_fBxjY_OjhJILlKGA/viewform 2. Convert the official weights to huggingface: ```bash python src/transformers/models/llama/convert_..."
+        },
+        {
+          "id": 54378,
+          "title": "LLaMA2_GPU_Quantized",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/transformer_lens/demos/LLaMA2_GPU_Quantized.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -32.54016158251323,
+          "excerpt": "x=x, labels={\"x\":xaxis, \"y\":yaxis, \"color\":caxis}, **kwargs).show(renderer) [markdown] ## Loading LLaMA [markdown] LLaMA weights are not available on HuggingFace, so you'll need to download and convert them manually: 1. Get LLaMA weights here: https://docs.google.com/forms/d/e/1FAIpQLSfqNECQnMkycAp2jP4Z9TFX0cGR4uf7b_fBxjY_OjhJILlKGA/viewform 2. Convert the official weights to huggingface: ```bash python src/transformers/models/llama/convert_llama_weights_to_hf.py \\ --input_dir /path/to/downloaded/llama/weights \\ --..."
+        },
+        {
+          "id": 830479,
+          "title": "RMS_NoRM",
+          "path": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/paper_list/RMS_NoRM.pdf",
+          "category": "手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA",
+          "score": -14.712077353675964,
+          "excerpt": "h time step in a sequence, both BatchNorm-LSTM and BatchNorm-Everywhere help speed up the convergence of training process. By contrast, LayerNorm and RMSNorm not only converge faster than BatchNorm, but also reach lower validation error rate, thoughpRMSNorm performs slightly 7 0 50 100 150 200 250 300 Training steps (x1k) 0.4 0.5 0.6 0.7 0.8 0.9 1.0 Valid error rate Baseline BatchNorm-Everywhere BatchNorm-LSTM LayerNorm RMSNorm pRMSNorm Figure 5: Error rate on validation set for the attentive reader model. Model Ti..."
+        },
+        {
+          "id": 821719,
+          "title": "3_手撕LLM_手撕GPT",
+          "path": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT/3_手撕LLM_手撕GPT.pptx",
+          "category": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT",
+          "score": -51.441234394752236,
+          "excerpt": "多手段 - 剪枝 - 蒸馏 - 量化 4.6 Generation coding 4.6 Generation coding 4.2.2 Generate-Beam-searching Beam seraching beam = 2 4.3 Generate 方法 -Sampling sampling Softmax(x)/Temperature 4.3 Generate 方法 -Sampling 4.3 Generate 方法 -Sampling 4.3 Generate 方法 -Sampling 4.4 Generate 方法 - Top- K TopK sampling 4.4 Generate 方法 - Top- K 4.4 Generate 方法 - Top- K 1. 论文 解读 GPT1 Decoder-Only Transformers Causal Model Language Unspervied Learning GPT2: Multi-task-learning Model size / BPE / TOP-k Generation GPT3: Prompt / Fintuning Zero-shot..."
+        },
+        {
+          "id": 57803,
+          "title": "transformer_lens_docs",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/sites/transformer_lens_docs.html",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -35.38499433447458,
+          "excerpt": "ormer_lens.tools.model_registry.hf_scraper module transformer_lens.tools.model_registry.registry_io module transformer_lens.tools.model_registry.relevancy module transformer_lens.tools.model_registry.schemas module transformer_lens.tools.model_registry.validate module transformer_lens.tools.model_registry.verification module transformer_lens.tools.model_registry.verify_models module transformer_lens.utilities package Toggle navigation of transformer_lens.utilities package transformer_lens.utilities.activation_funct..."
+        },
+        {
+          "id": 124658,
+          "title": "cs224n-2026-lecture05-transformers",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs224n/cs224n_site_linked_files/cs224n-2026-lecture05-transformers.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -35.01202613532415,
+          "excerpt": "attention, we’ll go through two optimization tricks that end up being : • Residual Connections • Layer Normalization • In most Transformer diagrams, these are often written together as “Add & Norm” Transformer Decoder The Transformer Encoder: Residual connections [He et al., 2016] • Residual connections are a trick to help models train better. • Instead of 𝑋(𝑖) = Layer(𝑋 𝑖−1 ) (where 𝑖 represents the layer) • We let 𝑋(𝑖) = 𝑋(𝑖−1) + Layer(𝑋 𝑖−1 ) (so we only have to learn “the residual” from the previous layer) • Gr..."
+        }
+      ],
+      "evidence_query": "Transformer 手撕GPT LLaMA RoPE RMSNorm Grouped Query Attention CS336 assignment1"
+    },
+    "llm_training_scaling_data": {
+      "module": {
+        "id": "llm_training_scaling_data",
+        "stage": "03",
+        "title": "大模型预训练、数据、Scaling 与 DeepSeek 架构",
+        "summary": "系统学习现代预训练决策、数据流水线、Scaling Law 与 MoE/MLA 等架构设计。",
+        "outcomes": [
+          "解释 Scaling Law 与数据质量/规模之间的权衡。",
+          "理解去重、过滤、课程式数据配比和数据混合。",
+          "学习 MoE、MLA、YaRN、负载均衡和 multi-token prediction。"
+        ],
+        "queries": [
+          "scaling laws",
+          "CS336 scaling",
+          "CS336 data",
+          "DeepSeek-V3",
+          "Mixture-of-Experts",
+          "Multi Latent Attention",
+          "YaRN"
+        ],
+        "project": "设计一个小型预训练实验计划：数据、模型规模、训练预算和评测节点。"
+      },
+      "evidence": [
+        {
+          "id": 112346,
+          "title": "2025 Lecture 9 - Scaling laws basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 9 - Scaling laws basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -57.96085941826203,
+          "excerpt": "on many tasks (MT, LM, Speech) and hypothesized scaling shape. Hestness II Very ahead of its time.. “Emergence” Scaling by compute Speed = accuracy Part 2. Neural (LLM) scaling behaviors 1.Data vs performance “Are there simple rules that determine how data affects performance?” 2. Data vs model size Do we train on more data or bigger models? 3. Hyper-parameters vs performance “How should we set hyperparameters on the big model??” Scaling laws – power law relationships for many factors These scaling laws hold on man..."
+        },
+        {
+          "id": 112347,
+          "title": "2025 Lecture 9 - Scaling laws basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 9 - Scaling laws basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -57.93384143089625,
+          "excerpt": "...’s our estimation error? Informally, we have 𝑛 boxes, each box gets 𝑛 samples. 𝐸𝑟𝑟𝑜𝑟 ≈ 1 𝑛 + 𝑜𝑡ℎ𝑒𝑟 𝑠𝑚𝑜𝑜𝑡ℎ𝑛𝑒𝑠𝑠 𝑡𝑒𝑟𝑚𝑠 In 𝑑-dimensions, this becomes 𝐸𝑟𝑟𝑜𝑟 = 𝑛−1/𝑑 - This means scaling is 𝒚 = − 𝟏 𝒅 𝒙 + 𝑪 Takeaway: flexible ‘nonparametric’ learning has dimension dependent scaling laws. Intrinsic dimensionality theory of data scaling laws Some have made the following argument ( Bahri 2021) 1. Scaling laws arise due to polynomial rates of learning 1 𝑛𝛼 2. Some argue the slope 𝛼 is closely connected to the intrinsic dimens..."
+        },
+        {
+          "id": 112345,
+          "title": "2025 Lecture 9 - Scaling laws basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 9 - Scaling laws basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -57.69103313225109,
+          "excerpt": "Lecture 9 CS336 S C A L I N G L A W S - B A S I C S Taking scaling seriously Imagine the following scenario.. Your friend has given you ten thousand H100s for a month, and asked you to build a good open source LM. What do you do? • Put together your infra team and distributed training framework (A2) • Put together a great pretraining dataset (A4) • Run a big model (but which one??) < - we are here. Scaling isn’t easy Wide or deep? How many heads? Which nonlinearity? We could cargo cult things from existing LMs… but..."
+        },
+        {
+          "id": 112349,
+          "title": "2025 Lecture 9 - Scaling laws basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 9 - Scaling laws basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -57.237828001953076,
+          "excerpt": "Some surprising takeaways The effect of hyperparameters on big LMs can be predicted before training! - Optimizer choice - Model depth - Architecture choice The scaling law based design procedure. 1. Train a few smaller models 2. Establish a scaling law (e.g. ADAM vs SGD scaling law) 3. Select optimal hyperparam based on the scaling law prediction. One important use of scaling laws Q: Do we need more data or bigger models? Clearly, lots of data is wasted on small models Joint data -model scaling laws describe how th..."
+        },
+        {
+          "id": 112350,
+          "title": "2025 Lecture 9 - Scaling laws basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 9 - Scaling laws basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -56.86686274580018,
+          "excerpt": "...upfront cost Recent example for different (diffusion) models Gulrajani + 2023. Methods like IsoFLOPS are pretty easy to execute, and our group has replicated these results Scaling laws for models and compute Log-linearity extends to model parameters and compute! Lets us set the following based on small models - Pick optimizer - Pick architecture and model sizes Also lets us make smart resource tradeoffs - Big models vs more data? Recap: scaling laws – surprising and useful! - Data scaling : understand how data aff..."
+        },
+        {
+          "id": 96042,
+          "title": "cs336_assignment3_scaling",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment3_scaling/cs336_assignment3_scaling.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -40.990820710506924,
+          "excerpt": "CS336 Assignment 3 (scaling): Scaling Laws Version 26.0.5 CS336 Staff Spring 2026 1 Assignment Overview In this assignment, you will gain some hands-on experience with language model scaling laws. The setting You are in charge of training ClosedAI’s next-generation language model. This model will take the GDP of a small country to train and melt an Antarctic ice shelf, so you want to make sure you get it right. Concretely, you are given a fixed compute budget (measured in wall-clock time). Your goal is to produce a..."
+        },
+        {
+          "id": 96147,
+          "title": "cs336_assignment4_data",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment4_data/cs336_assignment4_data.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -35.34242971021886,
+          "excerpt": "CS336 Assignment 4 (data): Filtering Language Modeling Data Version 26.0.1 CS336 Staff Spring 2026 1 Assignment Overview In this assignment, you will gain some hands-on experience with filtering web crawls to create data for language modeling. What you will implement. 1. Convert Common Crawl HTML to text. 2. Filter the extracted text with various methods (e.g., harmful content, personally identifiable information, etc.). 3. Deduplicate the training data. What you will run. 1. Train language models on different data..."
+        },
+        {
+          "id": 96054,
+          "title": "pyproject",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment3_scaling/pyproject.toml",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -25.081628785946812,
+          "excerpt": "[project] name = \"cs336_scaling\" version = \"26.0.2\" description = \"Add your description here\" readme = \"README.md\" requires-python = \">=3.12\" dependencies = [ \"pydantic>=2.8\", \"requests>=2.32\", \"rich>=14.0\", ] [project.optional-dependencies] server = [ \"einx>=0.3.0\", \"einops>=0.8.1\", \"equinox>=0.13.0\", \"fastapi[standard]>=0.115\", \"flash-hog>=0.5.0\", \"furu>=0.0.27\", \"jax[cuda13]==0.9.1; sys_platform == 'linux'\", \"jax==0.9.1; sys_platform != 'linux'\", \"jaxtyping>=0.3.3\", \"modal\", \"optax>=0.2.3\", \"polars>=1.40.1\", \"ps..."
+        },
+        {
+          "id": 831777,
+          "title": "Multi_Latent_Attention",
+          "path": "手撕LLM2.0-MAC/5章_手撕 DeepSeek-V3(New)/lc5_deepseek_v3/Multi_Latent_Attention.ipynb",
+          "category": "手撕LLM2.0-MAC/5章_手撕 DeepSeek-V3(New)",
+          "score": -58.05811188565151,
+          "excerpt": "[markdown] # Multi Latent Attention(MLA) MHA/GQA 网络中在 Inference 时会产生大量的 KV-Cache，其占用越多，将减少 Decoding 时 batching 数量。 MLA 是为了减少 KV-Cache 而生的技术。 为了快速理解 MLA 是一种类似 MQA(Multi_Query_Attention) 的技术（即单头KV），MLA做到了 1. MLA 达到 MQA 单头 KV 的 cache 量级， 对于 K、V 需要存两份数据， MLA 只要存一份 Cache 数据 2. 将 MQA 的 KV 投影看成是一种特征压缩（40头->1头， 减少97.5% 数据量），其算 MHA 是 KV 单头share成多头 3. MLA 从单头到多头的映射是通过一个升维投影矩阵得到的， 对于 MQA 类压缩投影，被 MLA 视为是将 latent特征 投影到 隐空间(learnable） MQA 公式化为： $$ k_\\text{mqa} = WK_\\text{down}(X), X \\in \\mathbb{R} ^{N \\times d}, W_\\text{down} \\i..."
+        },
+        {
+          "id": 120013,
+          "title": "arxiv-1014dec681dd42dbf323b2738d357e3c-https_arxiv_org_abs_2405_04434",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_current/var/files/arxiv-1014dec681dd42dbf323b2738d357e3c-https_arxiv_org_abs_2405_04434",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -12.856715311413906,
+          "excerpt": "<!DOCTYPE html> <html lang=\"en\"> <head> <title>[2405.04434] DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model</title> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/static/browse/0.3.4/images/icons/apple-touch-icon.png\"> <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/static/browse/0.3.4/images/icons/favicon-32x32.png\"> <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/static/browse/0.3.4/images/ic..."
+        }
+      ],
+      "evidence_query": "scaling laws CS336 scaling CS336 data DeepSeek-V3 Mixture-of-Experts Multi Latent Attention YaRN"
+    },
+    "sft_peft_lora": {
+      "module": {
+        "id": "sft_peft_lora",
+        "stage": "04",
+        "title": "SFT、PEFT、LoRA、QLoRA 与指令微调",
+        "summary": "学习把预训练模型变成可用助手的核心后训练与参数高效微调方法。",
+        "outcomes": [
+          "理解 SFT 数据格式、loss mask 和监督微调流程。",
+          "比较全量微调、LoRA、QLoRA、Adapter 和 prompt tuning。",
+          "判断何时适合使用量化与 PEFT。"
+        ],
+        "queries": [
+          "LoRA",
+          "QLoRA",
+          "PEFT",
+          "SFT",
+          "Adapter",
+          "Prompting",
+          "Supervised FineTuning"
+        ],
+        "project": "准备一个小型指令微调数据集，并写出 SFT/LoRA 实验方案。"
+      },
+      "evidence": [
+        {
+          "id": 821319,
+          "title": "Lecture-Part6-SFT-Application",
+          "path": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/Lecture-Part6-SFT-Application.pdf",
+          "category": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA",
+          "score": -35.38062476795539,
+          "excerpt": "冬瓜AIGC-手撕LLM xiaodongguaAIGC5.3 其他 ● SWE-Bench ● CodeForce ● 大海捞针 ● 数学竞赛 ● 加法 ● 视觉定位 ● ...... 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC, 手撕LLM2.0 ；严禁外传, 版权所有 小冬瓜AIGC-手撕LLM xiaodongguaAIGC6 总结 ● 指令微调数据具有通用性，有监督微调包含：全参微调，PEFT两种 ● 提示词工程是当前 LLM 系统重要的应用，在不微调情况下，使用内部能力解决问题 ● 外部能力：LLM 系统有局限性，可以使用外部工具拓展能力边界 ● 测评分为：基准测评、L..."
+        },
+        {
+          "id": 821084,
+          "title": "LoRA篇",
+          "path": "18-LLM-模型/大模型（LLMs）参数高效微调(PEFT)面/LoRA篇.pdf",
+          "category": "18-LLM-模型/大模型（LLMs）参数高效微调(PEFT)面",
+          "score": -43.14781825630617,
+          "excerpt": "LoRA 系列篇 一、 LoRA 篇 1.1 什么是 LoRA ？ 1.2 LoRA 的思路是什么？ 1.3 LoRA 的特点是什么？ 1.4 简单描述一下 LoRA? 二、 QLoRA 篇 2.1 QLoRA 的思路是怎么样的？ 2.2 QLoRA 的特点是什么？ 三、 AdaLoRA 篇 3.1 AdaLoRA 的思路是怎么样的？ 四、 LoRA 权重是否可以合入原模型？ 五、 ChatGLM-6B LoRA 后的权重多大？ 六、 LoRA 微调优点是什么？ 七、 LoRA 微调方法为啥能加速训练？ 八、如何在已有 LoRA 模型上继续训练？ 九、 LoRA 缺点是什么？ 十、 LoRA 这种微调方法和全参数比起来有什么劣势吗？ 十一、 LORA 应该作用于 Transformer 的哪个参数矩阵？ 十二、 LoRA 微调参数量怎么确定？ 十三、 Rank 如何选取？ 十四、 alpha 参数 如何选取？ 十五、 LoRA 高效微调 如何避免过拟合？ 十六、微调大模型时 , 优化器如何？ 十七、哪些因素会影响内存使用？ 十八、 LoRA 权重是否可以合并？ 十九、是否可以逐层调整 LoRA 的最优 rank ？ 二十、..."
+        },
+        {
+          "id": 549,
+          "title": "QLoRA",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/6章_手撕LLM_手撕LoRA/paper/QLoRA.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -42.681467658006056,
+          "excerpt": "...data type to the computation data type to perform the forward and backward pass, but we only compute weight gradients for the LoRA parameters which use 16-bit BrainFloat. 4 QLoRA vs. Standard Finetuning We have discussed how QLoRA works and how it can significantly reduce the required memory for finetuning models. The main question now is whether QLoRA can perform as well as full-model finetuning. Furthermore, we want to analyze the components of QLoRA including the impact of NormalFloat4 over standard Float4. The..."
+        },
+        {
+          "id": 821381,
+          "title": "QLoRA",
+          "path": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/paper/QLoRA.pdf",
+          "category": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA",
+          "score": -42.681467658006056,
+          "excerpt": "...data type to the computation data type to perform the forward and backward pass, but we only compute weight gradients for the LoRA parameters which use 16-bit BrainFloat. 4 QLoRA vs. Standard Finetuning We have discussed how QLoRA works and how it can significantly reduce the required memory for finetuning models. The main question now is whether QLoRA can perform as well as full-model finetuning. Furthermore, we want to analyze the components of QLoRA including the impact of NormalFloat4 over standard Float4. The..."
+        },
+        {
+          "id": 821464,
+          "title": "Supervised_Finetuning_Dataset",
+          "path": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/lc6_sft/Supervised_Finetuning_Dataset.ipynb",
+          "category": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA",
+          "score": -46.41806359122202,
+          "excerpt": "[markdown] # Supervised Finetuning Dataset 语言模型的输入是 token 序列, 对于有监督学习(Supervised FineTuning,SFT)任务可以将语言任务数据转化为通用的问答（QA）模式，SFT学习时仅拟合回答(A) 所以有监督任务数据面临（1）将有监督任务数据转化为通用的 QA (2) 构造有监督学习的 label 1. message format 2. dataset 3. data collactor function 处理流程 1. SFT 数据为 QA 对, 考虑多轮对话情形, 使用 chat message 组织对话，使用自定义对话模版 2. 将单条数据 tokenizer 化 3. 编写 collate function [markdown] ## 数据 & Tokenizer [code] from transformers import AutoTokenizer tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen3-0.6B', #local_dir='~/.cache/huggingface/..."
+        },
+        {
+          "id": 619,
+          "title": "QLoRA",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/6章_手撕LLM_手撕LoRA/qlora/QLoRA.md",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -42.13131190267009,
+          "excerpt": "# 手撕QLoRA [TOC] <img src=\"/Users/denghang/Library/Application Support/typora-user-images/image-20230827002913121.png\" alt=\"image-20230827002913121\" style=\"zoom:50%;\" /> ## 2 普通8bit量化 ```python import numpy as np def quantize(input_data, std_mean): quantize_step = std_mean / 255.0 quantized_data = np.round(input_data / quantize_step) quantized_data = np.clip(quantized_data, 0, 255) return quantized_data.astype(np.uint8) def dequantize(quantized_data, quantize_range): quantize_step = std_mean / 255.0 dequantized_data..."
+        },
+        {
+          "id": 821476,
+          "title": "Supervised_Finetuning_PyTorch",
+          "path": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/lc6_sft/Supervised_Finetuning_PyTorch.ipynb",
+          "category": "手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA",
+          "score": -45.07196040355022,
+          "excerpt": "[markdown] # SFT by PyTorch 本代码基于数据构造 `lecture/lc6_sft/Supervised_Finetuning_Dataset.ipynb` 进行训练。 并且本代码可以在 colab/CPU/GPU/Mac 上进行微调训练。本代码在 mac 运行，所微调模型能正常对话。 本代码自定义 dataset 和 训练函数，训练成功后能进行文本生成。 [markdown] 关于 `transfomrers` 库的使用，建议以[官网文档](https://huggingface.co/docs/transformers/index)为主，查阅接口 [code] from transformers import AutoTokenizer, AutoModelForCausalLM import torch tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen3-0.6B', local_dir='~/.cache/huggingface/', # 如果可以直连 huggingface, 去除此行. ) ## 调用现成 Pretrained 模型..."
+        },
+        {
+          "id": 821136,
+          "title": "LLaMA3+QLoRA 微调脚本(仅测试环境colab T4，不用于实际任务训练)",
+          "path": "手撕LLM2.0-MAC/LLaMA3+QLoRA 微调脚本(仅测试环境colab T4，不用于实际任务训练).docx",
+          "category": "手撕LLM2.0-MAC/LLaMA3+QLoRA 微调脚本(仅测试环境colab T4，不用于实际任务训练).docx",
+          "score": -43.33579009036838,
+          "excerpt": "https://colab.research.google.com/drive/16meo2Sfoxzu22EkmJVdlo0weGOdHgbpJ?usp=sharing"
+        },
+        {
+          "id": 4,
+          "title": "LLaMA3+QLoRA 微调脚本(仅测试环境colab T4，不用于实际任务训练)",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/LLaMA3+QLoRA 微调脚本(仅测试环境colab T4，不用于实际任务训练).docx",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -42.57948070979244,
+          "excerpt": "https://colab.research.google.com/drive/16meo2Sfoxzu22EkmJVdlo0weGOdHgbpJ?usp=sharing"
+        },
+        {
+          "id": 77074,
+          "title": "using_peft_for_inference",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/huggingface_diffusers/docs/source/en/tutorials/using_peft_for_inference.md",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -40.630262780399235,
+          "excerpt": "...ially interfering parameters from merged models. Keep in mind the LoRA ranks need to have identical ranks to be merged. Make sure the latest stable version of Diffusers and PEFT is installed. ```bash pip install -U -q diffusers peft ``` Load a UNET that corresponds to the LoRA UNet. ```py import copy import torch from diffusers import AutoModel, DiffusionPipeline from peft import get_peft_model, LoraConfig, PeftModel unet = AutoModel.from_pretrained( \"stabilityai/stable-diffusion-xl-base-1.0\", torch_dtype=torch.flo..."
+        }
+      ],
+      "evidence_query": "LoRA QLoRA PEFT SFT Adapter Prompting Supervised FineTuning"
+    },
+    "inference_systems": {
+      "module": {
+        "id": "inference_systems",
+        "stage": "05",
+        "title": "推理、服务化、加速与分布式系统",
+        "summary": "把模型内部机制连接到真实延迟、吞吐、显存和服务约束。",
+        "outcomes": [
+          "解释 KV cache、batching、prefill/decode、chunk prefill 和 speculative decoding。",
+          "理解 FlashAttention、vLLM、张量并行和分布式训练基础。",
+          "能阅读 profiling 结果并定位系统瓶颈。"
+        ],
+        "queries": [
+          "Inference",
+          "FlashAttention",
+          "vLLM",
+          "KV cache",
+          "speculative decoding",
+          "DeepSpeed",
+          "Tensor Model Parallelism",
+          "CS336 systems"
+        ],
+        "project": "写一份 7B 模型部署说明：延迟、吞吐、显存预算与优化策略。"
+      },
+      "evidence": [
+        {
+          "id": 125218,
+          "title": "anlp-s2025-22-efficient-inference",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/cmu_anlp/cmu_anlp_spring2025_site_linked_files/anlp-s2025-22-efficient-inference.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -36.11634072156121,
+          "excerpt": "Efficient Inference Sean Welleck | CMU Advanced NLP March 27 , 2025 Most slides by Hailey Schoelkopf from the NeurIPS 2024 LLM Inference Tutorial Efficient inference Using the L 1 model on a Macbook with LM Studio 1 Efficient inference Using a LLM API 2 Efficient inference Running experiments involving a lot of inference 3 Efficient inference Serving many customer requests 4 Efficiency | goals Scope: • Basics of efficient inference • How can we make inference strategies faster? • Which strategies are most efficient..."
+        },
+        {
+          "id": 112382,
+          "title": "2025 Lecture 7 - Parallelism basics",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 7 - Parallelism basics.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -31.7989578001951,
+          "excerpt": "...use? DDP/ZeRO1 Per-batch No scaling 2* # param Linear Very FSDP (ZeRO3) 3x Per-FSDP block Linear 3 * # param Linear Very Pipeline Per-pipeline Linear Activations Linear NO Tensor+seq 2x transformer block Linear 8*activations per- layer all-reduce No impact No Have to balance limited resource – memory, bandwidth, batch size Model vs Tensor parallel (TPU book) Key quantity Global batch size (divided by GPU) ‘3D parallelism’ – putting it all together Simple rules of thumb from the literature. 1. Until your model fits..."
+        },
+        {
+          "id": 124125,
+          "title": "cs336_assignment2_systems",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment2_systems/cs336_assignment2_systems.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -37.188734930226694,
+          "excerpt": "CS336 Assignment 2 (systems): Systems and Parallelism Version 26.1.3 CS336 Staff Spring 2026 1 Assignment Overview In this assignment, you will gain some hands-on experience with improving single-GPU training speed and scaling training to multiple GPUs. What you will implement 1. Benchmarking and profiling harness 2. Activation checkpointing 3. Flash Attention 2 Triton kernel 4. Distributed data parallel training 5. Optimizer state sharding 6. Fully sharded data parallel training What the code looks like The assign..."
+        },
+        {
+          "id": 1073,
+          "title": "FlashAttention",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/3章_手撕LLM_手撕GPT/paper_list/FlashAttention.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -69.41880715656052,
+          "excerpt": "masked language modeling. Averaged over 10 runs on 8\u0002A100 GPUs. BERT Implementation Training time (minutes) Nvidia MLPerf 1.1 [58] 20.0\u0006 1.5 FlashAttention(ours) 17.4\u0006 1.4 GPT-2. FlashAttentionyields faster training times for GPT-2 [67] on the large OpenWebtext dataset [32] than the widely used HuggingFace [87] and Megatron-LM [77] implementations. Table 2 shows up to 3\u0002 end- to-end speedup compared to Huggingface and 1.7\u0002 speedup compared to Megatron-LM.FlashAttention 7 achieves the same perplexity as the other tw..."
+        },
+        {
+          "id": 821927,
+          "title": "FlashAttention",
+          "path": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT/paper_list/FlashAttention.pdf",
+          "category": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT",
+          "score": -69.41880715656052,
+          "excerpt": "masked language modeling. Averaged over 10 runs on 8\u0002A100 GPUs. BERT Implementation Training time (minutes) Nvidia MLPerf 1.1 [58] 20.0\u0006 1.5 FlashAttention(ours) 17.4\u0006 1.4 GPT-2. FlashAttentionyields faster training times for GPT-2 [67] on the large OpenWebtext dataset [32] than the widely used HuggingFace [87] and Megatron-LM [77] implementations. Table 2 shows up to 3\u0002 end- to-end speedup compared to Huggingface and 1.7\u0002 speedup compared to Megatron-LM.FlashAttention 7 achieves the same perplexity as the other tw..."
+        },
+        {
+          "id": 1064,
+          "title": "FlashAttention",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/3章_手撕LLM_手撕GPT/paper_list/FlashAttention.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -69.34294137477227,
+          "excerpt": "the IO complexity [1] of FlashAttention, proving that it requires𝑂¹𝑁 2𝑑2 𝑀 1º HBM accesses where 𝑑 is the head dimension and𝑀 is the size of SRAM, as compared toΩ¹𝑁 𝑑¸ 𝑁 2º of standard attention. For typical values of 𝑑 and 𝑀, FlashAttention requires many times fewer HBM accesses compared to standard attention (up to 9\u0002 fewer, as shown in Fig. 2). Moreover, we provide a lower bound, showing that no exact attention algorithm can asymptotically improve on the number of HBM accesses over all SRAM sizes. We also show t..."
+        },
+        {
+          "id": 876,
+          "title": "FlashAttention_Softmax",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/3章_手撕LLM_手撕GPT/paper_list/FlashAttention_Softmax.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -68.23777568535564,
+          "excerpt": "Twent y-ninth Annual Conference on Neural Information Processing Systems (NIPS ), 2015. URL http://learningsys.org/papers/LearningSys_2015_paper_33.pdf. [18] B. P . Welford. Note on a method for calculating correcte d sums of squares and products. T echnometrics, 4(3):419–420, 1962. URL https://amstat.tandfonline.com/doi/abs/10.1080/00401706.1962.10490022. 9"
+        },
+        {
+          "id": 821730,
+          "title": "FlashAttention_Softmax",
+          "path": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT/paper_list/FlashAttention_Softmax.pdf",
+          "category": "手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT",
+          "score": -68.23777568535564,
+          "excerpt": "Twent y-ninth Annual Conference on Neural Information Processing Systems (NIPS ), 2015. URL http://learningsys.org/papers/LearningSys_2015_paper_33.pdf. [18] B. P . Welford. Note on a method for calculating correcte d sums of squares and products. T echnometrics, 4(3):419–420, 1962. URL https://amstat.tandfonline.com/doi/abs/10.1080/00401706.1962.10490022. 9"
+        },
+        {
+          "id": 92870,
+          "title": "cs336_site_2025",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_site_2025.html",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -23.11990084134365,
+          "excerpt": "Stanford CS336 | Language Modeling from Scratch (2025) CS336 Coursework Schedule CS336: Language Modeling from Scratch Stanford / Spring 2025 This is the archived website for the Spring 2025 offering of CS336. The latest offering is here . Course Staff Tatsunori Hashimoto Instructor Percy Liang Instructor Neil Band CA Marcel Rød CA Rohith Kuditipudi CA Logistics Lectures: Tuesday/Thursday 3:00-4:20pm in NVIDIA Auditorium Office hours: Tatsu Hashimoto (Gates 364): Fridays at 3-4pm Percy Liang (Gates 350): Fridays at..."
+        },
+        {
+          "id": 92874,
+          "title": "cs336_site_2024",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_site_2024.html",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -23.10584295251793,
+          "excerpt": "Stanford CS336 | Language Modeling from Scratch (2024) CS336 Coursework Schedule CS336: Language Modeling from Scratch Stanford / Spring 2024 This is the archived website for the Spring 2024 offering of CS336. The latest offering is here . Course Staff Tatsunori Hashimoto Instructor Percy Liang Instructor Nelson Liu CA Gabriel Poesia CA Logistics Lectures: Monday/Wednesday 1:30-2:50pm in McMurtry Art & Art History Building, Oshman Presentation Space, Room 102 Office hours: Tatsunori Hashimoto : Friday 3-4pm Gates 3..."
+        }
+      ],
+      "evidence_query": "Inference FlashAttention vLLM KV cache speculative decoding DeepSpeed Tensor Model Parallelism CS336 systems"
+    },
+    "alignment_rlhf_eval": {
+      "module": {
+        "id": "alignment_rlhf_eval",
+        "stage": "06",
+        "title": "RLHF、DPO、奖励模型、评测与安全",
+        "summary": "学习偏好学习、后训练、评测体系和安全检查如何共同塑造可用模型。",
+        "outcomes": [
+          "理解 reward modeling、PPO、DPO、GRPO 和 Constitutional AI。",
+          "使用 benchmark harness 和简单本地评测。",
+          "区分能力评测、安全评测和回归测试。"
+        ],
+        "queries": [
+          "RLHF",
+          "PPO",
+          "DPO",
+          "reward model",
+          "OpenAI Evals",
+          "HELM",
+          "HarmBench",
+          "Constitutional AI",
+          "CS329H"
+        ],
+        "project": "为“大模型学习之路”导师定义一套本地评测题和回归测试。"
+      },
+      "evidence": [
+        {
+          "id": 785522,
+          "title": "harmbench_splash",
+          "path": "Frontier-AI-PhD-Curriculum/07_evaluation_safety_benchmarks/safety_eval/harmbench/assets/harmbench_splash.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/07_evaluation_safety_benchmarks",
+          "score": -37.40665537178699,
+          "excerpt": "BIOWEAPON GENERAL HARM CHEMWEAPON CYBERCRIME COPYRIGHT HARASSMENT MISINFOMATION ILLEGAL ACT STANDARD BEHAVIORS CONTEXTUAL BEHAVIORS COPYRIGHT BEHAVIORS MULTIMODAL BEHAVIORS AutoDan GCG Human Few-shot PAIR GPT-4 Gemini Llama Claude Mistral LLaVAPersona HARMBENCH + ATTACKS + DEFENSE"
+        },
+        {
+          "id": 57595,
+          "title": "2305.18290_dpo",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/papers/2305.18290_dpo.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -34.661179187754236,
+          "excerpt": "...f test prompts, computing the average reward under the true reward function as well as the average sequence-level KL3 with the reference policy KL (π || πref). We find that DPO produces by far the most efficient frontier, achieving the highest reward while still achieving low KL. This result is particularly notable for multiple reasons. First, DPO and PPO optimize the same objective, but DPO is notably more efficient; 3That is, the sum of the per-timestep KL-divergences. 8 DPO’s reward/KL tradeoff strictly dominate..."
+        },
+        {
+          "id": 30301,
+          "title": "04_[2.4]_RLHF",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/arena_3/chapter2_rl/instructions/pages/04_[2.4]_RLHF.md",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -41.022836071235375,
+          "excerpt": "ayers, or adaptive KL penalties > - Perform some exploratory mechanistic interpretability on RLHF'd models > - Learn about the trlX library, which is designed to train transformers via RLHF in a way which abstracts away many of the low-level details ## Reading - [Illustrating Reinforcement Learning from Human Feedback (RLHF)](https://huggingface.co/blog/rlhf) (~10 minutes) - An accessible and mostly non-technical introduction to RLHF, which discusses it in context of the full pipeline for training autoregressive tr..."
+        },
+        {
+          "id": 785835,
+          "title": "medhelm",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/evals/stanford_crfm_helm/docs/medhelm.md",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -38.236111557982525,
+          "excerpt": "...kflow** - Scheduling Resources and Staff - Overseeing Financial Activities - Organizing Workflow Processes - Care Coordination and Planning --- ## Installation **NOTE**: MedHELM is compatible **only** with `Python 3.10`. Other Python versions are not supported. #### 1. Create a Virtual Environment Run the following commands to create and activate a new python virtual environment: ```bash # Create and activate a clean environment conda create -n crfm-helm python=3.10 pip wget conda activate crfm-helm pip install -U..."
+        },
+        {
+          "id": 785796,
+          "title": "vhelm",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/evals/stanford_crfm_helm/docs/vhelm.md",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -38.08628742711855,
+          "excerpt": "# VHELM (Vision-Language Models) **Holistic Evaluation of Vision-Language Models (VHELM)** is an extension of the HELM framework for evaluating **Vision-Language Models (VLMs)**. VHELM aggregates various datasets to cover one or more of the 9 aspects: visual perception, bias, fairness, knowledge, multilinguality, reasoning, robustness, safety, and toxicity. In doing so, we produce a comprehensive, multi-dimensional view of the capabilities of the VLMs across these important factors. In addition, we standardize the..."
+        },
+        {
+          "id": 31132,
+          "title": "2.4_RLHF_solutions",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/arena_3/chapter2_rl/exercises/part4_rlhf/2.4_RLHF_solutions.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -41.042164566358935,
+          "excerpt": "a variant of PPO specialised for doing RLHF on LLMs. It forgoes the critic, and uses the average reward over many rollouts as a baseline instead. > ##### Learning Objectives > > - Understand and implement GRPO > - Use GRPO + LoRA together to finetune a model. ### ☆ Bonus This section offers some suggested ways to extend the core RLHF exercises. > ##### Learning Objectives > > - Improve your RLHF implementation via techniques like differential learning rates, frozen layers, or adaptive KL penalties > - Perform some..."
+        },
+        {
+          "id": 31194,
+          "title": "2.4_RLHF_exercises",
+          "path": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety/repos/arena_3/chapter2_rl/exercises/part4_rlhf/2.4_RLHF_exercises.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/12_alignment_interpretability_safety",
+          "score": -41.042164566358935,
+          "excerpt": "a variant of PPO specialised for doing RLHF on LLMs. It forgoes the critic, and uses the average reward over many rollouts as a baseline instead. > ##### Learning Objectives > > - Understand and implement GRPO > - Use GRPO + LoRA together to finetune a model. ### ☆ Bonus This section offers some suggested ways to extend the core RLHF exercises. > ##### Learning Objectives > > - Improve your RLHF implementation via techniques like differential learning rates, frozen layers, or adaptive KL penalties > - Perform some..."
+        },
+        {
+          "id": 2396,
+          "title": "DPO",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/8章_手撕LLM_手撕ChatLLaMA/DPO.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -34.66833953890535,
+          "excerpt": "...f test prompts, computing the average reward under the true reward function as well as the average sequence-level KL3 with the reference policy KL (π || πref). We find that DPO produces by far the most efficient frontier, achieving the highest reward while still achieving low KL. This result is particularly notable for multiple reasons. First, DPO and PPO optimize the same objective, but DPO is notably more efficient; DPO’s reward/KL tradeoff strictly dominates PPO. Second, DPO achieves a better frontier than PPO,..."
+        },
+        {
+          "id": 10556,
+          "title": "DPO",
+          "path": "手撕llm/手撕LLM+RLHF 14章完整版/资料/9章_手撕LLM_手撕PPO/DPO.pdf",
+          "category": "手撕llm/手撕LLM+RLHF 14章完整版",
+          "score": -34.66833953890535,
+          "excerpt": "...f test prompts, computing the average reward under the true reward function as well as the average sequence-level KL3 with the reference policy KL (π || πref). We find that DPO produces by far the most efficient frontier, achieving the highest reward while still achieving low KL. This result is particularly notable for multiple reasons. First, DPO and PPO optimize the same objective, but DPO is notably more efficient; DPO’s reward/KL tradeoff strictly dominates PPO. Second, DPO achieves a better frontier than PPO,..."
+        },
+        {
+          "id": 112366,
+          "title": "2025 Lecture 15 - RLHF Alignment",
+          "path": "Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_lectures_2025/nonexecutable/2025 Lecture 15 - RLHF Alignment.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/01_llm_core",
+          "score": -49.26090206208373,
+          "excerpt": "things to worry about How do we RLHF? • PPO • DPO What are some side -effects of RLHF? RLHF Data What types of pairwise feedback. How do we get (good) pairwise feedback? RLHF and data – standard setups Standard ‘pairwise feedback’ setup RLHF and data – instruct GPT guideline Allegedly - google bard crowdsourcing instructions https://assets.bwbx.io/documents/users/iqjWHBFdfxIU/rqKqEqbXBnDI/v0 Crowdworker selection - instructGPT Scale + Upwork – 40 workers. Now let’s try our own annotation task You will get 5 minutes..."
+        }
+      ],
+      "evidence_query": "RLHF PPO DPO reward model OpenAI Evals HELM HarmBench Constitutional AI"
+    },
+    "rag_agents": {
+      "module": {
+        "id": "rag_agents",
+        "stage": "07",
+        "title": "RAG、Agent、工具调用与代码智能体",
+        "summary": "构建能检索、推理、调用工具并完成任务的大模型系统。",
+        "outcomes": [
+          "理解切分、检索、重排、来源引用和幻觉失败模式。",
+          "学习工具调用、规划、记忆、ReAct 和代码 Agent 工作流。",
+          "把本应用的数据库设计映射到生产级 RAG 模式。"
+        ],
+        "queries": [
+          "RAG",
+          "ReAct",
+          "Agent",
+          "LangChain",
+          "Berkeley LLM Agents",
+          "Code Agents",
+          "SWE-bench"
+        ],
+        "project": "改进一个检索提示词，并用资料库里的五个问题测试效果。"
+      },
+      "evidence": [
+        {
+          "id": 792327,
+          "title": "llm-agents-berkeley-intro-sp25",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo/slides/llm-agents-berkeley-intro-sp25.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -56.43853092734268,
+          "excerpt": "...nd graduate students ▪ Goal of publishing in a workshop or conference ▪ Students must apply to participate via a forthcoming Google Form Timeline Course Website https://rdi.berkeley.edu/adv-llm-agents/"
+        },
+        {
+          "id": 792891,
+          "title": "llm-agents-berkeley-intro-sp25",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_adv_llm_agents_sp25_site_linked_files/llm-agents-berkeley-intro-sp25.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -56.42770463565013,
+          "excerpt": "...nd graduate students ▪ Goal of publishing in a workshop or conference ▪ Students must apply to participate via a forthcoming Google Form Timeline Course Website https://rdi.berkeley.edu/adv-llm-agents/"
+        },
+        {
+          "id": 792317,
+          "title": "Code Agents and AI for Vulnerability Detection",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo/slides/Code Agents and AI for Vulnerability Detection.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -52.45512140079509,
+          "excerpt": "...Language Model Agents My research journey ● Machine learning and natural language processing ○ Worked on this 2000 - 2009, during my PhD and postdoc ● Machine learning for code generation, software engineering ○ 2012 - present. Started at Edinburgh, then moved to Google DeepMind in 2018 ● AI for security ○ 2024 - present Why am I telling you this? 1. What questions I can answer 2. Your career is long, technologies change 3. Thinking across disciplines Outline ● Coding Agents ● AI for computer security ● LLM agents..."
+        },
+        {
+          "id": 792257,
+          "title": "welleck2025_berkeley_bridging",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo/slides/welleck2025_berkeley_bridging.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -40.9358856309846,
+          "excerpt": "k (alphabetical by last name): •Jeremy Avigad (CMU) •Joshua Clune (CMU) •Jiewen Hu (CMU) •Mateja Jamnik (Cambridge) •Albert Q. Jiang (Cambridge, Mistral) •Timothee Lacroix (Meta, Mistral) •Guillaume Lample (Meta, Mistral) •Haohan Lin (Tsinghua) •Wenda Li (Edinburgh) •Jiacheng Liu (Washington) •Zhiqing Sun (CMU, OpenAI) •Yuhuai (Tony) Wu (Google, X.ai) •Yiming Yang (CMU) •Jin Peng Zhou (Cornell) •Thomas Zhu (CMU) Sean Welleck CMU School of Computer Science Learning, Language, and Logic (L3) Lab wellecks@cmu.edu 76"
+        },
+        {
+          "id": 792874,
+          "title": "welleck2025_berkeley_bridging",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_adv_llm_agents_sp25_site_linked_files/welleck2025_berkeley_bridging.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -40.91861856658318,
+          "excerpt": "k (alphabetical by last name): •Jeremy Avigad (CMU) •Joshua Clune (CMU) •Jiewen Hu (CMU) •Mateja Jamnik (Cambridge) •Albert Q. Jiang (Cambridge, Mistral) •Timothee Lacroix (Meta, Mistral) •Guillaume Lample (Meta, Mistral) •Haohan Lin (Tsinghua) •Wenda Li (Edinburgh) •Jiacheng Liu (Washington) •Zhiqing Sun (CMU, OpenAI) •Yuhuai (Tony) Wu (Google, X.ai) •Yiming Yang (CMU) •Jin Peng Zhou (Cornell) •Thomas Zhu (CMU) Sean Welleck CMU School of Computer Science Learning, Language, and Logic (L3) Lab wellecks@cmu.edu 76"
+        },
+        {
+          "id": 792487,
+          "title": "neubig24softwareagents",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo/slides/neubig24softwareagents.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -40.42777001550641,
+          "excerpt": "O X •Using LMs, analysis, or both Conclusion Summary •Copilots already very useful, code agents getting there •Current challenges: code LLMs, editing, localization, planning, safety •Future directions: •Agentic training methods •Human-in-the-loop •Broader software tasks than coding •Thanks! And you can try out agents yourself https://github.com/All-Hands-AI/OpenHands Questions?"
+        },
+        {
+          "id": 792903,
+          "title": "Code_Agents_and_AI_for_Vulnerability_Detection",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_adv_llm_agents_sp25_site_linked_files/Code_Agents_and_AI_for_Vulnerability_Detection.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -37.45017505952941,
+          "excerpt": "...Language Model Agents My research journey ● Machine learning and natural language processing ○ Worked on this 2000 - 2009, during my PhD and postdoc ● Machine learning for code generation, software engineering ○ 2012 - present. Started at Edinburgh, then moved to Google DeepMind in 2018 ● AI for security ○ 2024 - present Why am I telling you this? 1. What questions I can answer 2. Your career is long, technologies change 3. Thinking across disciplines Outline ● Coding Agents ● AI for computer security ● LLM agents..."
+        },
+        {
+          "id": 792855,
+          "title": "tapeagents",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_f24_site_linked_files/tapeagents.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -36.986018520771644,
+          "excerpt": "[55] Action: CallFunction function: Digital Coupon Creation Agent UserInitMessageShort.main_node Agent.intent_discovery_node_b Environment Agent.intent_discovery_node_b Environment Agent.gather_values_node Agent.verify_values_node Agent.request_node Agent.generate_node UserHappyPath.main_node Agent.gather_values_node Agent.verify_values_node Agent.update_and_plan_node Agent.request_node Agent.generate_node UserInvliadValue.main_node Agent.gather_values_node Agent.verify_values_node Agent.request_node Agent.generate..."
+        },
+        {
+          "id": 792565,
+          "title": "tapeagents",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo/assets/tapeagents.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -36.98645439904902,
+          "excerpt": "[55] Action: CallFunction function: Digital Coupon Creation Agent UserInitMessageShort.main_node Agent.intent_discovery_node_b Environment Agent.intent_discovery_node_b Environment Agent.gather_values_node Agent.verify_values_node Agent.request_node Agent.generate_node UserHappyPath.main_node Agent.gather_values_node Agent.verify_values_node Agent.update_and_plan_node Agent.request_node Agent.generate_node UserInvliadValue.main_node Agent.gather_values_node Agent.verify_values_node Agent.request_node Agent.generate..."
+        },
+        {
+          "id": 792863,
+          "title": "neubig24softwareagents",
+          "path": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_f24_site_linked_files/neubig24softwareagents.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents",
+          "score": -24.435327485424246,
+          "excerpt": "O X •Using LMs, analysis, or both Conclusion Summary •Copilots already very useful, code agents getting there •Current challenges: code LLMs, editing, localization, planning, safety •Future directions: •Agentic training methods •Human-in-the-loop •Broader software tasks than coding •Thanks! And you can try out agents yourself https://github.com/All-Hands-AI/OpenHands Questions?"
+        }
+      ],
+      "evidence_query": "RAG ReAct Agent LangChain Berkeley LLM Agents Code Agents SWE-bench"
+    },
+    "vlm_multimodal": {
+      "module": {
+        "id": "vlm_multimodal",
+        "stage": "08",
+        "title": "VLM 与多模态基础",
+        "summary": "学习视觉语言表征、图文对齐和以 LLM 为中心的多模态模型。",
+        "outcomes": [
+          "理解 ViT、CLIP、BLIP-2、LLaVA、多模态对齐和 VQA 任务。",
+          "比较对比学习、图像描述和指令微调 VLM 路线。",
+          "知道图像 token 如何接入 LLM 上下文。"
+        ],
+        "queries": [
+          "ViT",
+          "CLIP",
+          "BLIP2",
+          "LLaVA",
+          "多模态",
+          "CMU MMML",
+          "CS25",
+          "VLM"
+        ],
+        "project": "解释 LLaVA 从图像编码器到语言模型输出的训练流水线。"
+      },
+      "evidence": [
+        {
+          "id": 150413,
+          "title": "2103.00020_clip",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/papers/2103.00020_clip.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -37.5261919793728,
+          "excerpt": "efﬁciency of CLIP will be necessary. Analysis in Section 3.1 found that CLIP’s zero-shot perfor- mance is still quite weak on several kinds of tasks. When compared to task-speciﬁc models, the performance of CLIP is poor on several types of ﬁne-grained classiﬁcation such as differentiating models of cars, species of ﬂowers, and variants of aircraft. CLIP also struggles with more abstract and systematic tasks such as counting the number of objects in an image. Finally for novel tasks which are unlikely to be included..."
+        },
+        {
+          "id": 150620,
+          "title": "cs25_site",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/stanford_cs25/cs25_site.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -49.68477807605841,
+          "excerpt": "CS25: Transformers United V6 | CS25 CS25 CS25 Logistics FAQ Recordings Search Search Cancel Loading search index… No recent searches No results for \" Query here \" Title here Date here Summary here to select to navigate to close Search by FlexSearch CS25: Transformers United V6 CS25 has become one of Stanford's hottest seminar courses, featuring top researchers at the forefront of Transformers research such as Geoffrey Hinton, Ashish Vaswani, and Andrej Karpathy. Our class has an incredibly popular reception within..."
+        },
+        {
+          "id": 150626,
+          "title": "cs25_site",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/stanford_cs25/cs25_site.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -46.144236480706724,
+          "excerpt": ", autoregressive modeling, and reasoning capabilities inherited from strong language models. I will then discuss emerging directions in multimodal architecture design, including sparsity and modality specialization, arguing that efficient and scalable multimodal intelligence may require both shared abstract reasoning and modality-aware computation. Finally, I will briefly discuss real-time multimodal intelligence and several open problems facing the field. The goal of this talk is to present a perspective on how th..."
+        },
+        {
+          "id": 151417,
+          "title": "cmu_mmml_current_site",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_mmml_current_site.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -45.63037980657723,
+          "excerpt": "...Morency Yonatan Bisk Daniel Fried Carlos Busso With substantial assistance from Paul Pu Liang Multimodal Machine Learning LP Morency, Paul Liang, Daniel Fried, Yonatan Bisk cmu-mmml YouTube © Copyright 2026 Carnegie Mellon University. Powered by Jekyll with al-folio theme."
+        },
+        {
+          "id": 150527,
+          "title": "2405.17247_introduction_to_vlm",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/papers/2405.17247_introduction_to_vlm.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -34.396771709308894,
+          "excerpt": "val-based benchmarks rely on real images extracted from well-known datasets such as COCO. However, using real image datasets that were not designed for VLM evaluation can be problematic since such dataset does not provide images that can be associated with negative captions. For example, a “coffee cup” will always be photographed on top of a table. Consequently, a VLM could leverage thislocation biasto consistently predict the correct positive caption in which the “coffee cup is on top of the table” without using t..."
+        },
+        {
+          "id": 152248,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_adv_mmml_course_repo/_site/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -30.922747171398207,
+          "excerpt": "11-877 AMML 11-877 AMML 11877 - Advanced Topics in Multimodal Machine Learning 11877 - Advanced Topics in Multimodal Machine Learning Course webpage for CMU course 11-877, Advanced Topics in Multimodal Machine Learning, Spring 2022, Spring 2023, Spring 2024 Local Testing Use the following command to run the repo on the local machine: bundle exec jekyll serve --baseurl '/adv-mmml-course' Hosted Website Spring 2024: https://cmu-multicomp-lab.github.io/adv-mmml-course/spring2024/ Spring 2023: https://cmu-multicomp-lab..."
+        },
+        {
+          "id": 151491,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_mmml_course_repo/_site/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -30.568114627163645,
+          "excerpt": "11-777 MMML 11-777 MMML Fall2023 Fall2022 Fall2020 M ulti M odal M achine L earning 11-777 • Carnegie Mellon University Multimodal Machine Learning CMU MultiComp Lab CMU-MultiComp-Lab YouTube © Copyright 2024 Carnegie Mellon University. Powered by Jekyll with al-folio theme."
+        },
+        {
+          "id": 151495,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_mmml_course_repo/_site/fall2023/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -30.338113143862323,
+          "excerpt": "...pplications of MMML including multimodal affect recognition, multimodal language grounding and language-vision navigation. Time: Tuesday and Thursday 9:30-11:00 AM Content: CMU Canvas Location: MM A14 and zoom (see links in CMU Canvas ) Discussion and Q&A: Piazza Assignment submissions: Gradescope (for registered students only) Online lectures: The lectures will be recorded and made available on CMU Canvas for registered students. External link to the lectures on our Youtube channel ! Contact: Students should ask a..."
+        },
+        {
+          "id": 151503,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_mmml_course_repo/_site/fall2022/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video",
+          "score": -30.338113143862323,
+          "excerpt": "...plications of MMML including multimodal affect recognition, multimodal language grounding and language-vision navigation. Time: Tuesday and Thursday 10:10-11:30 AM Content: CMU Canvas Location: DH 1212 and zoom (see links in CMU Canvas ) Discussion and Q&A: Piazza Assignment submissions: Gradescope (for registered students only) Online lectures: The lectures will be recorded and made available on CMU Canvas for registered students. External link to the lectures on our Youtube channel ! Contact: Students should ask..."
+        },
+        {
+          "id": 144756,
+          "title": "clip_vit",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_repo/prismatic/models/backbones/vision/clip_vit.py",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -32.954251687261184,
+          "excerpt": "\"\"\" clip_vit.py \"\"\" from prismatic.models.backbones.vision.base_vision import TimmViTBackbone # Registry =>> Supported CLIP Vision Backbones (from TIMM) CLIP_VISION_BACKBONES = { \"clip-vit-b\": \"vit_base_patch16_clip_224.openai\", \"clip-vit-l\": \"vit_large_patch14_clip_224.openai\", \"clip-vit-l-336px\": \"vit_large_patch14_clip_336.openai\", } # [IMPORTANT] By Default, TIMM initialized OpenAI CLIP models with the standard GELU activation from PyTorch. # HOWEVER =>> Original OpenAI models were trained with the quick_gelu *..."
+        }
+      ],
+      "evidence_query": "ViT CLIP BLIP2 LLaVA 多模态 CMU MMML CS25 VLM"
+    },
+    "streaming_video_vlm": {
+      "module": {
+        "id": "streaming_video_vlm",
+        "stage": "09",
+        "title": "流式 VLM 与在线视频理解",
+        "summary": "聚焦长时序、实时输入和在线视频语言系统。",
+        "outcomes": [
+          "理解在线视频 benchmark 与时间推理需求。",
+          "比较流式记忆、帧选择和层次化视频理解。",
+          "把 streaming VLM 与具身智能、机器人场景联系起来。"
+        ],
+        "queries": [
+          "StreamingVLM",
+          "VideoLLM-online",
+          "StreamingBench",
+          "OVO-Bench",
+          "online video",
+          "hierarchical streaming video"
+        ],
+        "project": "为机器人或第一视角视频场景设计一组 streaming VLM 评测题。"
+      },
+      "evidence": [
+        {
+          "id": 806869,
+          "title": "Hierarchical_Streaming_Video_Understanding_ICCV2025",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/papers/Hierarchical_Streaming_Video_Understanding_ICCV2025.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -63.23066160507782,
+          "excerpt": "Open-ended Hierarchical Streaming Video Understanding with Vision Language Models Hyolim Kang* Yunsu Park∗ Youngbeom Yoo Yeeun Choi Seon Joo Kim Yonsei University {hyolimkang,ysp7954,youngbeom.yoo,yeeun-choi,seonjookim}@yonsei.ac.kr Abstract We introduce Hierarchical Streaming Video Understanding, a task that combines online temporal action localization with free-form description generation. Given the scarcity of datasets with hierarchical and fine-grained temporal an- notations, we demonstrate that LLMs can effect..."
+        },
+        {
+          "id": 806874,
+          "title": "Hierarchical_Streaming_Video_Understanding_ICCV2025",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/papers/Hierarchical_Streaming_Video_Understanding_ICCV2025.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -62.738318530075716,
+          "excerpt": "...isticated, hi- erarchical temporal comprehension, enabling it to capture structured action intervals rather than aligning predictions to single points in time [5, 41]. 2.3. Hierarchical Video Understanding Hierarchical video understanding seeks to recognize actions across multiple levels of granularity, from fine-grained ac- tions to higher-level activities. Although this hierarchical structure aligns with natural action dynamics, few recent works address this topic [15, 34]. Our Work To the best of our knowledge,..."
+        },
+        {
+          "id": 806871,
+          "title": "Hierarchical_Streaming_Video_Understanding_ICCV2025",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/papers/Hierarchical_Streaming_Video_Understanding_ICCV2025.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -62.57426171314688,
+          "excerpt": "...tion, we preserve the VLM’s generalization ability and avoid the degradation typically caused by tuning on relatively small custom datasets. The proposed system, Open-ended Hierarchical Online Understanding System for Events ( OpenHOUSE), is an approach that bridges the gap between established online action detection methods and large-scale VLMs. Without compromising the strict online nature of existing online ac- tion detection formulation, we effectively incorporate the generative capabilities of large-scale VLMs..."
+        },
+        {
+          "id": 806122,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -20.841999831708545,
+          "excerpt": "VideoLLM-online VideoLLM-online: Online Large Language Model for Streaming Video Joya Chen , Zhaoyang Lv , Shiwei Wu , Kevin Qinghong Lin , Chenan Song , Difei Gao , Jia-Wei Liu , Ziteng Gao , Dongxing Mao , Mike Zheng Shou Show Lab, National University of Singapore Reality Labs Research, Meta CVPR 2024 Paper Code HuggingFace Space Demo HuggingFace Checkpoints HuggingFace Datasets TLDR: The first streaming video LLM, high speed (5~10 FPS on RTX 3090 GPU, 10~15 FPS on A100 GPU) on long-form videos (10 minutes), with..."
+        },
+        {
+          "id": 806123,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo/index.html",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -12.975767275431892,
+          "excerpt": "...ons into a streaming dialogue format, and (3) an optimized inference pipeline to speed up the model responses in real-world video streams. With our LIVE framework, we built VideoLLM-online model upon Llama-2/Llama-3 and demonstrate its significant advantages in processing streaming videos. For instance, on average, our model can support streaming dialogue in a 5-minute video clip at over 10 FPS on an A100 GPU. Moreover, it also showcases state-of-the-art performance on public offline video benchmarks, such as recog..."
+        },
+        {
+          "id": 806129,
+          "title": "README",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo/README.md",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -8.883236414570547,
+          "excerpt": "## <img src=\"demo/assistant_rectangle.png\" height=\"25\"> VideoLLM-online: Online Video Large Language Model for Streaming Video <a href=\"https://showlab.github.io/videollm-online/\" target=\"_blank\"><img alt=\"Homepage\" src=\"https://img.shields.io/badge/🌍 Homepage-d35400?color=d35400\" /></a> <a href=\"https://huggingface.co/spaces/chenjoya/videollm-online\" target=\"_blank\"><img alt=\"Demo\" src=\"https://img.shields.io/badge/🤗 Hugging Face Spaces-ffc107?color=ffc107\" /></a> <a href=\"https://arxiv.org/abs/2406.11816\" target=..."
+        },
+        {
+          "id": 806133,
+          "title": ".gitignore",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo/.gitignore",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -11.070958898430728,
+          "excerpt": "__pycache__/ /outputs /checkpoints /datasets /ffmpeg /demo/assets/*.json /demo/assets/cache /demo/rendering/ChatTTS *.wav /demo/rendering/*.mp4 .DS_Store"
+        },
+        {
+          "id": 806269,
+          "title": "index",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo/webpage/static/js/index.js",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -10.586863029564359,
+          "excerpt": "window.HELP_IMPROVE_VIDEOJS = false; $(document).ready(function() { // Check for click events on the navbar burger icon var options = { slidesToScroll: 1, slidesToShow: 1, loop: true, infinite: true, autoplay: true, autoplaySpeed: 5000, } // Initialize all div with carousel class var carousels = bulmaCarousel.attach('.carousel', options); bulmaSlider.attach(); })"
+        },
+        {
+          "id": 802521,
+          "title": "README",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/awesome_streaming_video_understanding/README.md",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -21.778182088136575,
+          "excerpt": "...al Adjacency Selection (TAS)** and **Spatial Domain Consolidation (SDC)**, plus scene-adaptive compression to balance accuracy, latency, and GPU memory. | | [EventMemAgent: Hierarchical Event-Centric Memory for Online Video Understanding with Adaptive Tool Use](https://arxiv.org/abs/2602.15329) | EventMemAgent | 2026/02 | [Link](https://github.com/lingcco/EventMemAgent) | arXiv | **Agent with Hierarchical Event-Centric Memory**: Employs a dual-layer memory where short-term memory detects event boundaries and perfor..."
+        },
+        {
+          "id": 806903,
+          "title": "OVO-Bench_CVPR2025",
+          "path": "Frontier-AI-PhD-Curriculum/04_streaming_vlm/papers/OVO-Bench_CVPR2025.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/04_streaming_vlm",
+          "score": -46.57298859975803,
+          "excerpt": "tate videos are GPT-4o and Gemini-1.5 Pro. Figure 4. Left: Queries Temporal Distribution in OVO-Bench. Center: Linguistic Characteristics of Text Queries. Right: Video category distribution of OVO-Bench. ness. All options are shufﬂed after human review to avoid potential preference bias. Prompting Ofﬂine-Models for Simulated Online Under- standing. With the signiﬁcant performance gap between main-streaming powerful ofﬂine Video-LLMs [43][34][45] and existing online models [5][56], one natural question is made: Is i..."
+        }
+      ],
+      "evidence_query": "StreamingVLM VideoLLM-online StreamingBench OVO-Bench online video hierarchical streaming video"
+    },
+    "vla_robotics": {
+      "module": {
+        "id": "vla_robotics",
+        "stage": "10",
+        "title": "VLA、机器人学习与具身策略",
+        "summary": "学习视觉语言模型如何进一步成为机器人动作策略。",
+        "outcomes": [
+          "理解 OpenVLA、RT-1/RT-2、Octo、pi0、动作 token 化和策略微调。",
+          "连接机器人数据集、模拟器与真实世界操作任务。",
+          "知道输出从文本变成动作后，建模和评测会发生什么变化。"
+        ],
+        "queries": [
+          "OpenVLA",
+          "OpenVLA-OFT",
+          "RT-1",
+          "RT-2",
+          "Octo",
+          "pi0",
+          "action tokenization",
+          "CS224R",
+          "CS285"
+        ],
+        "project": "草拟一个在新操作任务上微调 VLA 的实验方案。"
+      },
+      "evidence": [
+        {
+          "id": 145813,
+          "title": "2502.19645_openvla_oft",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2502.19645_openvla_oft.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -47.22049618132142,
+          "excerpt": "...ask performance in LIBERO, given that the variant without FiLM already exhibits good language following. Spatial Object Goal Long Average SR (%) SR (%) SR (%) SR (%) SR (%) OpenVLA-OFT (1 policy per suite) (original, from Table I) 97.6 98.4 97.9 94.5 97.1 OpenVLA-OFT (1 policy for all 4 suites) 97.7 98.0 96.1 95.3 96.8 OpenVLA-OFT+ (1 policy for all 4 suites, + FiLM) 97.8 98.2 98.2 93.8 97.0 TABLE XV: Ablation experiment: Fine-tuning OpenVLA from scratch with the OFT recipe. Policy inputs here include a third-perso..."
+        },
+        {
+          "id": 145712,
+          "title": "2406.09246_openvla",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2406.09246_openvla.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -47.14291957337467,
+          "excerpt": "y comparing OpenVLA with OpenVLA-Bridge, we see that performance drops drastically (reduction of 30 percent in absolute success rate), which demonstrates the importance of OpenX pretraining on final policy performance. Although the language grounding performance is not impacted, we observe performance reduction across all generalization categories. This result suggests that the large diversity of scenes, objects, and tasks in the OpenX training mixture is essential for unlocking improved generalization capabilities..."
+        },
+        {
+          "id": 145876,
+          "title": "2405.12213_octo",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2405.12213_octo.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -43.901172167159714,
+          "excerpt": "s) and Octo-Base (93M params). • Finetuning scripts for Octo models, in JAX. • Model pretraining pipeline for Octo pretraining on the Open X-Embodiment dataset, in JAX. • Standalone data loaders for Open X-Embodiment data, compatible with JAX and PyTorch. We provide a simple example for loading and running a pretrained Octo model in Appendix B. IV. E XPERIMENTS Our experiments provide an empirical analysis of Octo, evaluating its ability to serve as a general robotic foundation model across several axes: 1) Can Oct..."
+        },
+        {
+          "id": 145881,
+          "title": "2405.12213_octo",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2405.12213_octo.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -43.817705035317324,
+          "excerpt": "...datasets, e.g., in our “from scratch” comparisons, underlining that large transformer policies are uniquely suited for scalable training on diverse datasets. Training data: Octo is trained on the most diverse cross- embodied robot dataset to date, a mix of 25 datasets that we manually curated from the Open X-Embodiment dataset [ 67] (see Section III-B). We ablate the impact of this training mix 0.2 0.4 0.6 0.8 20406080 Octo Tiny 100 Octo Small Octo Base # Params (M) Success Rate (0-shot) UR5 WidowX Fig. 6: Model Sc..."
+        },
+        {
+          "id": 144876,
+          "title": "LIBERO",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_oft_repo/LIBERO.md",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -31.50435231811106,
+          "excerpt": "# OpenVLA-OFT in the LIBERO Simulation Benchmark ## Relevant Files Evaluation * `experiments/robot/libero/`: LIBERO eval files * `run_libero_eval.py`: LIBERO eval script * `libero_utils.py`: LIBERO eval utils * `experiments/robot/`: General eval utils files * `openvla_utils.py`: OpenVLA-specific eval utils * `robot_utils.py`: Other eval utils Training * `vla-scripts/finetune.py`: VLA fine-tuning script ## Setup Set up a conda environment (see instructions in [SETUP.md](SETUP.md)). Clone and install the [LIBERO repo..."
+        },
+        {
+          "id": 145806,
+          "title": "2502.19645_openvla_oft",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2502.19645_openvla_oft.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -20.25583092411827,
+          "excerpt": "fits of using the pretrained representation for downstream policy learning. 4) Scaling Up OpenVLA-OFT to a Larger Real-World Dataset (BridgeData V2): In Appendix G1, we observe that a single OpenVLA-OFT policy can effectively fit all four LIBERO task suite datasets combined, confirming that the proposed method scales to larger fine-tuning datasets. In this section, we scale up the fine-tuning data further and assess whether OpenVLA-OFT can also fit a real-world robotic ma- nipulation dataset that is significantly l..."
+        },
+        {
+          "id": 145672,
+          "title": "2406.09246_openvla",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2406.09246_openvla.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -16.213193996162776,
+          "excerpt": "...the evaluations performed in those prior works to challenge the Internet-pretrained VLA models. Thus, lower performance of models without Internet pretraining is expected. RT-2-X clearly outperforms both RT-1-X and Octo, demonstrating the benefits of large, pretrained VLMs for robotics. 85.0 (Tasks & conditions seen in training data) (Unseen objects, tasks, backgrounds, & concepts) 78.3 26.7 33.3 32.0 44.0 72.0 88.0 34.3 14.3 82.982.9 Move Coke Can to Taylor Swift Pick Coke Can Figure 4: Google robot evaluation re..."
+        },
+        {
+          "id": 145878,
+          "title": "2405.12213_octo",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/papers/2405.12213_octo.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -14.370240714311828,
+          "excerpt": "...h a small transformer action decoder trained with a diffusion objective, similar to [ 10, 98, 17, 55]. Our instantiation of this architecture has 28M parameters (similar to RT-1 [ 10]). We adopt this as our from-scratch baseline (“ResNet+Transformer Scratch” ). We also compare to a pretrained visual representation following the procedure of Majumdar et al. [57]. A ViT-B visual encoder is initialized to the VC-1 weights [ 57], a state-of-the-art visual representation pretrained on 4,000 hours of ego-centric videos a..."
+        },
+        {
+          "id": 144882,
+          "title": "SETUP",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_oft_repo/SETUP.md",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -20.222674159410403,
+          "excerpt": "# Setup Instructions ## Set Up Conda Environment ```bash # Create and activate conda environment conda create -n openvla-oft python=3.10 -y conda activate openvla-oft # Install PyTorch # Use a command specific to your machine: https://pytorch.org/get-started/locally/ pip3 install torch torchvision torchaudio # Clone openvla-oft repo and pip install to download dependencies git clone https://github.com/moojink/openvla-oft.git cd openvla-oft pip install -e . # Install Flash Attention 2 for training (https://github.co..."
+        },
+        {
+          "id": 144887,
+          "title": "ALOHA",
+          "path": "Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_oft_repo/ALOHA.md",
+          "category": "Frontier-AI-PhD-Curriculum/05_vla_robotics",
+          "score": -19.664398297001924,
+          "excerpt": "...nd_save.py](vla-scripts/merge_lora_weights_and_save.py) for merging the LoRA adapter into the base model offline. It's okay if you already merged LoRA weights into the base OpenVLA model during fine-tuning; you can always redownload the base model and merge again as long as you still have the LoRA adapter (`merge_lora_weights_and_save.py` will handle this for you). If you run into any issues, please open a new GitHub issue. ## Launching ALOHA Robot Evaluations In the primary conda environment (`openvla-oft`) which..."
+        }
+      ],
+      "evidence_query": "OpenVLA OpenVLA-OFT RT-1 RT-2 Octo pi0 action tokenization CS224R"
+    },
+    "robot_sim_data": {
+      "module": {
+        "id": "robot_sim_data",
+        "stage": "11",
+        "title": "机器人模拟器、数据集与可复现实验",
+        "summary": "学习在本地或工作站上运行机器人学习实验所需的工具链。",
+        "outcomes": [
+          "比较 ManiSkill、Isaac Lab、Habitat、RoboCasa、RLBench、robosuite、DROID 和 BridgeData。",
+          "理解 benchmark/任务设计与数据采集权衡。",
+          "知道模拟器如何支撑 VLA 与 world model 研究。"
+        ],
+        "queries": [
+          "ManiSkill",
+          "Isaac Lab",
+          "Habitat",
+          "RoboCasa",
+          "RLBench",
+          "robosuite",
+          "DROID",
+          "BridgeData"
+        ],
+        "project": "选择一个模拟器，写出复现一个操作 benchmark 的最小步骤。"
+      },
+      "evidence": [
+        {
+          "id": 72096,
+          "title": "rlbench_site",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/rlbench_site.html",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -44.039305385845815,
+          "excerpt": "RLBench Search this site Embedded Files Skip to main content Skip to navigation RLBench RLBench Robot Learning Benchmark RLBench: The Robot Learning Benchmark & Learning Environment Stephen James Zicong Ma David Rovick Arrojo Andrew J. Davison Dyson Robotics Lab, Imperial College London IEEE Robotics and Automation Letters 2020 RLBench is an ambitious large-scale benchmark and learning environment featuring 100 unique, hand-design tasks , tailored to facilitate research in a number of vision-guided manipulation res..."
+        },
+        {
+          "id": 71986,
+          "title": "1909.12271_rlbench",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/papers/1909.12271_rlbench.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -43.1874341415596,
+          "excerpt": "...lute or delta joint positions, absolute or delta joint torque, absolute or delta end-effector velocities, and ﬁnally absolute or delta end-effector poses. D. Demonstrations RLBench, through the task building tool mentioned in Section IV-E, provides expert algorithmπ∗ for each different task and their corresponding variations, allowing for demon- stration episodes to be generated The episodes produced via π∗ come from using the Open Motion Planning Library [38]. E. Task Builder Two common simulation environments in..."
+        },
+        {
+          "id": 72068,
+          "title": "2009.12293_robosuite",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/papers/2009.12293_robosuite.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -41.11995907009047,
+          "excerpt": "robosuite: A Modular Simulation Framework and Benchmark for Robot Learning Yuke Zhu♣ Josiah Wong♣ Ajay Mandlekar♣ Roberto Mart´ ın-Mart´ ın♣∗ Abhishek Joshi♢ Kevin Lin ♢ Abhiram Maddukuri♢ Soroush Nasiriany♢ Yifeng Zhu♢† robosuite.ai Abstract robosuite is a simulation framework for robot learning powered by the MuJoCo physics engine. It offers a modular design for creating robotic tasks as well as a suite of benchmark environments for reproducible re- search. This paper discusses the key system modules and the benc..."
+        },
+        {
+          "id": 72095,
+          "title": "maniskill_docs",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/maniskill_docs.html",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -39.89026138769987,
+          "excerpt": "ptions Performance Additional Resources Community Projects Sim-to-Real Transfer Simulation Evaluations for Real-World policies Benchmarks/Datasets Algorithms/Models Teleoperation Performance Benchmarking Cartpole Balance Commands for Reproducing the Results Benchmarking Details/Methodology Task Configuration Citation previous ManiSkill next Installation Edit on GitHub Show Source © Copyright 2024, ManiSkill Contributors. Created using Sphinx 8.2.3. Built with the PyData Sphinx Theme 0.18.0."
+        },
+        {
+          "id": 72099,
+          "title": "robocasa_site",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/sites/robocasa_site.html",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -39.282309052231355,
+          "excerpt": "...Brewing Coffee Team Core Team Soroush Nasiriany Sepehr Nasiriany Abhiram Maddukuri Yuke Zhu Alumni Lance Zhang Adeet Parikh Aaron Lo Abhishek Joshi Ajay Mandlekar Citation RoboCasa365: @inproceedings { robocasa365 , title = {RoboCasa365: A Large-Scale Simulation Framework for Training and Benchmarking Generalist Robots} , author = {Soroush Nasiriany and Sepehr Nasiriany and Abhiram Maddukuri and Yuke Zhu} , booktitle = {International Conference on Learning Representations (ICLR)} , year = {2026} } RoboCasa (Origin..."
+        },
+        {
+          "id": 71945,
+          "title": "2603.04356_robocasa365",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/papers/2603.04356_robocasa365.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -37.28676453218862,
+          "excerpt": "...mplete inventory in Appendix C.1. In addition to the 3D assets, we significantly expand the repertoire of interactable fixtures and ap- pliances in the kitchen environment. RoboCasa (Nasiriany et al., 2024) includes a total of 20 inter- actable fixtures and appliances across 4 categories: sinks, coffee machines, stoves, and microwaves. We significantly expand the scope of these assets to 456 instances spanning 12 categories. We in- clude new categories of appliances, such as toasters, toaster ovens, stand mixers, b..."
+        },
+        {
+          "id": 69311,
+          "title": "maniskill",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/maniskill/docs/source/user_guide/additional_resources/benchmarking_results/rtx_4090/maniskill.csv",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -38.90649799331844,
+          "excerpt": "489204407 | 28150.17743103457 | 27.4904076474947 | 1000 | 4516282368 | 3895869440 | CartpoleBalanceBenchmark-v1 | rgb+depth | 1024 | pd_joint_delta_pos | NVIDIA GeForce RTX 4090 | 1.0 | 160.0 | 160.0 | | | | | | 42.36268997192383 | 24172.21382019563 | 23.605677558784794 | 1000 | 5114933248 | 4642455552 | 42.87176942825317 | 23885.18163948624 | 23.325372694810778 | 1000 | 5117489152 | 4642455552 | CartpoleBalanceBenchmark-v1 | rgb+depth | 1024 | pd_joint_delta_pos | NVIDIA GeForce RTX 4090 | 1.0 | 224.0 | 224.0 | |..."
+        },
+        {
+          "id": 65614,
+          "title": "Habitat_Lab",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/habitat_lab/examples/tutorials/notebooks/Habitat_Lab.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -38.374198785920974,
+          "excerpt": "...\"rb\") as f: display.display(display.Image(data=f.read(), format=\"png\")) except ImportError: pass [markdown] ## Key Concepts All the concepts link to their definitions: 1. [`habitat.sims.habitat_simulator.HabitatSim`](https://github.com/facebookresearch/habitat-lab/blob/main/habitat-lab/habitat/sims/habitat_simulator/habitat_simulator.py#L254) Thin wrapper over `habitat_sim` providing seamless integration with experimentation framework. 2. [`habitat.core.env.Env`](https://github.com/facebookresearch/habitat-lab/blob..."
+        },
+        {
+          "id": 65608,
+          "title": "Habitat2_Quickstart",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/habitat_lab/examples/tutorials/notebooks/Habitat2_Quickstart.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -38.30213921643285,
+          "excerpt": "...t_coll_end_pen: float = 1.0 @dataclass class NavPickSuccessMeasurementConfig(MeasurementConfig): type: str = \"NavPickSuccess\" cs = ConfigStore.instance() cs.store( package=\"habitat.task.measurements.distance_to_target_object\", group=\"habitat/task/measurements\", name=\"distance_to_target_object\", node=DistanceToTargetObjectMeasurementConfig, ) cs.store( package=\"habitat.task.measurements.nav_pick_reward\", group=\"habitat/task/measurements\", name=\"nav_pick_reward\", node=NavPickRewardMeasurementConfig, ) cs.store( packa..."
+        },
+        {
+          "id": 65598,
+          "title": "Habitat_Lab_TopdownMap_Visualization",
+          "path": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/habitat_lab/examples/tutorials/notebooks/Habitat_Lab_TopdownMap_Visualization.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets",
+          "score": -38.13693656056262,
+          "excerpt": "...eta Platforms, Inc. and affiliates. # This source code is licensed under the MIT license found in the # LICENSE file in the root directory of this source tree. [markdown] # Habitat Lab: Topdown Map Visualization ## Initial setup and imports: [code] # [setup] import os from typing import TYPE_CHECKING, Union, cast import git import matplotlib.pyplot as plt import numpy as np import habitat from habitat.config.default_structured_configs import ( CollisionsMeasurementConfig, FogOfWarConfig, TopDownMapMeasurementConfig..."
+        }
+      ],
+      "evidence_query": "ManiSkill Isaac Lab Habitat RoboCasa RLBench robosuite DROID BridgeData"
+    },
+    "world_models": {
+      "module": {
+        "id": "world_models",
+        "stage": "12",
+        "title": "World Model 与模型式强化学习",
+        "summary": "学习潜变量动力学、想象 rollout、预测表征和规划。",
+        "outcomes": [
+          "理解 World Models、Dreamer、MuZero、V-JEPA、JEPA-WM、Genie 和 model-based RL。",
+          "比较重建式模型与 joint-embedding predictive model。",
+          "把 world model 与机器人、自动驾驶联系起来。"
+        ],
+        "queries": [
+          "World Models",
+          "DreamerV3",
+          "MuZero",
+          "V-JEPA",
+          "JEPA-WM",
+          "Genie",
+          "LightZero",
+          "CS330"
+        ],
+        "project": "解释为什么潜空间想象可以提升控制任务的样本效率。"
+      },
+      "evidence": [
+        {
+          "id": 810666,
+          "title": "2402.15391_genie",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2402.15391_genie.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -44.87576520021803,
+          "excerpt": "izes a novel video tokenizer, and extracts latent actions via a causal action model. Both the video tokens and latent actions Figure 2 | Diverse trajectories: Genie is a gen- erative model that can be used as an interactive environment. The model can be prompted in var- ious ways, either with a generated image (top) or a hand-drawn sketch (bottom). At each time step, the model takes a user-provided latent action to generate the next frame, producing trajectories with interesting and diverse character actions. are p..."
+        },
+        {
+          "id": 810679,
+          "title": "2402.15391_genie",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2402.15391_genie.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -44.83561620968423,
+          "excerpt": "...atent action model, though have not been applied at scale. VPT (Baker et al., 2022) is a recent ap- proach that uses an inverse dynamics model 10 Proprietary + Confidential Genie: Generative Interactive Environments learnt from human-provided action labeled data, tolabelInternet-scalevideoswithactionsthatcan then be used for training a policy. We showed, in contrast, that we can uselatent actions learnt from Internet videos to infer policies for arbitrary environments, avoidingtheneedforground-truth actions that ar..."
+        },
+        {
+          "id": 810664,
+          "title": "2402.15391_genie",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2402.15391_genie.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -44.541195906921864,
+          "excerpt": "2024-2-26 Proprietary + Confidential Genie: Generative Interactive Environments Jake Bruce*,1, Michael Dennis*,1, Ashley Edwards*,1, Jack Parker-Holder*,1, Yuge (Jimmy) Shi*,1, Edward Hughes1, Matthew Lai1, Aditi Mavalankar1, Richie Steigerwald1, Chris Apps1, Yusuf Aytar1, Sarah Bechtle1, Feryal Behbahani1, Stephanie Chan1, Nicolas Heess1, Lucy Gonzalez1, Simon Osindero1, Sherjil Ozair1, Scott Reed1, Jingwei Zhang1, Konrad Zolna1, Jeff Clune1,2, Nando de Freitas1, Satinder Singh1 and Tim Rocktäschel*,1 *Equal contr..."
+        },
+        {
+          "id": 810665,
+          "title": "2402.15391_genie",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2402.15391_genie.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -44.334470452772976,
+          "excerpt": "nd. All rights reserved arXiv:2402.15391v1 [cs.LG] 23 Feb 2024 Proprietary + Confidential Genie: Generative Interactive Environments 1. Introduction The last few years have seen an emergence of generative AI, with models capable of generat- ing novel and creative content. Driven by break- throughs in architectures such as transformers (Vaswanietal.,2017), advancesinhardware, and a recent focus on scaling models and datasets, we can now generate coherent, conversational lan- guage (Brown et al., 2020; Radford et al...."
+        },
+        {
+          "id": 810694,
+          "title": "2402.15391_genie",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2402.15391_genie.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -44.200763281623836,
+          "excerpt": "...yperparameters. All models use the following architecture for 200k steps, differing only in batch size. Parameters num_layers num_heads d_model k/q size 2.3B 34 20 2560 128 Genie Model The parameter count, model architecture as well as compute usage of the dynamics model for the final Genie model is listed in Table 12. We train a 10.1B dynamics model with a batch size of 512, for a total of 125k steps using 256 TPUv5. Behavioral Cloning Details In this section we provide more details about our behavioral cloning ex..."
+        },
+        {
+          "id": 810816,
+          "title": "2301.04104_dreamerv3",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/papers/2301.04104_dreamerv3.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -41.56787086628587,
+          "excerpt": "...across model sizes. Previous Dreamer generations We present the third generation of the Dreamer line of work. Where the distinction is useful, we refer to this algorithm as DreamerV3. The DreamerV1 algorithm 21 was limited to continuous control, the DreamerV2 algorithm 22 surpassed human performance on Atari, and the DreamerV3 algorithm enables out-of-the-box learning across diverse benchmarks. We summarize the changes that DreamerV3 introduces as follows: • Robustness techniques: Observation symlog, KL balance and..."
+        },
+        {
+          "id": 807797,
+          "title": "README",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/repos/dreamerv3_repo/README.md",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -18.488317283744138,
+          "excerpt": "# Mastering Diverse Domains through World Models A reimplementation of [DreamerV3][paper], a scalable and general reinforcement learning algorithm that masters a wide range of applications with fixed hyperparameters. ![DreamerV3 Tasks](https://user-images.githubusercontent.com/2111293/217647148-cbc522e2-61ad-4553-8e14-1ecdc8d9438b.gif) If you find this code useful, please reference in your paper: ``` @article{hafner2025dreamerv3, title={Mastering diverse control tasks through world models}, author={Hafner, Danijar..."
+        },
+        {
+          "id": 811029,
+          "title": "cs330_openchallenges_2023",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/courses/stanford_cs330/stanford_cs330_site_linked_files/cs330_openchallenges_2023.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -43.83766445402384,
+          "excerpt": "Jo7HR+rdy4uVqr31q73bhz9979B+sbD490nCrGD1ksY3XiU82liPghCpT8JFGchr7kx/7phzx+fMaVFnF0gKOE90I6iERfMIrW5W2s/miSrEVCikO/n2nj4QuYftHxl5p3WUCGW65pAzGNJkkENFuEBXEOwSFH2rbeKyw0PYL8HDPkGs0skieGXegXvIzK7KOZIhUVkSkR4vtluW0d26fv0JTKnfgazf1Z6gObId85TuFhKSDaC1BbVwkBF1cE5yV1RnleIImKE4wh8bKCoZLftObxF0tSTYl3yxvhmrps5XCsBCKPIE4REiViZX1E8j52geg0tHI833XNV6uKayr5bMhUGbeABFxWjwDFjwGhIeLfTJtQmQwpAFFiMMSepVQ8jM+4fQVpFNCIjf6lqHOStv/D4SfXatwUlSrzQy+/dLANxLeB6/7xdTJF1Jd0qtECi7FyxIOZiEsA5ctZImvD5SXpx4pKWS5q1oSLNZUadC6mxq3pmkoDm3y6FIG5Jna99c3OTm..."
+        },
+        {
+          "id": 811063,
+          "title": "cs330_openchallenges_2023",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/courses/stanford_cs330/stanford_cs330_site_linked_files/cs330_openchallenges_2023.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -43.83001144100028,
+          "excerpt": "aVFnF0gKOE90I6iERfMIrW5W2s/miSrEVCikO/n2nj4QuYftHxl5p3WUCGW65pAzGNJkkENFuEBXEOwSFH2rbeKyw0PYL8HDPkGs0skieGXegXvIzK7KOZIhUVkSkR4vtluW0d26fv0JTKnfgazf1Z6gObId85TuFhKSDaC1BbVwkBF1cE5yV1RnleIImKE4wh8bKCoZLftObxF0tSTYl3yxvhmrps5XCsBCKPIE4REiViZX1E8j52geg0tHI833XNV6uKayr5bMhUGbeABFxWjwDFjwGhIeLfTJtQmQwpAFFiMMSepVQ8jM+4fQVpFNCIjf6lqHOStv/D4SfXatwUlSrzQy+/dLANxLeB6/7xdTJF1Jd0qtECi7FyxIOZiEsA5ctZImvD5SXpx4pKWS5q1oSLNZUadC6mxq3pmkoDm3y6FIG5Jna99c3OTme8YNFwJ8amM1n73vpPEsQsDXmETFKtu24nwV5GFQomuU2eap5QdkoHvGvNiIZc97Lx8LQzynoCsC..."
+        },
+        {
+          "id": 810967,
+          "title": "cs330_maml_review",
+          "path": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/courses/stanford_cs330/stanford_cs330_site_linked_files/cs330_maml_review.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl",
+          "score": -43.746313860503506,
+          "excerpt": "teless: it takes current model parameters as input. torch.autograd.grad() If you want to backpropagate through the gradient later: torch.autograd.grad(outputs, inputs, create_graph=True) Otherwise: torch.autograd.grad(outputs, inputs, create_graph=False) 15 parameters 16 Parameters are a dictionary with (parameter_name, parameter_value) pairs. You should explicitly compute the updated parameter. What We Covered Today 17 1.Review of the meta-learning problem setup 2.Model-Agnostic Meta-Learning (MAML) 3.Useful PyTor..."
+        }
+      ],
+      "evidence_query": "World Models DreamerV3 MuZero V-JEPA JEPA-WM Genie LightZero CS330"
+    },
+    "driving_world_models": {
+      "module": {
+        "id": "driving_world_models",
+        "stage": "13",
+        "title": "自动驾驶 World Model 与 VLM",
+        "summary": "学习面向驾驶的生成式仿真、规划和视觉语言推理。",
+        "outcomes": [
+          "理解 GAIA-1、DriveDreamer、Vista、CarDreamer、Waymax、DriveLM 和 OpenEMMA。",
+          "连接场景生成、闭环评测和规划。",
+          "识别驾驶 world model 与通用视频生成的差异。"
+        ],
+        "queries": [
+          "GAIA-1",
+          "DriveDreamer",
+          "Vista",
+          "CarDreamer",
+          "Waymax",
+          "DriveLM",
+          "OpenEMMA",
+          "autonomous driving world model"
+        ],
+        "project": "写一篇短综述，比较两种自动驾驶 world model 路线。"
+      },
+      "evidence": [
+        {
+          "id": 140777,
+          "title": "drivelm_project",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/sites/drivelm_project.html",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -43.69829381948966,
+          "excerpt": "nto many frame-level trajectories & planning QA pairs. How about the annotation process? The annotation process is different for DriveLM-nuScenes and DriveLM-CARLA. For DriveLM-nuScenes , we divide the annotation process into three steps: 1️⃣ Keyframe selection. Given all frames in one clip, the annotator selects the keyframes that need annotation. The criterion is that those frames should involve changes in ego-vehicle movement status (lane changes, sudden stops, start after a stop, etc.). 2️⃣ Key objects selectio..."
+        },
+        {
+          "id": 140778,
+          "title": "drivedreamer_project",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/sites/drivedreamer_project.html",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -41.45899819670655,
+          "excerpt": "DriveDreamer: Towards Real-world-driven World Models for Autonomous Driving DriveDreamer: Towards Real-world-driven World Models for Autonomous Driving Xiaofeng Wang 1* , Zheng Zhu 1* , Guan Huang 1,2 , Xinze Chen 1 , Jiagang Zhu 1 , Jiwen Lu 2 , GigaAI 1 , Tsinghua University 2 * Equal Contribution arXiv Code DriveDreamer excels in controllable driving video generation, aligning seamlessly with text prompts and structured traffic constraints. DriveDreamer can also interact with the driving scene and predict differ..."
+        },
+        {
+          "id": 140741,
+          "title": "2309.09777_drivedreamer",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/papers/2309.09777_drivedreamer.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -41.31246193715748,
+          "excerpt": "DriveDreamer: Towards Real-world-driven World Models for Autonomous Driving Xiaofeng Wang*1 Zheng Zhu*1 Guan Huang1,2 Xinze Chen1 Jiagang Zhu1 Jiwen Lu2 1GigaAI 2Tsinghua University Project Page: https://drivedreamer.github.io xd xd DriveDreamer xdDriveDreamer Different Driving Actions Different Text Prompts “Sunny”“Rainy”“Night” Initial Condition DriveDreamer Driving Video Generation with Traffic Condition and Different Text Prompts Future Driving Video Generation with Action Interaction Future Driving Action Gene..."
+        },
+        {
+          "id": 140650,
+          "title": "2403.06845_drivedreamer2",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/papers/2403.06845_drivedreamer2.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -41.27425544750106,
+          "excerpt": "..., show a relative improvement of 2.8% and 3.9%, respectively. Besides, the tracking metrics, AMOTA and AMOTP, exhibit a rela- tive enhancement of 8.0% and 1.6%. Furthermore,DriveDreamer-2 is capable of generating high-quality driving videos even in the absence of image conditions. Removing the image condition leads to increased diversity in the generated con- tent, consequently further improving performance metrics for downstream tasks. Specifically, the mAP and NDS for 3D detection show a relative improvement of 3..."
+        },
+        {
+          "id": 138183,
+          "title": "wosac_submission_via_waymax",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/waymax/docs/notebooks/wosac_submission_via_waymax.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -43.72630368362209,
+          "excerpt": "[markdown] # Waymo Open Sim Agents Challenge Submission This tutorial covers how to use Waymax to create a Waymo Open Sim Agents Challenge (WOSAC) submission. Please also refer to the [WOSAC submission notebook](https://github.com/waymo-research/waymo-open-dataset/blob/master/tutorial/tutorial_sim_agents.ipynb) for additional reference and for setting up a submission without Waymax. [code] !pip install waymo-open-dataset-tf-2-11-0==1.6.0 import os import jax from jax import numpy as jnp from jax import random impor..."
+        },
+        {
+          "id": 136541,
+          "title": "data_prep_nus",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/drivelm/docs/data_prep_nus.md",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -30.590327162080733,
+          "excerpt": "...s://docs.google.com/forms/d/e/1FAIpQLSeX6CR3u-15IV-TKx2uPv1wiKjydjZ__NNW98H4nR5JZtQa2Q/viewform) before downloading. To get started, download nuScenes subset image data and DriveLM-nuScenes QA json files below. For v1.1 data, please visit the [DriveLM/challenge](https://github.com/OpenDriveLab/DriveLM/tree/main/challenge) folder. <!-- <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSfm8k7LjITLRdXgbURxk46dq5Q2n8qGoRX0nWqQNE1U_322wQ/viewform?usp=sf_link\" target=\"_blank\"> <img src=\"https://img.shields.io/badge/Any%2..."
+        },
+        {
+          "id": 136540,
+          "title": "data_details",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/drivelm/docs/data_details.md",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -29.64880538258157,
+          "excerpt": "## Features of the DriveLM-Data <a name=\"features\"></a> - 🛣 Completeness in functionality (covering **Perception**, **Prediction**, and **Planning** QA pairs). <p align=\"center\"> <img src=\"../assets/images/repo/point_1.png\"> </p> - 🔜 Reasoning for future events that have not yet happened. - Many **\"What If\"**-style questions: imagine the future by language. <p align=\"center\"> <img src=\"../assets/images/repo/point_2.png\" width=70%> </p> - ♻ Task-driven decomposition. - **One** scene-level description into **many** f..."
+        },
+        {
+          "id": 136545,
+          "title": "gvqa",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/drivelm/docs/gvqa.md",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -28.330941257971258,
+          "excerpt": "...lability of logical dependencies between QAs, which can be used to guide the answering process. Below is a demo video illustrating the idea. https://github.com/OpenDriveLab/DriveLM/assets/54334254/988472a8-d7b9-4685-b4b8-7a0e77f68265"
+        },
+        {
+          "id": 137869,
+          "title": "LICENSE",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/waymax/LICENSE",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -31.060847784762174,
+          "excerpt": "Waymax License Agreement for Non-Commercial Use October 17, 2023 To aid the research community in making advancements in the domain of planning and simulation agents, Waymo has made publicly available the Waymax Licensed Materials (defined below), free of charge for Non-commercial Purposes (defined below) under certain terms and conditions. Your use, including downloading, of any portion or element of the Waymax Licensed Materials is conditioned upon the terms and conditions of this license agreement (the “Waymax L..."
+        },
+        {
+          "id": 140782,
+          "title": "wayve_scaling_gaia1",
+          "path": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/sites/wayve_scaling_gaia1.html",
+          "category": "Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models",
+          "score": -18.50829543580737,
+          "excerpt": "...rporating world models into driving models yields the potential to enable them to understand human decisions better and ultimately generalise to more real-world situations. GAIA-1 is a model that leverages video, text and action inputs to generate realistic driving videos and offers fine-grained control over ego-vehicle behaviour and scene features. Due to its multi-modal nature, GAIA-1 can generate videos from many prompt modalities and combinations. Examples of types of prompts that GAIA-1 can use to generate vid..."
+        }
+      ],
+      "evidence_query": "GAIA-1 DriveDreamer Vista CarDreamer Waymax DriveLM OpenEMMA autonomous driving world model"
+    },
+    "diffusion_video_3d": {
+      "module": {
+        "id": "diffusion_video_3d",
+        "stage": "14",
+        "title": "扩散、Flow Matching、视频生成与 3D 空间智能",
+        "summary": "把现代生成建模和空间表征加入 LLM/VLM 技术栈。",
+        "outcomes": [
+          "理解 DDPM、score SDE、latent diffusion、DiT、flow matching 和视频扩散。",
+          "理解 NeRF、3D Gaussian Splatting、PyTorch3D、Nerfstudio 和空间 VLM。",
+          "把生成式视频与世界模拟器联系起来。"
+        ],
+        "queries": [
+          "DDPM",
+          "Score SDE",
+          "Latent Diffusion",
+          "DiT",
+          "Flow Matching",
+          "Stable Video Diffusion",
+          "NeRF",
+          "Gaussian Splatting",
+          "VLM-3R"
+        ],
+        "project": "解释视频生成和 3D 场景表征如何支持 world model 训练。"
+      },
+      "evidence": [
+        {
+          "id": 92310,
+          "title": "2412.06264_flow_matching_guide",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/papers/2412.06264_flow_matching_guide.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -42.637580920259296,
+          "excerpt": "...ng. Due to the resulting computational burdens, later works attempted to learn CNFs without simulation (Rozen et al., 2021; Ben-Hamu et al., 2022), evolving into modern-day Flow Matching algorithms (Lipman et al., 2022; Liu et al., 2022; Albergo and Vanden-Eijnden, 2022; Neklyudov et al., 2023; Heitz et al., 2023; Tong et al., 2023). The resulting framework is a recipe comprising two steps (Lipman et al., 2022), see figure 2: First, choose a probability path pt interpolating between the sourcep and target q distrib..."
+        },
+        {
+          "id": 72487,
+          "title": "2d_riemannian_flow_matching_sphere",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/facebook_flow_matching/examples/2d_riemannian_flow_matching_sphere.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -42.34075972927664,
+          "excerpt": "[markdown] # A simple 2D Riemannian Flow Matching model on sphere [markdown] ## Imports and init device [code] import time import torch import math import numpy as np from torch import nn, Tensor # flow_matching from flow_matching.path import GeodesicProbPath from flow_matching.path.scheduler import CondOTScheduler from flow_matching.solver import ODESolver, RiemannianODESolver from flow_matching.utils import ModelWrapper from flow_matching.utils.manifolds import Sphere, Manifold # visualization import matplotlib.p..."
+        },
+        {
+          "id": 72503,
+          "title": "2d_flow_matching",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/facebook_flow_matching/examples/2d_flow_matching.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -42.34075972927664,
+          "excerpt": "[markdown] # A simple 2D Flow Matching model [markdown] This notebook trains and evaluates a simple 2D FM model with CondOT (i.e., linear) scheduler. Dataset: 2D checkerboard Model (velocity): MLP [markdown] ## Imports and init device [code] import time import torch from torch import nn, Tensor # flow_matching from flow_matching.path.scheduler import CondOTScheduler from flow_matching.path import AffineProbPath from flow_matching.solver import Solver, ODESolver from flow_matching.utils import ModelWrapper # visuali..."
+        },
+        {
+          "id": 72495,
+          "title": "2d_riemannian_flow_matching_flat_torus",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/facebook_flow_matching/examples/2d_riemannian_flow_matching_flat_torus.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -42.33120927938851,
+          "excerpt": "[markdown] # A simple 2D Riemannian Flow Matching model on sphere [markdown] ## Imports and init device [code] import time import torch import math import numpy as np from torch import nn, Tensor # flow_matching from flow_matching.path import GeodesicProbPath from flow_matching.path.scheduler import CondOTScheduler from flow_matching.solver import ODESolver, RiemannianODESolver from flow_matching.utils import ModelWrapper from flow_matching.utils.manifolds import FlatTorus, Manifold # visualization import matplotli..."
+        },
+        {
+          "id": 72499,
+          "title": "2d_discrete_flow_matching",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/facebook_flow_matching/examples/2d_discrete_flow_matching.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -42.283623996466574,
+          "excerpt": "[markdown] # A simple 2D Discrete Flow Matching model [markdown] This notebook trains and evaluates a simple 2D discrete FM model with $\\kappa_t = t^2$ scheduler. Dataset: 2D discrete checkerboard Model (probability denoiser): MLP [markdown] ## Imports and init device [code] import time import torch from torch import nn, Tensor # flow_matching from flow_matching.path import MixtureDiscreteProbPath from flow_matching.path.scheduler import PolynomialConvexScheduler from flow_matching.solver import MixtureDiscreteEule..."
+        },
+        {
+          "id": 92192,
+          "title": "2011.13456_score_sde",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/papers/2011.13456_score_sde.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -48.086032483338,
+          "excerpt": "...dom noise into data for sample generation. Crucially, this reverse process satisﬁes a reverse-time SDE (Anderson, 1982), which can be derived from the forward SDE given the score of the marginal probability densities as a function of time. We can therefore approximate the reverse-time SDE by training a time-dependent neural network to estimate the scores, and then produce samples using numerical SDE solvers. Our key idea is summarized in Fig. 1. Our proposed framework has several theoretical and practical contribut..."
+        },
+        {
+          "id": 92304,
+          "title": "2212.09748_dit",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/papers/2212.09748_dit.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -43.03767555563345,
+          "excerpt": "4.0 Figure 14. Uncurated 512× 512 DiT-XL/2 samples. Classiﬁer-free guidance scale = 4.0 Class label = “arctic wolf” (270) Figure 15. Uncurated 512× 512 DiT-XL/2 samples. Classiﬁer-free guidance scale = 4.0 Class label = “volcano” (980) 16 DiT-XL/2 512× 512 samples, classiﬁer-free guidance scale = 4.0 Figure 16. Uncurated 512× 512 DiT-XL/2 samples. Classiﬁer-free guidance scale = 4.0 Class label = “husky” (250) Figure 17. Uncurated 512× 512 DiT-XL/2 samples. Classiﬁer-free guidance scale = 4.0 Class label = “sulphur..."
+        },
+        {
+          "id": 797858,
+          "title": "2210.00379_nerf_3dgs_survey",
+          "path": "Frontier-AI-PhD-Curriculum/09_3d_spatial_intelligence/papers/2210.00379_nerf_3dgs_survey.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/09_3d_spatial_intelligence",
+          "score": -42.57511299761076,
+          "excerpt": "Baked SNeRG (2020) [40], Plenoctree (2021) [41], FastNeRF (2021) [42], KiloNeRF (2021) [43] Explicit (3.7.1) Plenoxels (2021) [45], DVGO (2021) [46], TensoRF (2022) [47] Sparse View (Sec. 3.3) Cost Volume MVSNeRF [50] (2021), PixelNeRF (2020) [77], NeuRay (2021) [78] Others DietNeRF (2021) [51], DS-NeRF (2021) [24] Generative/ Conditional (Sec. 3.4) GAN GIRAFFE (2020) [79], GRAF (2020) [80],π-GAN (2020) [81] , GNeRF (2021) [82], Stylenerf (2022) [83], EG3D (2022) [84] Diffusion DreamFusion (2022) [85], Magic3D (202..."
+        },
+        {
+          "id": 92512,
+          "title": "2006.11239_ddpm",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/papers/2006.11239_ddpm.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -40.6675685764333,
+          "excerpt": "ace nearest neighbors (b) Inception feature space nearest neighbors Figure 15: Unconditional CIFAR10 nearest neighbors. Generated samples are in the leftmost column, and training set nearest neighbors are in the remaining columns. 21 Figure 16: LSUN Church generated samples. FID=7.89 22 Figure 17: LSUN Bedroom generated samples, large model. FID=4.90 23 Figure 18: LSUN Bedroom generated samples, small model. FID=6.36 24 Figure 19: LSUN Cat generated samples. FID=19.75 25"
+        },
+        {
+          "id": 77030,
+          "title": "score_sde_vp",
+          "path": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/huggingface_diffusers/docs/source/en/api/schedulers/score_sde_vp.md",
+          "category": "Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video",
+          "score": -47.693186743889406,
+          "excerpt": "...UT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. --> # ScoreSdeVpScheduler `ScoreSdeVpScheduler` is a variance preserving stochastic differential equation (SDE) scheduler. It was introduced in the [Score-Based Generative Modeling through Stochastic Differential Equations](https://huggingface.co/papers/2011.13456) paper by Yang Song, Jascha Sohl-Dickstein, Diederik P. Kingma, Abhishek Kumar, Stefano..."
+        }
+      ],
+      "evidence_query": "DDPM Score SDE Latent Diffusion DiT Flow Matching Stable Video Diffusion NeRF Gaussian Splatting"
+    },
+    "omni_audio_capstone": {
+      "module": {
+        "id": "omni_audio_capstone",
+        "stage": "15",
+        "title": "全模态模型与最终 Capstone",
+        "summary": "跟踪音频/全模态模型，并把整条课程线整合成一个研究作品。",
+        "outcomes": [
+          "理解 Qwen3-Omni、Ola、InternLM OmniLive、SLAM-LLM、SenseVoice 和 CosyVoice 方向。",
+          "设计一个至少使用两种模态和一套评测的研究项目。",
+          "把这个本地学习网页作为开源学习伴侣继续迭代。"
+        ],
+        "queries": [
+          "Qwen3-Omni",
+          "Ola",
+          "InternLM OmniLive",
+          "SLAM-LLM",
+          "SenseVoice",
+          "CosyVoice",
+          "audio language model"
+        ],
+        "project": "完成一份 Capstone 提案：问题、数据、模型、评测、baseline、风险和算力计划。"
+      },
+      "evidence": [
+        {
+          "id": 811601,
+          "title": "README.Cosyvoice2.DiT",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/cosyvoice/runtime/triton_trtllm/README.Cosyvoice2.DiT.md",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -41.54199342025672,
+          "excerpt": "## Accelerating CosyVoice with DiT-based Token2Wav, NVIDIA Triton Inference Server and TensorRT-LLM Contributed by Yuekai Zhang (NVIDIA). This document describes how to accelerate CosyVoice with a DiT-based Token2Wav module from Step-Audio2, using NVIDIA Triton Inference Server and TensorRT-LLM. ### Quick Start Launch the service directly with Docker Compose: ```sh docker compose -f docker-compose.cosyvoice2.dit.yml up ``` ### Build the Docker Image To build the image from scratch: ```sh docker build . -f Dockerfil..."
+        },
+        {
+          "id": 811672,
+          "title": "README.Cosyvoice2.Unet",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/cosyvoice/runtime/triton_trtllm/README.Cosyvoice2.Unet.md",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -41.28532453642806,
+          "excerpt": "## Accelerating CosyVoice with NVIDIA Triton Inference Server and TensorRT-LLM Contributed by Yuekai Zhang (NVIDIA). ### Quick Start Launch the service directly with Docker Compose: ```sh docker compose -f docker-compose.cosyvoice2.unet.yml up ``` ### Build the Docker Image To build the image from scratch: ```sh docker build . -f Dockerfile.server -t soar97/triton-cosyvoice:25.06 ``` ### Run a Docker Container ```sh your_mount_dir=/mnt:/mnt docker run -it --name \"cosyvoice-server\" --gpus all --net host -v $your_mou..."
+        },
+        {
+          "id": 811655,
+          "title": "README.Cosyvoice3",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/cosyvoice/runtime/triton_trtllm/README.Cosyvoice3.md",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -40.88679147919403,
+          "excerpt": "## Accelerating CosyVoice3 with NVIDIA Triton Inference Server and TensorRT-LLM Contributed by Yuekai Zhang (NVIDIA). ### Quick Start Launch the service directly with Docker Compose: ```sh docker compose -f docker-compose.cosyvoice3.yml up ``` ### Build the Docker Image To build the image from scratch: ```sh docker build . -f Dockerfile.server -t soar97/triton-cosyvoice:25.06 ``` ### Run a Docker Container ```sh your_mount_dir=/mnt:/mnt docker run -it --name \"cosyvoice-server\" --gpus all --net host -v $your_mount_d..."
+        },
+        {
+          "id": 819031,
+          "title": "audio_visual_interaction",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni/cookbooks/audio_visual_interaction.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -30.290463271066884,
+          "excerpt": "h=640, height=360)) response, audio = run_model(model=model, messages=messages, processor=processor, return_audio=RETURN_AUDIO, use_audio_in_video=USE_AUDIO_IN_VIDEO) print(response) if audio is not None: display(Audio(audio, rate=24000)) [code] audio_path = \"https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen3-Omni/cookbook/interaction3.mp3\" messages = [ { \"role\": \"system\", \"content\": \"\"\"You are a romantic and artistic AI, skilled at using metaphors and personification in your responses, deeply romantic, and pron..."
+        },
+        {
+          "id": 819057,
+          "title": "audio_visual_dialogue",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni/cookbooks/audio_visual_dialogue.ipynb",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -30.139771168514567,
+          "excerpt": "...ns of actions, emotions, sounds, or voice changes. \\nDo not use asterisks, brackets, parentheses, or any other symbols to indicate tone or actions. \\nYou must answer users' audio or text questions, do not directly describe the video content. \\nYou should communicate in the same language strictly as the user unless they request otherwise.\\nWhen you are uncertain (e.g., you can't see/hear clearly, don't understand, or the user makes a comment rather than asking a question), use appropriate questions to guide the user..."
+        },
+        {
+          "id": 820832,
+          "title": "2509.17765_qwen3_omni",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/papers/2509.17765_qwen3_omni.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -16.917970666085626,
+          "excerpt": "2025-09-23 Qwen3-Omni Technical Report Qwen Team https://github.com/QwenLM/Qwen3-Omni https://huggingface.co/spaces/Qwen/Qwen3-Omni-Demo https://modelscope.cn/studios/Qwen/Qwen3-Omni-Demo Abstract We present Qwen3-Omni, a single multimodal model that for the first time maintains state-of-the-art performance across text, image, audio, and video without any degra- dation relative to single-modal counterparts. Qwen3-Omni matches the performance of same-sized single-modal models within the Qwen series and excels partic..."
+        },
+        {
+          "id": 820765,
+          "title": "2412.09596_internlm_omnilive",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/papers/2412.09596_internlm_omnilive.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -44.28369099365321,
+          "excerpt": "...oratory Streaming Perception Reasoning Compressed Memory Multi-modal Long MemoryPerception MemoryReadWriteQuery/Interruption Retrieval streaming videostreaming audio Output InternLM-XComposer2.5-OmniLive Figure 1. Inspired by human-like cognition and Specialized Generalist AI, we introduce InternLM-XComposer2.5-OmniLive (IXC2.5-OL), a system that facilitates real-time interaction with: (1) a streaming perception module supports streaming video and audio inputs; (2) a multi-modal long memory module that com- presses..."
+        },
+        {
+          "id": 818986,
+          "title": "Qwen3_Omni",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni/assets/Qwen3_Omni.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -16.988261104995328,
+          "excerpt": "2025-09-22 Qwen3-Omni Technical Report Qwen Team https://github.com/QwenLM/Qwen3-Omni https://huggingface.co/spaces/Qwen/Qwen3-Omni-Demo https://modelscope.cn/studios/Qwen/Qwen3-Omni-Demo Abstract We present Qwen3-Omni, a single multimodal model that for the first time maintains state-of-the-art performance across text, image, audio, and video without any degra- dation relative to single-modal counterparts. Qwen3-Omni matches the performance of same-sized single-modal models within the Qwen series and excels partic..."
+        },
+        {
+          "id": 819012,
+          "title": "Qwen3_Omni",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni/assets/Qwen3_Omni.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -16.651998379224658,
+          "excerpt": "sks Video-MMEw/o sub - 69.22 69.25 MVBench - 71.87 69.50 LVBench - 48.61 51.07 7 Conclusion In this paper, we introduce Qwen3-Omni-30B-A3B, Qwen3-Omni-30B-A3B-Thinking, Qwen3-Omni- Flash-Instruct, and Qwen3-Omni-Flash-Thinking models. Qwen3-Omni-30B-A3B matches or surpasses 15 the latest same-size unimodal Qwen models on text and vision benchmarks. Notably, on audio processing and dialogue benchmarks, it attains state-of-the-art performance among open-source systems on 32 benchmarks and is comparable to, or better..."
+        },
+        {
+          "id": 819008,
+          "title": "Qwen3_Omni",
+          "path": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni/assets/Qwen3_Omni.pdf",
+          "category": "Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models",
+          "score": -16.517767064278175,
+          "excerpt": "ation. These findings collectively suggest that Qwen3-Omni possesses considerable potential for advanced perception and reasoning in real-world contexts. Table 11: AudioVisual → Text performance of Qwen3-Omni-Instruct and other non-reasoning base- lines. The highest scores are shown in bold. Datasets Previous Open-source SoTAGemini-2.5-Flash Qwen2.5-OmniQwen3-Omni-30B-A3B -Instruct Qwen3-Omni-Flash -Instruct WorldSense 47.1(Yang et al., 2025b) 50.9 45.4 54.0 54.1 Table 12: AudioVisual → Text performance of Qwen3-Om..."
+        }
+      ],
+      "evidence_query": "Qwen3-Omni Ola InternLM OmniLive SLAM-LLM SenseVoice CosyVoice audio language model"
+    }
+  }
+}
