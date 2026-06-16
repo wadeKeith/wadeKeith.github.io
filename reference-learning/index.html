@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ac" />
+    <link rel="stylesheet" href="./styles.css?v=20260616ad" />
   </head>
   <body>
     <header class="topbar">
@@ -158,6 +158,29 @@
                 <h4>实验 / 阅读</h4>
                 <ul id="readingList"></ul>
               </article>
+            </div>
+          </section>
+          <section class="mechanism-lab">
+            <div class="lab-head">
+              <div class="section-title">
+                <p class="eyebrow">机制实验台</p>
+                <h3 id="simulatorTitle">调参观察机制，而不是只背概念</h3>
+              </div>
+              <div class="lab-presets" id="simulatorPresets" aria-label="实验预设"></div>
+            </div>
+            <div class="simulator-layout">
+              <article class="simulator-controls">
+                <p id="simulatorScenario" class="simulator-scenario"></p>
+                <div id="simulatorControls" class="simulator-control-grid"></div>
+              </article>
+              <aside class="simulator-readout">
+                <div id="simulatorMetrics" class="simulator-metrics"></div>
+                <div id="simulatorObservation" class="simulator-observation"></div>
+                <div class="simulator-actions">
+                  <button id="simulatorSearchBtn" class="secondary" type="button">检索机制证据</button>
+                  <button id="simulatorAskBtn" type="button">让导师解释当前设置</button>
+                </div>
+              </aside>
             </div>
           </section>
           <section class="worked-example">
@@ -397,6 +420,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ac"></script>
+    <script src="./app.js?v=20260616ad"></script>
   </body>
 </html>

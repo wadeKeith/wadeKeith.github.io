@@ -23,6 +23,7 @@ const state = {
   active: null,
   activeTab: "teach",
   activeLens: "intuition",
+  mechanismKnobs: { component: 55, evidence: 55, budget: 45, pressure: 40 },
   searchMode: "fts",
   lesson: null,
   lessonRequest: 0,
@@ -804,7 +805,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ac")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ad")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -821,7 +822,7 @@ async function loadStaticEvidence() {
 async function loadStaticSearchIndex() {
   if (state.staticSearchIndex) return state.staticSearchIndex;
   if (!state.staticSearchIndexPromise) {
-    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ac")
+    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ad")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1073,6 +1074,55 @@ function researchBriefFor(module, bp, pack, worked) {
     ],
     searchQuery: query,
     askPrompt: `请像人工智能研究生课程教授一样，审阅这份「${module.title}」研究任务书。\n\n研究 claim：证明「${main}」能改善「${supporting}」相关瓶颈，并说明失效条件。\n本章产出物：${module.project}\n常见风险：${risk}\n\n请严格检查：1）claim 是否可证伪；2）baseline 是否足够；3）证据是否覆盖机制和实验；4）指标是否能支撑结论；5）还缺哪些失败样例。`,
+  };
+}
+
+function clampScore(value) {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function mechanismSimulatorFor(module, bp, pack) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const supporting = concepts[1] || main;
+  const third = concepts[2] || supporting;
+  const k = state.mechanismKnobs;
+  const claim = clampScore(18 + k.component * 0.34 + k.evidence * 0.32 + k.budget * 0.16 - k.pressure * 0.12);
+  const cost = clampScore(12 + k.component * 0.24 + k.evidence * 0.12 + k.budget * 0.35 + k.pressure * 0.14);
+  const risk = clampScore(84 - k.evidence * 0.28 - k.budget * 0.12 + k.pressure * 0.32 + (k.component > 72 ? 8 : 0));
+  const diagnostic = clampScore(10 + k.evidence * 0.34 + k.pressure * 0.28 + k.component * 0.16 + k.budget * 0.1);
+  const verdict =
+    risk > 68
+      ? `当前设置把「${main}」推到高压力区，适合暴露失败模式；不要急着下结论，先保存反例和误差来源。`
+      : claim > 70 && diagnostic > 62
+        ? `当前设置已经能支撑一个较强 claim：${main} 可能改善 ${supporting}，但仍要保留 baseline 和消融。`
+        : cost > 72
+          ? `预算和复杂度偏高，像真实工程系统：先确认收益是否超过实现成本，再决定是否扩大实验。`
+          : `这是适合入门的教学设置：先观察 ${main} 如何影响 ${supporting}，再逐步提高证据质量和失败压力。`;
+  return {
+    title: `${module.stage}｜机制实验台：${main} 如何改变系统行为`,
+    scenario: `把本章看成一个可调系统：你正在验证「${main}」是否真的改善「${supporting}」，同时观察预算、证据质量和长尾压力如何改变结论。`,
+    controls: [
+      ["component", "核心组件强度", `从朴素 baseline 到完整启用 ${main}`],
+      ["evidence", "证据 / 数据质量", `来源覆盖、样例多样性和 ${third} 的标注可靠性`],
+      ["budget", "上下文 / 算力预算", "可用上下文、显存、实验轮次或评测时间"],
+      ["pressure", "失败压力", "长尾样例、分布偏移、噪声输入和安全边界"],
+    ],
+    metrics: [
+      ["claim", "结论可信度", claim, "claim 是否足以进入任务书"],
+      ["cost", "实现成本", cost, "系统复杂度、预算和维护负担"],
+      ["risk", "残余风险", risk, "失败模式还没有被解释的程度"],
+      ["diagnostic", "诊断能力", diagnostic, "实验能否暴露真实机制而非偶然结果"],
+    ],
+    presets: [
+      ["baseline", "Baseline", { component: 20, evidence: 45, budget: 35, pressure: 30 }],
+      ["balanced", "平衡实验", { component: 58, evidence: 62, budget: 50, pressure: 42 }],
+      ["stress", "压力测试", { component: 72, evidence: 68, budget: 55, pressure: 82 }],
+      ["research", "研究设置", { component: 84, evidence: 86, budget: 72, pressure: 64 }],
+    ],
+    verdict,
+    searchQuery: `${main} ${supporting} ${module.queries.slice(0, 2).join(" ")} failure mode ablation`,
+    askPrompt: `请作为“大模型学习之路”的教授，解释这个机制实验台的当前设置。\n章节：${module.title}\n核心组件强度：${k.component}/100\n证据/数据质量：${k.evidence}/100\n上下文/算力预算：${k.budget}/100\n失败压力：${k.pressure}/100\n当前观察：${verdict}\n\n请按：1）为什么这些变量会影响结论；2）此时该读哪些证据；3）下一步应该做哪个 baseline 或 ablation 来讲。`,
   };
 }
 
@@ -1379,6 +1429,7 @@ function renderTeach() {
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
   const manuscript = lectureManuscriptFor(state.active, bp, pack);
   const worked = workedExampleFor(state.active, bp, pack, manuscript);
+  const simulator = mechanismSimulatorFor(state.active, bp, pack);
   const brief = researchBriefFor(state.active, bp, pack, worked);
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
@@ -1493,6 +1544,45 @@ function renderTeach() {
   el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("simulatorTitle").textContent = simulator.title;
+  el("simulatorScenario").textContent = simulator.scenario;
+  el("simulatorPresets").innerHTML = simulator.presets
+    .map(([id, label]) => `<button class="preset-btn" type="button" data-lab-preset="${escapeHtml(id)}">${escapeHtml(label)}</button>`)
+    .join("");
+  el("simulatorControls").innerHTML = simulator.controls
+    .map(
+      ([id, label, helper]) => `
+        <label class="sim-control">
+          <span>
+            <strong>${escapeHtml(label)}</strong>
+            <small>${escapeHtml(helper)}</small>
+          </span>
+          <output>${escapeHtml(String(state.mechanismKnobs[id]))}</output>
+          <input type="range" min="0" max="100" step="5" value="${escapeHtml(String(state.mechanismKnobs[id]))}" data-lab-control="${escapeHtml(id)}" />
+        </label>
+      `
+    )
+    .join("");
+  el("simulatorMetrics").innerHTML = simulator.metrics
+    .map(
+      ([id, label, value, helper]) => `
+        <article class="sim-metric ${escapeHtml(id)}">
+          <div>
+            <strong>${escapeHtml(label)}</strong>
+            <span>${escapeHtml(String(value))}</span>
+          </div>
+          <div class="metric-bar" aria-hidden="true"><span style="width: ${escapeHtml(String(value))}%"></span></div>
+          <p>${escapeHtml(helper)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("simulatorObservation").innerHTML = `
+    <strong>教授观察</strong>
+    <p>${escapeHtml(simulator.verdict)}</p>
+  `;
+  el("simulatorSearchBtn").dataset.simulatorSearch = simulator.searchQuery;
+  el("simulatorAskBtn").dataset.simulatorAsk = simulator.askPrompt;
   el("workedExampleTitle").textContent = worked.title;
   el("workedExampleProblem").textContent = worked.problem;
   el("workedExampleSteps").innerHTML = worked.steps
@@ -2331,12 +2421,23 @@ el("teachTab").addEventListener("click", (event) => {
     renderTeach();
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
+  const presetBtn = event.target.closest("[data-lab-preset]");
+  if (presetBtn && state.active) {
+    const simulator = mechanismSimulatorFor(state.active, blueprintFor(state.active), LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation);
+    const preset = simulator.presets.find(([id]) => id === presetBtn.dataset.labPreset);
+    if (preset) {
+      state.mechanismKnobs = { ...preset[2] };
+      renderTeach();
+    }
+    return;
+  }
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
       searchBtn.dataset.workedSearch ||
       searchBtn.dataset.briefSearch ||
+      searchBtn.dataset.simulatorSearch ||
       searchBtn.dataset.lensSearch ||
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
@@ -2347,18 +2448,27 @@ el("teachTab").addEventListener("click", (event) => {
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
       askBtn.dataset.workedAsk ||
       askBtn.dataset.briefAsk ||
+      askBtn.dataset.simulatorAsk ||
       askBtn.dataset.lensAsk ||
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||
       askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }
+});
+
+el("teachTab").addEventListener("input", (event) => {
+  const control = event.target.closest("[data-lab-control]");
+  if (!control) return;
+  const key = control.dataset.labControl;
+  state.mechanismKnobs = { ...state.mechanismKnobs, [key]: Number(control.value) };
+  renderTeach();
 });
 
 el("queryChips").addEventListener("click", (event) => {

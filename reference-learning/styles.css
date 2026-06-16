@@ -97,6 +97,11 @@ input[type="search"] {
   padding: 0 12px;
 }
 
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--green);
+}
+
 h1,
 h2,
 h3,
@@ -993,6 +998,196 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.mechanism-lab {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.lab-head,
+.simulator-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.lab-presets,
+.simulator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.preset-btn {
+  min-height: 34px;
+  background: #fff;
+  color: var(--blue);
+  border-color: #c4d3df;
+}
+
+.simulator-controls,
+.simulator-readout {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.simulator-controls {
+  grid-template-rows: auto 1fr;
+}
+
+.simulator-scenario {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.7;
+}
+
+.simulator-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sim-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e0e6e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.sim-control span {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.sim-control strong {
+  color: var(--ink);
+}
+
+.sim-control small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.sim-control output {
+  justify-self: end;
+  min-width: 40px;
+  padding: 4px 7px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  text-align: center;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-control input {
+  grid-column: 1 / -1;
+}
+
+.simulator-readout {
+  width: min(430px, 100%);
+  background: var(--paper);
+}
+
+.simulator-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sim-metric {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e0e6e1;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.sim-metric div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.sim-metric strong {
+  color: var(--ink);
+}
+
+.sim-metric span {
+  color: var(--green);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-metric.risk span {
+  color: var(--red);
+}
+
+.metric-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5ece8;
+}
+
+.metric-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+}
+
+.sim-metric.risk .metric-bar span {
+  background: var(--red);
+}
+
+.sim-metric.cost .metric-bar span {
+  background: var(--amber);
+}
+
+.sim-metric p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.simulator-observation {
+  padding: 13px;
+  border: 1px solid #d7e0da;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.simulator-observation strong {
+  color: var(--blue);
+}
+
+.simulator-observation p {
+  margin: 6px 0 0;
+  color: #43504d;
+  line-height: 1.65;
 }
 
 .research-brief {
@@ -2095,6 +2290,10 @@ p {
   .seminar-panel,
   .roadmap-panel,
   .lecture-notes-grid,
+  .lab-head,
+  .simulator-layout,
+  .simulator-control-grid,
+  .simulator-metrics,
   .worked-layout,
   .brief-head,
   .brief-layout,
@@ -2169,6 +2368,9 @@ p {
   .reader-main,
   .reader-side,
   .lecture-card,
+  .mechanism-lab,
+  .simulator-controls,
+  .simulator-readout,
   .research-brief,
   .brief-main,
   .brief-gates,
@@ -2183,6 +2385,11 @@ p {
   }
 
   .brief-actions {
+    justify-content: flex-start;
+  }
+
+  .lab-presets,
+  .simulator-actions {
     justify-content: flex-start;
   }
 }
