@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616al" />
+    <link rel="stylesheet" href="./styles.css?v=20260616am" />
   </head>
   <body>
     <header class="topbar">
@@ -428,6 +428,16 @@
               <div id="masteryChecklist" class="mastery-checklist"></div>
             </aside>
           </section>
+          <section class="classroom-quiz-panel">
+            <div class="quiz-head">
+              <div class="section-title">
+                <p class="eyebrow">离线课堂小测</p>
+                <h3>不用问模型，先用选择题检查自己是否读懂</h3>
+              </div>
+              <div class="quiz-score" id="quizScore">0/4 正确</div>
+            </div>
+            <div id="quizCards" class="quiz-cards"></div>
+          </section>
           <section class="exam-panel">
             <div class="section-title">
               <p class="eyebrow">口试与评分</p>
@@ -511,6 +521,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616al"></script>
+    <script src="./app.js?v=20260616am"></script>
   </body>
 </html>

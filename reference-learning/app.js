@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616al";
+const APP_VERSION = "20260616am";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -43,6 +43,7 @@ const state = {
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
   notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
   mastery: JSON.parse(localStorage.getItem("llmRoadMastery") || "{}"),
+  quizAnswers: JSON.parse(localStorage.getItem("llmRoadQuizAnswers") || "{}"),
   pinnedSources: JSON.parse(localStorage.getItem("llmRoadPinnedSources") || "{}"),
 };
 
@@ -935,6 +936,10 @@ function saveMastery() {
   localStorage.setItem("llmRoadMastery", JSON.stringify(state.mastery));
 }
 
+function saveQuizAnswers() {
+  localStorage.setItem("llmRoadQuizAnswers", JSON.stringify(state.quizAnswers));
+}
+
 function savePinnedSources() {
   localStorage.setItem("llmRoadPinnedSources", JSON.stringify(state.pinnedSources));
 }
@@ -1696,6 +1701,112 @@ function problemSetFor(module, bp) {
   ];
 }
 
+function quizFor(module, bp) {
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const second = concepts[1] || main;
+  const misconception = bp.misconceptions[0] || "只复述术语，不保存证据，也不做最小实验。";
+  const evidenceQuery = (module.queries || []).slice(0, 4).join(" ") || module.title;
+  return [
+    {
+      id: "core_claim",
+      label: "Q1 / 核心判断",
+      question: `学完「${module.title}」后，最应该先能说清什么？`,
+      query: main,
+      ask: `请围绕「${module.title}」出 3 个核心判断自测题，并给出评分标准。`,
+      options: [
+        {
+          text: `用自己的话解释：${bp.thesis}`,
+          correct: true,
+          feedback: "对。先抓住本章要证明或解释的核心判断，再进入资料细节。",
+        },
+        {
+          text: `直接背下所有模型名和论文名。`,
+          correct: false,
+          feedback: "不够。模型名只是索引，不能替代机制、证据和实验判断。",
+        },
+        {
+          text: `先让导师生成一份总结，再跳过证据。`,
+          correct: false,
+          feedback: "危险。导师可以解释卡点，但本章要求先读证据、再问问题。",
+        },
+      ],
+    },
+    {
+      id: "mechanism",
+      label: "Q2 / 机制理解",
+      question: `解释 ${main} 时，哪种回答最接近顶级课程标准？`,
+      query: `${main} ${second}`,
+      ask: `请按“输入、变换、约束、瓶颈、失败模式”检查我是否真正理解 ${main}。`,
+      options: [
+        {
+          text: `说明它的输入、变换、约束、瓶颈和失败模式。`,
+          correct: true,
+          feedback: "对。机制理解必须能把概念放进系统链路，而不是只给定义。",
+        },
+        {
+          text: `说它很重要、很前沿、很多论文都在用。`,
+          correct: false,
+          feedback: "这只是背景，不是机制。缺少输入、变换、约束和失败条件。",
+        },
+        {
+          text: `只引用一个 benchmark 分数。`,
+          correct: false,
+          feedback: "分数需要机制解释和评测条件，否则很容易误读。",
+        },
+      ],
+    },
+    {
+      id: "evidence",
+      label: "Q3 / 证据阅读",
+      question: "遇到读不懂的概念时，正确顺序是什么？",
+      query: evidenceQuery,
+      ask: `请帮我为「${module.title}」制定证据阅读顺序：先检索什么，再精读什么，最后问什么。`,
+      options: [
+        {
+          text: "先即时检索本地证据，保存来源，再把卡住的片段交给导师解释。",
+          correct: true,
+          feedback: "对。这样模型回答会被证据约束，学习也能复盘。",
+        },
+        {
+          text: "先问导师要完整答案，证据以后有空再看。",
+          correct: false,
+          feedback: "这会让问答变成替代学习。当前网页的目标是证据优先、导师辅助。",
+        },
+        {
+          text: "只看第一条搜索结果，不区分概念、机制、实验和局限。",
+          correct: false,
+          feedback: "不够。证据要分类阅读，否则很难形成可复用知识。",
+        },
+      ],
+    },
+    {
+      id: "evaluation",
+      label: "Q4 / 评测闭环",
+      question: `怎样证明自己不是“看过了”，而是真懂「${module.title}」？`,
+      query: `${evidenceQuery} baseline benchmark ablation failure mode`,
+      ask: `请按严格助教标准检查我是否掌握「${module.title}」：baseline、指标、失败样例和 ablation。`,
+      options: [
+        {
+          text: `完成作品：${module.project}，并写出 baseline、指标、失败样例和下一步 ablation。`,
+          correct: true,
+          feedback: "对。可交付作品和评测闭环是从“看懂”走向“掌握”的证据。",
+        },
+        {
+          text: `把讲义读完，并感觉自己大概明白了。`,
+          correct: false,
+          feedback: "感觉不可靠。需要可检查产物、来源和失败样例。",
+        },
+        {
+          text: misconception,
+          correct: false,
+          feedback: "这正是本章要避开的误区。请回到证据和最小实验。",
+        },
+      ],
+    },
+  ];
+}
+
 function renderProgress() {
   const total = state.modules.length;
   const done = state.modules.filter((item) => state.done.has(item.id)).length;
@@ -2277,7 +2388,9 @@ function renderPractice() {
   const mastery = masteryFor(state.active, bp);
   const exam = examFor(state.active, bp);
   const problems = problemSetFor(state.active, bp);
+  const quiz = quizFor(state.active, bp);
   const checked = new Set(state.mastery[state.active.id] || []);
+  const quizAnswers = state.quizAnswers[state.active.id] || {};
   el("protocolList").innerHTML = mastery.protocol.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("masteryChecklist").innerHTML = mastery.rubric
     .map(
@@ -2295,6 +2408,43 @@ function renderPractice() {
   const score = checked.size;
   el("masteryScore").textContent = `${score}/${mastery.rubric.length} 达标`;
   el("masteryMeterBar").style.width = `${Math.round((score / mastery.rubric.length) * 100)}%`;
+  const quizCorrect = quiz.reduce((sum, item) => {
+    const selected = quizAnswers[item.id];
+    return sum + (item.options[selected] && item.options[selected].correct ? 1 : 0);
+  }, 0);
+  el("quizScore").textContent = `${quizCorrect}/${quiz.length} 正确`;
+  el("quizCards").innerHTML = quiz
+    .map((item, cardIdx) => {
+      const selected = quizAnswers[item.id];
+      const selectedOption = item.options[selected];
+      const answered = selected != null;
+      const feedbackClass = selectedOption && selectedOption.correct ? " correct" : answered ? " wrong" : "";
+      return `
+        <article class="quiz-card${feedbackClass}">
+          <div class="quiz-card-head">
+            <span>${escapeHtml(item.label)}</span>
+            <h4>${escapeHtml(item.question)}</h4>
+          </div>
+          <div class="quiz-options">
+            ${item.options
+              .map((option, optionIdx) => {
+                const active = selected === optionIdx ? " selected" : "";
+                const tone = selected === optionIdx ? (option.correct ? " correct" : " wrong") : "";
+                return `<button class="quiz-option${active}${tone}" type="button" data-quiz-card="${cardIdx}" data-quiz-option="${optionIdx}">${escapeHtml(option.text)}</button>`;
+              })
+              .join("")}
+          </div>
+          <div class="quiz-feedback${feedbackClass}">
+            ${answered ? escapeHtml(selectedOption.feedback) : "先选一个答案；系统会立刻给出离线反馈。"}
+          </div>
+          <div class="quiz-actions">
+            <button class="text-button" type="button" data-quiz-search="${escapeHtml(item.query)}">检索证据</button>
+            <button class="text-button" type="button" data-quiz-ask="${escapeHtml(item.ask)}">让导师追问</button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
   el("oralExamCards").innerHTML = exam.oral
     .map(
       (item, idx) => `
@@ -3107,6 +3257,31 @@ el("checkList").addEventListener("click", (event) => {
   const answer = el(`checkAnswer${btn.dataset.check}`);
   answer.classList.toggle("visible");
   btn.textContent = answer.classList.contains("visible") ? "收起讲解" : "展开讲解";
+});
+
+el("quizCards").addEventListener("click", (event) => {
+  if (!state.active) return;
+  const optionBtn = event.target.closest("[data-quiz-card][data-quiz-option]");
+  if (optionBtn) {
+    const quiz = quizFor(state.active, blueprintFor(state.active));
+    const card = quiz[Number(optionBtn.dataset.quizCard)];
+    if (!card) return;
+    state.quizAnswers[state.active.id] = {
+      ...(state.quizAnswers[state.active.id] || {}),
+      [card.id]: Number(optionBtn.dataset.quizOption),
+    };
+    saveQuizAnswers();
+    renderPractice();
+    return;
+  }
+  const searchBtn = event.target.closest("[data-quiz-search]");
+  if (searchBtn) {
+    showTab("read");
+    runSearch(searchBtn.dataset.quizSearch);
+    return;
+  }
+  const askBtn = event.target.closest("[data-quiz-ask]");
+  if (askBtn) setQuestion(askBtn.dataset.quizAsk, true);
 });
 
 el("workbenchCards").addEventListener("click", (event) => {
