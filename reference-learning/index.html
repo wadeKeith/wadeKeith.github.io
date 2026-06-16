@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reference Learning</title>
+    <title>Reference 学习站</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="topbar">
       <div>
-        <h1>Reference Learning</h1>
-        <p>本地知识库 · 学习路径 · 检索问答 · 本地模型</p>
+        <h1>Reference 学习站</h1>
+        <p>本地知识库 · 学习路径 · 检索问答 · 本地大模型</p>
       </div>
       <div class="status-strip">
-        <span id="dbStatus">DB: checking</span>
-        <span id="modelStatus">Model: checking</span>
+        <span id="dbStatus">知识库：检查中</span>
+        <span id="modelStatus">模型：检查中</span>
       </div>
     </header>
 
@@ -29,14 +29,14 @@
       <section class="workspace">
         <section class="hero-panel">
           <div>
-            <p class="eyebrow">Local-first study system</p>
+            <p class="eyebrow">本地优先学习系统</p>
             <h2 id="activeTitle">选择一个模块开始</h2>
             <p id="activeSummary">路径会把 Reference 中的中文实战资料和公开前沿课程串成一个可执行的 PhD 级学习计划。</p>
           </div>
           <div class="stats-grid">
-            <div><strong id="statDocs">-</strong><span>documents</span></div>
-            <div><strong id="statChunks">-</strong><span>chunks</span></div>
-            <div><strong id="statModules">-</strong><span>modules</span></div>
+            <div><strong id="statDocs">-</strong><span>文档</span></div>
+            <div><strong id="statChunks">-</strong><span>片段</span></div>
+            <div><strong id="statModules">-</strong><span>模块</span></div>
           </div>
         </section>
 
@@ -66,8 +66,8 @@
         <section class="panel chat-panel">
           <div class="panel-head">
             <div>
-              <h2>本地 RAG 导师</h2>
-              <p>优先调用本机 Ollama；没有模型时返回可引用的本地检索结果。</p>
+              <h2>中文 RAG 导师</h2>
+              <p>优先调用本地部署的大模型；没有模型时返回可引用的检索结果。</p>
             </div>
             <button id="askBtn">提问</button>
           </div>
@@ -78,7 +78,7 @@
     </main>
 
     <script>
-      window.REFERENCE_LEARNING_API_BASE = "http://127.0.0.1:8765/api";
+      window.REFERENCE_LEARNING_API_BASE = "http://47.111.133.184:61135/api";
     </script>
     <script src="./app.js"></script>
   </body>

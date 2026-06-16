@@ -106,21 +106,21 @@ async function load() {
     el("statDocs").textContent = stats.documents ?? "-";
     el("statChunks").textContent = stats.chunks ?? "-";
     el("statModules").textContent = stats.modules ?? state.modules.length;
-    el("dbStatus").textContent = stats.ready ? `DB: ${stats.documents} docs` : "DB: not built";
+    el("dbStatus").textContent = stats.ready ? `知识库：${stats.documents} 文档` : "知识库：未构建";
     if (!model.available) {
-      el("modelStatus").textContent = "Model: Ollama offline";
+      el("modelStatus").textContent = `模型：${model.provider || "服务"} 离线`;
     } else if (!model.models.length) {
-      el("modelStatus").textContent = `Model: none installed (${model.default_model})`;
+      el("modelStatus").textContent = `模型：未安装（默认 ${model.default_model}）`;
     } else if (model.models.includes(model.default_model)) {
-      el("modelStatus").textContent = `Model: ${model.default_model}`;
+      el("modelStatus").textContent = `模型：${model.default_model}`;
     } else {
-      el("modelStatus").textContent = `Model: ${model.models.length} local, default missing`;
+      el("modelStatus").textContent = `模型：${model.models.length} 个可用，默认模型缺失`;
     }
     renderModules();
     if (state.modules.length) selectModule(state.modules[0].id);
   } catch (err) {
-    el("dbStatus").textContent = "DB: error";
-    el("modelStatus").textContent = "Model: unknown";
+    el("dbStatus").textContent = "知识库：错误";
+    el("modelStatus").textContent = "模型：未知";
     el("answerBox").textContent = String(err);
   }
 }
