@@ -805,7 +805,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ad")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ae")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -822,7 +822,7 @@ async function loadStaticEvidence() {
 async function loadStaticSearchIndex() {
   if (state.staticSearchIndex) return state.staticSearchIndex;
   if (!state.staticSearchIndexPromise) {
-    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ad")
+    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ae")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1423,6 +1423,47 @@ function renderGlobalCourseMap() {
   ).join("");
 }
 
+function renderCourseAtlas() {
+  const modules = state.modules.length ? state.modules : FALLBACK_MODULES;
+  el("courseAtlas").innerHTML = COURSE_TRACKS.map((track, trackIdx) => {
+    const nodes = track.modules
+      .map((id, idx) => {
+        const item = modules.find((mod) => mod.id === id) || moduleById(id);
+        if (!item) return "";
+        const active = state.active && state.active.id === item.id ? " active" : "";
+        const done = state.done.has(item.id) ? " done" : "";
+        const query = (item.queries || []).slice(0, 3).join(" ") || item.title;
+        return `
+          <article class="atlas-node${active}${done}">
+            <button class="atlas-select" type="button" data-track-module="${escapeHtml(item.id)}">
+              <span>${escapeHtml(item.stage)}</span>
+              <strong>${escapeHtml(item.title)}</strong>
+            </button>
+            <p>${escapeHtml(item.summary)}</p>
+            <div class="atlas-node-foot">
+              <small>${String(idx + 1).padStart(2, "0")} / ${String(track.modules.length).padStart(2, "0")}</small>
+              <button class="text-button" type="button" data-atlas-search="${escapeHtml(query)}">证据</button>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+    return `
+      <article class="atlas-track track-${trackIdx + 1}">
+        <header>
+          <span>${String(trackIdx + 1).padStart(2, "0")}</span>
+          <div>
+            <h4>${escapeHtml(track.title)}</h4>
+            <p>${escapeHtml(track.summary)}</p>
+          </div>
+        </header>
+        <div class="atlas-rail">${nodes}</div>
+        <footer>${escapeHtml(track.milestone)}</footer>
+      </article>
+    `;
+  }).join("");
+}
+
 function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
@@ -1439,6 +1480,7 @@ function renderTeach() {
   const prev = activeIndex > 0 ? state.modules[activeIndex - 1] : null;
   const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
   renderGlobalCourseMap();
+  renderCourseAtlas();
   el("readerTitle").textContent = manuscript.title;
   el("readerParagraphs").innerHTML = manuscript.paragraphs
     .map((item, idx) => `<p><span>${String(idx + 1).padStart(2, "0")}</span>${escapeHtml(item)}</p>`)
@@ -2431,7 +2473,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -2442,6 +2484,7 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.ladderSearch ||
       searchBtn.dataset.seminarSearch ||
       searchBtn.dataset.courseMapSearch ||
+      searchBtn.dataset.atlasSearch ||
       searchBtn.dataset.sessionSearch ||
       searchBtn.dataset.concept;
     showTab("read");

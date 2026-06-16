@@ -598,6 +598,163 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
+.course-atlas {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff, #f8fbfa);
+  box-shadow: var(--shadow);
+}
+
+.course-atlas-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.atlas-track {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.atlas-track header {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.atlas-track header > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-track h4 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.atlas-track header p,
+.atlas-track footer {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.atlas-rail {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.atlas-rail::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 20px;
+  height: 2px;
+  background: #dde8e2;
+}
+
+.atlas-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  min-height: 164px;
+  padding: 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.atlas-node.active {
+  border-color: rgba(38, 112, 95, 0.72);
+  background: #edf7f1;
+}
+
+.atlas-node.done {
+  box-shadow: inset 4px 0 0 var(--green);
+}
+
+.atlas-select {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  min-height: 48px;
+  padding: 0;
+  text-align: left;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+}
+
+.atlas-select:hover {
+  transform: none;
+}
+
+.atlas-select span {
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-select strong {
+  line-height: 1.25;
+}
+
+.atlas-node p {
+  margin: 0;
+  color: #43504d;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.atlas-node-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #e8ede8;
+}
+
+.atlas-node-foot small {
+  color: var(--amber);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-track footer {
+  padding: 10px 12px;
+  border: 1px solid #e4e9e5;
+  border-radius: 8px;
+  background: var(--paper);
+}
+
 .roadmap-panel {
   display: grid;
   scroll-margin-top: 118px;
@@ -2286,6 +2443,7 @@ p {
   .app-grid,
   .course-reader,
   .global-course-grid,
+  .course-atlas-grid,
   .syllabus-grid,
   .seminar-panel,
   .roadmap-panel,
@@ -2326,8 +2484,18 @@ p {
   }
 
   .route-grid,
-  .evidence-grid {
+  .evidence-grid,
+  .atlas-rail {
     grid-template-columns: 1fr;
+  }
+
+  .atlas-rail::before {
+    left: 20px;
+    right: auto;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    height: auto;
   }
 
   .hero-metrics {
