@@ -22,10 +22,11 @@ const state = {
   modules: [],
   active: null,
   activeTab: "teach",
+  activeLens: "intuition",
   lesson: null,
   lessonRequest: 0,
-  done: new Set(JSON.parse(localStorage.getItem("referenceLearningDone") || "[]")),
-  notes: JSON.parse(localStorage.getItem("referenceLearningNotes") || "{}"),
+  done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
+  notes: JSON.parse(localStorage.getItem("llmRoadNotes") || "{}"),
 };
 
 const FALLBACK_STATS = {
@@ -475,6 +476,33 @@ const COURSE_ANCHORS = {
   omni_audio_capstone: ["Omni 模型路线：音频、语音、视觉、文本统一接口。", "Capstone 研究训练：问题、数据、baseline、评测。", "系统整合：检索、模型、工具和多模态输入协作。"],
 };
 
+const TEACHING_LENSES = [
+  {
+    id: "intuition",
+    label: "直觉",
+    title: "先建立可讲给别人听的直觉",
+    prompt: "请把这章先讲成一段研究生能立刻抓住的直觉解释。",
+  },
+  {
+    id: "mechanism",
+    label: "机制",
+    title: "再拆开关键机制、公式或系统链路",
+    prompt: "请按机制链路解释这章：输入是什么，变换是什么，瓶颈或目标是什么。",
+  },
+  {
+    id: "engineering",
+    label: "工程",
+    title: "落到代码、实验和部署约束",
+    prompt: "请把这章转成工程检查表：该实现什么，观察什么指标，容易在哪里失败。",
+  },
+  {
+    id: "research",
+    label: "研究",
+    title: "最后连接论文问题和开放研究方向",
+    prompt: "请指出这章对应的前沿论文问题、评测方式和可做的小研究题。",
+  },
+];
+
 const LECTURE_PACKS = {
   orientation: {
     principles: ["把资料库理解为可复现研究环境：目录负责边界，索引负责定位，笔记负责迁移。", "每章按“核心问题 -> 证据 -> 机制解释 -> 小实验 -> 复盘”的顺序学习。"],
@@ -592,11 +620,11 @@ function formatNumber(value) {
 }
 
 function saveDone() {
-  localStorage.setItem("referenceLearningDone", JSON.stringify([...state.done]));
+  localStorage.setItem("llmRoadDone", JSON.stringify([...state.done]));
 }
 
 function saveNotes() {
-  localStorage.setItem("referenceLearningNotes", JSON.stringify(state.notes));
+  localStorage.setItem("llmRoadNotes", JSON.stringify(state.notes));
 }
 
 function blueprintFor(module) {
@@ -656,6 +684,7 @@ function renderTeach() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
   const pack = LECTURE_PACKS[state.active.id] || LECTURE_PACKS.orientation;
+  const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   el("outcomeList").innerHTML = (state.active.outcomes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("courseAnchorList").innerHTML = (COURSE_ANCHORS[state.active.id] || COURSE_ANCHORS.orientation)
     .map((item) => `<li>${escapeHtml(item)}</li>`)
@@ -664,6 +693,56 @@ function renderTeach() {
   el("principleList").innerHTML = pack.principles.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("mechanismList").innerHTML = pack.mechanisms.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("readingList").innerHTML = pack.readings.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  el("lensSwitch").innerHTML = TEACHING_LENSES.map(
+    (item) => `
+      <button class="lens-btn${item.id === state.activeLens ? " active" : ""}" type="button" data-lens="${escapeHtml(item.id)}">
+        ${escapeHtml(item.label)}
+      </button>
+    `
+  ).join("");
+  const lensBodies = {
+    intuition: `把「${state.active.title}」先压缩成一句话：${bp.thesis} 这一视角要求你先能不用术语讲给同学听，再把术语逐个挂回 ${bp.concepts
+      .slice(0, 4)
+      .join("、")}。`,
+    mechanism: `${pack.mechanisms[0]} 学习时按“输入 -> 变换 -> 约束 -> 失败模式”四步拆解；如果这四格填不满，说明还没有真正读懂机制。`,
+    engineering: `把本章落成可运行作品：${state.active.project} 先做最小实验，再记录数据、指标、错误样例和一次复盘。`,
+    research: `把本章接到前沿研究：从 ${bp.concepts.slice(0, 3).join("、")} 中选一个概念，追问它的 benchmark、baseline、开放问题和可复现实验。`,
+  };
+  el("lensCard").innerHTML = `
+    <div>
+      <span class="lens-label">${escapeHtml(lens.label)}视角</span>
+      <h4>${escapeHtml(lens.title)}</h4>
+      <p>${escapeHtml(lensBodies[lens.id] || lensBodies.intuition)}</p>
+    </div>
+    <div class="lens-actions">
+      <button class="secondary" type="button" data-lens-search="${escapeHtml(bp.concepts.slice(0, 2).join(" "))}">检索这条线</button>
+      <button type="button" data-lens-ask="${escapeHtml(`${lens.prompt}\n\n章节：${state.active.title}\n核心判断：${bp.thesis}`)}">请导师重讲</button>
+    </div>
+  `;
+  const ladder = [
+    ["入口问题", bp.thesis, bp.concepts[0] || state.active.title],
+    ["概念骨架", bp.concepts.slice(0, 4).join(" / "), bp.concepts.slice(0, 2).join(" ")],
+    ["机制抓手", pack.mechanisms[0], bp.concepts[1] || state.active.title],
+    ["实验动作", bp.labSteps[0], state.active.queries[0] || state.active.title],
+    ["研究迁移", state.active.project, state.active.queries.slice(0, 2).join(" ")],
+  ];
+  el("knowledgeLadder").innerHTML = ladder
+    .map(
+      ([title, body, query], idx) => `
+        <article class="ladder-step">
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <div>
+            <h4>${escapeHtml(title)}</h4>
+            <p>${escapeHtml(body)}</p>
+          </div>
+          <div class="ladder-actions">
+            <button class="text-button" type="button" data-ladder-search="${escapeHtml(query)}">检索</button>
+            <button class="text-button" type="button" data-ladder-ask="${escapeHtml(`请围绕「${title}」讲解 ${state.active.title}：${body}`)}">追问</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
   el("lectureThesis").textContent = bp.thesis;
   el("lectureFrame").textContent = bp.frame;
   el("conceptMap").innerHTML = bp.concepts
@@ -926,6 +1005,27 @@ el("conceptMap").addEventListener("click", (event) => {
   if (!btn) return;
   showTab("read");
   runSearch(btn.dataset.concept);
+});
+
+el("teachTab").addEventListener("click", (event) => {
+  const lensBtn = event.target.closest("[data-lens]");
+  if (lensBtn) {
+    state.activeLens = lensBtn.dataset.lens;
+    renderTeach();
+    return;
+  }
+  const searchBtn = event.target.closest("[data-lens-search], [data-ladder-search]");
+  if (searchBtn) {
+    const query = searchBtn.dataset.lensSearch || searchBtn.dataset.ladderSearch;
+    showTab("read");
+    runSearch(query);
+    return;
+  }
+  const askBtn = event.target.closest("[data-lens-ask], [data-ladder-ask]");
+  if (askBtn) {
+    const prompt = askBtn.dataset.lensAsk || askBtn.dataset.ladderAsk;
+    setQuestion(prompt, true);
+  }
 });
 
 el("queryChips").addEventListener("click", (event) => {

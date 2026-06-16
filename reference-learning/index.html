@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616k" />
+    <link rel="stylesheet" href="./styles.css?v=20260616l" />
   </head>
   <body>
     <header class="topbar">
@@ -99,6 +99,15 @@
                 <ul id="readingList"></ul>
               </article>
             </div>
+          </section>
+          <section class="course-studio">
+            <div class="section-title">
+              <p class="eyebrow">交互课堂</p>
+              <h3>换一种教授视角重讲本章，再按阶梯推进学习</h3>
+            </div>
+            <div id="lensSwitch" class="lens-switch" aria-label="讲授视角"></div>
+            <article id="lensCard" class="lens-card"></article>
+            <div id="knowledgeLadder" class="knowledge-ladder"></div>
           </section>
           <div class="teaching-layout">
             <article class="lecture-card">
@@ -193,6 +202,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616k"></script>
+    <script src="./app.js?v=20260616l"></script>
   </body>
 </html>

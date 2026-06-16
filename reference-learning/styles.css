@@ -460,6 +460,114 @@ p {
   line-height: 1.7;
 }
 
+.course-studio {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff, #f7faf8);
+}
+
+.lens-switch {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.lens-btn {
+  min-height: 40px;
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+}
+
+.lens-btn.active {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.lens-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #cfdcd6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.lens-label {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.lens-card h4 {
+  margin: 4px 0 8px;
+  font-size: 20px;
+}
+
+.lens-card p {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.7;
+}
+
+.lens-actions,
+.ladder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.knowledge-ladder {
+  display: grid;
+  gap: 10px;
+}
+
+.ladder-step {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ladder-step > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder-step h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.ladder-step p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .lecture-card,
 .concept-board,
 .route-card,
@@ -770,6 +878,8 @@ p {
   .app-grid,
   .syllabus-grid,
   .lecture-notes-grid,
+  .lens-card,
+  .ladder-step,
   .teaching-layout,
   .practice-layout,
   .notes-layout,
@@ -807,6 +917,7 @@ p {
   .tab-strip,
   .syllabus-grid,
   .lecture-notes-grid,
+  .lens-switch,
   .hero-metrics,
   .search-row,
   .check-card {
