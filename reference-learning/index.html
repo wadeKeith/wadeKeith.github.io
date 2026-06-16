@@ -3,83 +3,153 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reference 学习站</title>
+    <title>大模型 AI 交互教授</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="topbar">
-      <div>
-        <h1>Reference 学习站</h1>
-        <p>本地知识库 · 学习路径 · 检索问答 · 本地大模型</p>
+      <div class="brand-block">
+        <span class="brand-kicker">Reference Knowledge Studio</span>
+        <h1>大模型人工智能交互教授</h1>
+        <p>基于本地 Reference 数据库的课程讲授、证据精读、练习与 RAG 问答。</p>
       </div>
-      <div class="status-strip">
+      <div class="status-strip" aria-label="系统状态">
         <span id="dbStatus">知识库：检查中</span>
         <span id="modelStatus">模型：检查中</span>
+        <span id="progressStatus">进度：0/0</span>
       </div>
     </header>
 
-    <main class="app-shell">
-      <aside class="sidebar">
-        <section class="panel">
-          <h2>学习路径</h2>
-          <div id="moduleList" class="module-list"></div>
-        </section>
+    <main class="app-grid">
+      <aside class="curriculum-rail" aria-label="课程目录">
+        <div class="rail-head">
+          <div>
+            <p class="eyebrow">16 阶段路径</p>
+            <h2>从 LLM 到具身智能</h2>
+          </div>
+          <button id="resetProgress" class="text-button" type="button">重置</button>
+        </div>
+        <div class="progress-meter" aria-hidden="true">
+          <span id="progressBar"></span>
+        </div>
+        <div id="moduleList" class="module-list"></div>
       </aside>
 
-      <section class="workspace">
-        <section class="hero-panel">
-          <div>
-            <p class="eyebrow">本地优先学习系统</p>
-            <h2 id="activeTitle">选择一个模块开始</h2>
-            <p id="activeSummary">路径会把 Reference 中的中文实战资料和公开前沿课程串成一个可执行的 PhD 级学习计划。</p>
+      <section class="lesson-workspace" aria-live="polite">
+        <section class="lesson-hero">
+          <div class="lesson-heading">
+            <p id="activeStage" class="eyebrow">选择一个模块开始</p>
+            <h2 id="activeTitle">正在加载课程</h2>
+            <p id="activeSummary">读取本地课程路径和知识库统计中。</p>
           </div>
-          <div class="stats-grid">
+          <div class="hero-metrics">
             <div><strong id="statDocs">-</strong><span>文档</span></div>
-            <div><strong id="statChunks">-</strong><span>片段</span></div>
-            <div><strong id="statModules">-</strong><span>模块</span></div>
+            <div><strong id="statChunks">-</strong><span>知识片段</span></div>
+            <div><strong id="statModules">-</strong><span>课程模块</span></div>
           </div>
         </section>
 
-        <section class="split">
-          <section class="panel">
-            <div class="panel-head">
-              <h2>模块目标</h2>
-              <button id="markDone" class="ghost">标记完成</button>
-            </div>
-            <ul id="outcomeList" class="outcomes"></ul>
-            <div class="project-box">
-              <span>实践任务</span>
-              <p id="projectText">选择模块后显示。</p>
-            </div>
-          </section>
+        <nav class="tab-strip" aria-label="学习视图">
+          <button class="tab-btn active" data-tab="teach" type="button">教授导学</button>
+          <button class="tab-btn" data-tab="read" type="button">证据精读</button>
+          <button class="tab-btn" data-tab="practice" type="button">练习闭环</button>
+          <button class="tab-btn" data-tab="notes" type="button">学习笔记</button>
+        </nav>
 
-          <section class="panel">
-            <div class="panel-head">
-              <h2>检索 Reference</h2>
-              <button id="searchBtn">检索</button>
+        <section id="teachTab" class="tab-panel active">
+          <div class="teaching-layout">
+            <article class="lecture-card">
+              <p class="eyebrow">Professor framing</p>
+              <h3 id="lectureThesis">本章核心判断</h3>
+              <p id="lectureFrame"></p>
+            </article>
+            <div class="concept-board">
+              <div class="section-title">
+                <p class="eyebrow">概念地图</p>
+                <h3>点击任一概念，可直接检索或追问</h3>
+              </div>
+              <div id="conceptMap" class="concept-map"></div>
             </div>
-            <textarea id="searchInput" rows="3" placeholder="输入关键词，例如：FlashAttention 的核心思想是什么？"></textarea>
-            <div id="searchResults" class="results"></div>
-          </section>
-        </section>
-
-        <section class="panel chat-panel">
-          <div class="panel-head">
+          </div>
+          <div id="lectureRoute" class="route-grid"></div>
+          <div class="misconception-band">
             <div>
-              <h2>中文 RAG 导师</h2>
-              <p>优先调用本地部署的大模型；没有模型时返回可引用的检索结果。</p>
+              <p class="eyebrow">常见误区</p>
+              <h3>先避开这些坑，学习会快很多</h3>
             </div>
-            <button id="askBtn">提问</button>
+            <ul id="misconceptionList"></ul>
           </div>
-          <textarea id="questionInput" rows="4" placeholder="问一个你不会的问题，系统会先检索 Reference，再交给本地模型讲解。"></textarea>
-          <div id="answerBox" class="answer"></div>
+        </section>
+
+        <section id="readTab" class="tab-panel">
+          <div class="reading-toolbar">
+            <div>
+              <p class="eyebrow">数据库证据</p>
+              <h3>每章自动从 Reference SQLite/FTS 中抽取必读材料</h3>
+            </div>
+            <div class="search-row">
+              <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
+              <button id="searchBtn" type="button">检索</button>
+            </div>
+          </div>
+          <div id="queryChips" class="query-chips"></div>
+          <div id="evidenceResults" class="evidence-grid"></div>
+        </section>
+
+        <section id="practiceTab" class="tab-panel">
+          <div class="practice-layout">
+            <div>
+              <p class="eyebrow">概念检查</p>
+              <h3>不用模型也能自测：先答，再展开教授讲解</h3>
+              <div id="checkList" class="check-list"></div>
+            </div>
+            <aside class="lab-card">
+              <p class="eyebrow">实践任务</p>
+              <h3 id="projectTitle">本章项目</h3>
+              <p id="projectText">选择模块后显示。</p>
+              <ol id="labSteps"></ol>
+              <button id="projectAskBtn" type="button">让导师帮我拆解任务</button>
+            </aside>
+          </div>
+        </section>
+
+        <section id="notesTab" class="tab-panel">
+          <div class="notes-layout">
+            <div>
+              <p class="eyebrow">费曼笔记</p>
+              <h3>把本章用自己的话讲清楚</h3>
+              <textarea id="noteInput" rows="10" placeholder="写下你的理解、疑问、推导、代码实验记录。笔记会保存在本机浏览器。"></textarea>
+              <div class="note-actions">
+                <button id="saveNote" type="button">保存笔记</button>
+                <button id="askFromNote" class="secondary" type="button">用笔记追问导师</button>
+              </div>
+            </div>
+            <aside class="note-prompt">
+              <p class="eyebrow">写作脚手架</p>
+              <ul id="notePrompts"></ul>
+            </aside>
+          </div>
         </section>
       </section>
+
+      <aside class="mentor-dock" aria-label="问答导师">
+        <div class="dock-head">
+          <div>
+            <p class="eyebrow">RAG 导师</p>
+            <h2>读不懂就问</h2>
+          </div>
+          <button id="markDone" class="secondary" type="button">标记完成</button>
+        </div>
+        <div id="quickPrompts" class="quick-prompts"></div>
+        <textarea id="questionInput" rows="6" placeholder="把你没读懂的概念、证据片段或实验任务贴在这里。"></textarea>
+        <div class="mentor-actions">
+          <button id="askBtn" type="button">提交问题</button>
+          <button id="clearAnswer" class="secondary" type="button">清空</button>
+        </div>
+        <div id="answerBox" class="answer-box">导师回答会显示在这里；没有本地模型时，会先返回检索式讲解和来源。</div>
+      </aside>
     </main>
 
-    <script>
-      window.REFERENCE_LEARNING_API_BASE = "http://47.111.133.184:61135/api";
-    </script>
     <script src="./app.js"></script>
   </body>
 </html>

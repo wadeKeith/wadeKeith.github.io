@@ -1,112 +1,591 @@
+function defaultApiBase() {
+  const host = window.location.hostname;
+  if (["localhost", "127.0.0.1"].includes(host)) return "./api";
+  if (["yincheng429.cn", "www.yincheng429.cn"].includes(host)) return "http://47.111.133.184:61135/api";
+  return `${window.location.origin}/api`;
+}
+
+const API_BASE = (window.REFERENCE_LEARNING_API_BASE || defaultApiBase()).replace(/\/$/, "");
+
 const state = {
   modules: [],
   active: null,
+  activeTab: "teach",
+  lesson: null,
+  lessonRequest: 0,
   done: new Set(JSON.parse(localStorage.getItem("referenceLearningDone") || "[]")),
+  notes: JSON.parse(localStorage.getItem("referenceLearningNotes") || "{}"),
+};
+
+const LESSON_BLUEPRINTS = {
+  orientation: {
+    thesis: "先把资料库当成研究实验室，而不是文件夹仓库。",
+    frame:
+      "这一章解决学习系统问题：你需要知道哪些资料负责概念、哪些资料负责代码、哪些资料负责前沿论文，随后用检索和笔记把它们串成可复用的研究工作流。",
+    concepts: ["Reference 地图", "课程矩阵", "检索式学习", "证据引用", "本地 RAG", "学习闭环"],
+    route: [
+      ["先建地图", "读目录、覆盖矩阵和模块路径，明确 LLM、VLM、VLA、world model 等板块的边界。"],
+      ["再建索引感", "理解 SQLite/FTS 的角色：它不是替你学习，而是帮你快速回到证据。"],
+      ["最后建习惯", "每次学习都留下问题、来源和自己的解释，后续问答才有上下文。"],
+    ],
+    misconceptions: ["把数据库检索结果当最终答案。它只是证据入口。", "跳过目录直接刷材料，最后会迷失在 60k+ 文件里。"],
+    checks: [
+      ["为什么这套系统要本地优先？", "从隐私、速度、可复现资料来源三个角度回答。", "本地优先让资料、索引、问答都在自己的机器或私有服务里运行，适合长期学习和研究复现；即使没有模型，也能靠数据库证据继续阅读。"],
+      ["检索、精读、问答的顺序应该是什么？", "先证据，再解释。", "先检索定位资料，再精读片段和源文件，最后用导师解释卡住的概念；这样模型回答会被证据约束。"],
+    ],
+    labSteps: ["打开覆盖矩阵，标出三类最常用资料。", "为每个模块保存一个你最想追问的问题。", "完成一次检索、精读、笔记、追问的闭环。"],
+  },
+  math_pytorch_nlp: {
+    thesis: "大模型不是魔法，它首先是张量程序、优化问题和语言建模目标。",
+    frame:
+      "这一章把数学、PyTorch、NLP 基础压成一条可执行路径：你要能看懂 shape，能追踪梯度，能解释 token 如何变成 embedding，再进入 Transformer。",
+    concepts: ["Tensor shape", "Autograd", "Optimization", "Tokenization", "Embedding", "Language modeling"],
+    route: [
+      ["看张量", "所有模型结构都先落实为矩阵维度、广播和 batch 约定。"],
+      ["看训练", "理解 loss、反向传播、优化器和训练循环，才能定位模型为什么不收敛。"],
+      ["看文本", "把文本切成 token、映射成向量，再用语言建模目标学习分布。"],
+    ],
+    misconceptions: ["只背公式不跑代码。大模型工程里 shape 错误会比概念错误更早出现。", "把 tokenizer 当预处理细节。它直接影响压缩率、上下文预算和多语言表现。"],
+    checks: [
+      ["为什么 embedding 不是 one-hot 的简单替代？", "关注可学习参数和语义邻近性。", "Embedding 是可学习的稠密表示，既降低维度，也让相似 token 在训练中形成可用的几何关系。"],
+      ["训练循环最小闭环包括哪些部分？", "数据、前向、loss、反向、更新。", "取 batch，前向计算 logits，计算 loss，反向传播梯度，优化器更新参数，并监控指标。"],
+    ],
+    labSteps: ["实现一个小文本分类器。", "打印每一层张量形状。", "换 tokenizer 或 vocab 后观察输入长度变化。"],
+  },
+  transformer_gpt_llama: {
+    thesis: "Transformer 的核心不是一堆模块名，而是信息如何在序列内被选择、混合与归一化。",
+    frame:
+      "这一章从 scaled dot-product attention 到 GPT/LLaMA。目标是能手写 decoder-only 模型，并解释 RoPE、RMSNorm、SwiGLU、GQA 为什么会出现在现代架构里。",
+    concepts: ["Self-Attention", "Causal mask", "MHA/GQA", "RoPE", "RMSNorm", "SwiGLU", "Sampling"],
+    route: [
+      ["推注意力", "从 QK^T 的相似度、scale、mask、softmax 和 V 加权平均开始。"],
+      ["搭 GPT", "把 attention、MLP、残差、归一化堆成 decoder block，再接语言建模头。"],
+      ["读 LLaMA", "比较 RoPE、RMSNorm、SwiGLU、GQA 与 vanilla Transformer 的差异。"],
+    ],
+    misconceptions: ["只会说 attention is all you need，却说不清 mask 后 logits 发生什么。", "把 LLaMA 结构变化当技巧清单，而不是训练稳定性和推理效率选择。"],
+    checks: [
+      ["causal mask 保护了什么？", "从自回归训练的信息泄漏回答。", "它阻止当前位置看到未来 token，保证训练时的条件分布和推理时逐 token 生成一致。"],
+      ["RoPE 和绝对位置编码的差异是什么？", "关注相对位置信息如何进入注意力。", "RoPE 通过旋转 Q/K 表示把位置信息注入相似度计算，更自然地表达相对位置并支持一定长度外推。"],
+    ],
+    labSteps: ["手写一个单头 attention 并验证 mask。", "实现最小 GPT block。", "比较 top-k、top-p、temperature 的采样输出。"],
+  },
+  llm_training_scaling_data: {
+    thesis: "预训练质量由模型、数据、算力和训练配方共同决定，任何一个短板都会放大。",
+    frame:
+      "这一章进入现代 LLM 训练：scaling laws 告诉你预算如何分配，数据工程决定模型学到什么，MoE/MLA/YaRN 等结构选择影响效率和长上下文能力。",
+    concepts: ["Scaling laws", "Data mixture", "Deduplication", "MoE", "MLA", "YaRN", "Multi-token prediction"],
+    route: [
+      ["定预算", "用 scaling 思维理解参数量、token 数和 compute 的权衡。"],
+      ["管数据", "去重、过滤、配比和质量评估比单纯堆数据更关键。"],
+      ["看架构", "用 DeepSeek 风格材料理解 MoE、MLA、长上下文和训练效率的系统组合。"],
+    ],
+    misconceptions: ["把 scaling law 当固定公式。它是决策工具，不是替代实验的定律。", "只看模型结构忽略数据配比，实际训练会被数据质量支配。"],
+    checks: [
+      ["为什么高质量数据会改变小模型表现？", "从有效 token 和噪声梯度回答。", "高质量数据提高每个 token 的学习信号，减少无效或冲突梯度，因此同样 compute 下模型更容易学到可泛化模式。"],
+      ["MoE 的收益和代价是什么？", "稀疏激活 vs 路由和负载均衡。", "MoE 增大总参数但每个 token 只激活部分专家，提高容量效率；代价是路由、通信和负载均衡更复杂。"],
+    ],
+    labSteps: ["写一个 1B 级别预训练计划草案。", "列出数据过滤指标。", "设计三个 checkpoint eval。"],
+  },
+  sft_peft_lora: {
+    thesis: "后训练的目标不是让模型记更多知识，而是让它按任务和人类偏好使用已有能力。",
+    frame:
+      "这一章讨论 SFT、PEFT、LoRA、QLoRA 和 instruction tuning。你要能判断何时全参微调，何时只训练低秩适配器，何时量化会影响质量。",
+    concepts: ["SFT", "Loss masking", "LoRA", "QLoRA", "Adapter", "Instruction data", "Quantization"],
+    route: [
+      ["看数据格式", "区分 prompt、response、system、mask 和多轮对话模板。"],
+      ["看参数路径", "比较全参、LoRA、QLoRA、adapter、prompt tuning 的更新范围。"],
+      ["看评估", "用任务集和人工检查判断后训练是否真的改善了目标行为。"],
+    ],
+    misconceptions: ["把 LoRA 当免费午餐。它省显存，但 rank、target module 和数据质量仍然决定效果。", "只看训练 loss，不检查指令遵循和灾难性遗忘。"],
+    checks: [
+      ["SFT 中为什么要做 loss masking？", "哪些 token 该负责学习？", "通常只让模型在 assistant response 上承担 loss，避免把用户输入和模板也当成需要生成的目标。"],
+      ["QLoRA 的关键节省来自哪里？", "基础权重量化，适配器训练。", "冻结的基础模型用低比特量化存储和计算，只训练少量 LoRA 参数，从而显著降低显存。"],
+    ],
+    labSteps: ["整理 100 条 instruction 数据。", "选择 LoRA target modules。", "设计训练前后对比问题。"],
+  },
+  inference_systems: {
+    thesis: "推理系统的核心矛盾是内存带宽、批处理效率和用户延迟之间的博弈。",
+    frame:
+      "这一章把模型结构连接到真实服务：KV cache、prefill/decode、FlashAttention、vLLM、张量并行和 speculative decoding 都是为吞吐、延迟、显存服务。",
+    concepts: ["KV cache", "Prefill/decode", "Batching", "FlashAttention", "vLLM", "Tensor parallel", "Speculative decoding"],
+    route: [
+      ["拆阶段", "区分 prefill 的并行计算和 decode 的逐 token 生成瓶颈。"],
+      ["看内存", "理解 KV cache、显存占用和 attention IO 对吞吐的影响。"],
+      ["看调度", "用 vLLM、batching、并行和 speculative decoding 思考生产部署。"],
+    ],
+    misconceptions: ["把 FlashAttention 误解成 sparse attention。它是 exact attention 的 IO-aware 实现。", "只追求单请求 latency，忽略批量吞吐和显存碎片。"],
+    checks: [
+      ["KV cache 为什么能加速 decode？", "避免重复计算过去 token 的 K/V。", "生成新 token 时，过去 token 的 K/V 已缓存，只需计算新位置并与缓存交互，减少重复前向计算。"],
+      ["FlashAttention 主要优化什么？", "不是近似稀疏，而是内存读写。", "它通过分块和在线 softmax 避免物化完整注意力矩阵，减少 HBM 与 SRAM 间 IO，同时保持精确 attention。"],
+    ],
+    labSteps: ["估算 7B 模型 KV cache 显存。", "画出 prefill/decode 时序。", "写一页部署预算说明。"],
+  },
+  alignment_rlhf_eval: {
+    thesis: "对齐不是单个算法，而是偏好数据、优化目标、评测和安全边界的组合工程。",
+    frame:
+      "这一章从 reward model、PPO、DPO、GRPO 到 eval harness。重点是把能力评测、安全评测和回归测试分开，不让漂亮分数掩盖真实风险。",
+    concepts: ["Reward model", "PPO", "DPO", "GRPO", "Eval harness", "Safety eval", "Regression"],
+    route: [
+      ["建偏好", "理解 pairwise preference、reward model 和直接偏好优化的区别。"],
+      ["看优化", "比较 PPO 这类 RL 方法和 DPO 这类离线目标。"],
+      ["做评测", "把 benchmark、红队、安全检查和回归测试组合成套件。"],
+    ],
+    misconceptions: ["把 benchmark 分数当部署许可。真实应用还需要安全、鲁棒性和回归测试。", "认为 RLHF 一定优于 SFT；数据和目标错了会让模型更会迎合。"],
+    checks: [
+      ["DPO 为什么可以绕过显式 reward model？", "它直接用偏好对优化策略。", "DPO 把偏好数据转成直接优化的分类式目标，用参考模型约束策略，不需要先单独训练 reward model 再跑 PPO。"],
+      ["能力 eval 和安全 eval 为什么要分开？", "高能力不等于低风险。", "能力评测衡量任务表现，安全评测衡量拒答、越狱、偏见和有害输出；两者目标不同，混在一起会误判。"],
+    ],
+    labSteps: ["为学习助手列 10 个能力题。", "列 10 个安全/幻觉题。", "定义上线前必须通过的回归项。"],
+  },
+  rag_agents: {
+    thesis: "RAG 和 Agent 的价值在于把模型从闭卷生成变成有证据、有工具、有行动边界的系统。",
+    frame:
+      "这一章把本网站本身当案例：chunking、retrieval、reranking、citation、tool use、ReAct、code agent 都服务于可靠完成任务，而不是炫技。",
+    concepts: ["Chunking", "Retrieval", "Reranking", "Citation", "ReAct", "Tool use", "SWE-bench"],
+    route: [
+      ["看检索", "理解 chunk 粒度、关键词扩展、排序和噪声过滤。"],
+      ["看回答", "引用来源、承认不足、避免把模型常识伪装成资料证据。"],
+      ["看行动", "Agent 需要计划、工具、状态和失败恢复，不能只靠长提示词。"],
+    ],
+    misconceptions: ["把 RAG 当向量库接模型。真正难点在资料治理、召回质量和引用约束。", "Agent 越自主越好。高风险任务需要明确工具权限和可审计轨迹。"],
+    checks: [
+      ["为什么 RAG 仍然会幻觉？", "检索错、证据不足、生成越界。", "如果召回片段不相关、上下文缺关键证据，或模型没有被严格要求引用来源，RAG 仍会生成看似合理但无依据的答案。"],
+      ["ReAct 的核心思想是什么？", "推理和行动交替。", "模型在思考下一步时选择工具行动，再根据观察结果继续推理，适合需要多步检索或环境反馈的任务。"],
+    ],
+    labSteps: ["改写一个检索 query。", "用五个问题测试召回。", "记录一次模型回答引用是否充分。"],
+  },
+  vlm_multimodal: {
+    thesis: "多模态模型的关键是把视觉表示对齐到语言模型能使用的语义空间。",
+    frame:
+      "这一章从 ViT、CLIP、BLIP-2、LLaVA 到 VQA。重点不是会念模型名，而是知道图像 token 如何进入 LLM，上游视觉编码和下游指令微调如何衔接。",
+    concepts: ["ViT", "CLIP", "BLIP-2", "LLaVA", "VQA", "Image tokens", "Multimodal alignment"],
+    route: [
+      ["看视觉编码", "ViT 把图像分 patch，CLIP 用对比学习建立图文空间。"],
+      ["看桥接", "Q-Former、投影层或 adapter 把视觉特征接入 LLM。"],
+      ["看指令", "多模态 instruction tuning 让模型学会按语言任务使用视觉证据。"],
+    ],
+    misconceptions: ["以为把图片向量拼到文本前面就够了。对齐和数据任务设计才决定是否可用。", "忽略 OCR、空间关系和细粒度感知这类 VLM 常见短板。"],
+    checks: [
+      ["CLIP 为什么适合做多模态基础？", "图文对比空间。", "CLIP 用大量图文对学习共享表示，使图像和文本可以在同一语义空间中检索和匹配。"],
+      ["LLaVA 训练大致分几步？", "先对齐，再指令微调。", "常见路线是先训练视觉到语言空间的投影/连接层，再用多模态指令数据微调，让 LLM 学会视觉问答和描述。"],
+    ],
+    labSteps: ["画出 LLaVA 数据流。", "比较 CLIP 和 BLIP-2 的训练目标。", "设计 5 个 VQA 失败案例。"],
+  },
+  streaming_video_vlm: {
+    thesis: "在线视频理解的难点是时间、记忆和延迟，而不是把更多帧塞进上下文。",
+    frame:
+      "这一章研究 streaming VLM、online video benchmark、帧选择和层级记忆。你要能解释为什么长视频需要状态管理和事件抽象。",
+    concepts: ["Streaming VLM", "Online video", "Temporal reasoning", "Frame selection", "Memory", "StreamingBench", "OVO-Bench"],
+    route: [
+      ["看时间", "区分离线整段理解和在线逐步观察。"],
+      ["看记忆", "比较短期帧缓存、长期摘要和层级事件表示。"],
+      ["看评测", "设计问题时要测试时序、因果、状态变化和实时性。"],
+    ],
+    misconceptions: ["认为长上下文能直接解决视频理解。视觉冗余和事件稀疏会让上下文浪费严重。", "只看最终答案，不测在线过程中的更新和延迟。"],
+    checks: [
+      ["在线 VLM 为什么需要记忆机制？", "历史帧不能无限保留。", "系统必须压缩历史观察，保留任务相关事件，否则上下文和计算成本会随视频长度失控。"],
+      ["视频 benchmark 应该覆盖哪些能力？", "时间、状态、因果。", "应覆盖动作顺序、状态变化、长期依赖、事件定位、因果推理和实时响应。"],
+    ],
+    labSteps: ["设计 10 个在线公开视频问题。", "定义帧采样策略。", "写一个层级摘要记忆方案。"],
+  },
+  vla_robotics: {
+    thesis: "VLA 的核心转变是：语言模型输出的不再只是文本，而是可执行的动作或策略条件。",
+    frame:
+      "这一章连接 VLM 和机器人学习。OpenVLA、RT-1/RT-2、Octo、pi0、action tokenization 共同回答一个问题：如何把视觉语言理解落到机器人动作。",
+    concepts: ["OpenVLA", "RT-1/RT-2", "Octo", "pi0", "Action tokenization", "Policy fine-tuning", "LIBERO"],
+    route: [
+      ["看输入输出", "观察、语言指令、动作空间和控制频率决定模型接口。"],
+      ["看数据", "机器人数据的场景、硬件、动作标注和分布偏移非常关键。"],
+      ["看微调", "VLA fine-tuning 要关注任务成功率、泛化和安全约束。"],
+    ],
+    misconceptions: ["把 VLA 当带摄像头的聊天机器人。它必须控制真实或仿真环境。", "忽略动作空间定义，导致模型输出无法稳定执行。"],
+    checks: [
+      ["VLA 和 VLM 的输出差异是什么？", "文本 vs 行动。", "VLM 通常输出文本解释或答案，VLA 需要输出动作、动作 token 或策略条件，直接影响环境状态。"],
+      ["机器人数据为什么难？", "收集成本和分布偏移。", "真实机器人数据昂贵、硬件差异大、任务环境复杂，训练分布和部署场景之间很容易偏移。"],
+    ],
+    labSteps: ["选一个 manipulation 任务。", "定义观察、指令和动作空间。", "列出 fine-tuning 成功指标。"],
+  },
+  robot_sim_data: {
+    thesis: "可复现实验依赖仿真、数据和评测协议，而不只是一个策略模型。",
+    frame:
+      "这一章研究 ManiSkill、Isaac Lab、Habitat、RoboCasa、RLBench、robosuite、DROID、BridgeData。目标是知道如何选择工具、复现实验并解释数据偏差。",
+    concepts: ["ManiSkill", "Isaac Lab", "Habitat", "RoboCasa", "RLBench", "robosuite", "DROID", "BridgeData"],
+    route: [
+      ["选环境", "根据任务类型、物理精度、传感器和生态选择模拟器。"],
+      ["看数据", "理解 demonstration、teleoperation、真实采集和仿真数据的差异。"],
+      ["做复现", "记录版本、任务种子、评测指标和失败模式。"],
+    ],
+    misconceptions: ["认为仿真成功等于真实成功。sim-to-real gap 需要单独处理。", "只报告平均成功率，不保存失败轨迹和任务配置。"],
+    checks: [
+      ["选择机器人模拟器要看哪些维度？", "任务、物理、传感器、生态。", "要看支持的任务类型、物理引擎、传感器、资产、并行效率、已有 benchmark 和社区生态。"],
+      ["数据集为什么会限制策略泛化？", "分布覆盖。", "如果 demonstrations 只覆盖少数场景、物体或动作方式，策略容易记住分布而不是学习可泛化控制。"],
+    ],
+    labSteps: ["选一个模拟器并列安装步骤。", "定义任务初始状态分布。", "写失败案例记录模板。"],
+  },
+  world_models: {
+    thesis: "世界模型通过学习环境动力学，让智能体可以在潜空间里想象、评估和规划。",
+    frame:
+      "这一章从 World Models、Dreamer、MuZero、V-JEPA、JEPA-WM、Genie 到 model-based RL。关键是区分重构式预测、联合嵌入预测和规划使用方式。",
+    concepts: ["Latent dynamics", "DreamerV3", "MuZero", "V-JEPA", "JEPA-WM", "Genie", "Model-based RL"],
+    route: [
+      ["学表示", "把高维观察压到可预测、可控制的潜在状态。"],
+      ["学动力学", "预测未来状态、奖励或价值，用 imagination rollout 训练策略。"],
+      ["看规划", "MuZero 类方法把模型用于搜索，Dreamer 类方法用于潜空间策略学习。"],
+    ],
+    misconceptions: ["把世界模型等同视频生成。控制任务关心可规划状态，不只是逼真像素。", "忽略模型误差累积，长 rollout 会放大偏差。"],
+    checks: [
+      ["latent imagination 为什么能省样本？", "在模型里生成训练经验。", "学到动力学后，智能体可以在潜空间模拟未来，减少真实环境交互次数，用更多想象轨迹更新策略。"],
+      ["MuZero 和 Dreamer 的使用方式有什么不同？", "搜索 vs 潜空间策略学习。", "MuZero 学模型辅助 MCTS 搜索，Dreamer 学潜在动力学并在想象 rollout 中训练 actor-critic。"],
+    ],
+    labSteps: ["画出 Dreamer 数据流。", "列出模型误差来源。", "设计一个小控制任务的 world model eval。"],
+  },
+  driving_world_models: {
+    thesis: "自动驾驶世界模型必须同时服务场景生成、闭环评测、规划和安全边界。",
+    frame:
+      "这一章关注 GAIA-1、DriveDreamer、Vista、CarDreamer、Waymax、DriveLM、OpenEMMA。驾驶场景比一般视频生成更强调物理一致性、交通规则和闭环控制。",
+    concepts: ["GAIA-1", "DriveDreamer", "Vista", "CarDreamer", "Waymax", "DriveLM", "Closed-loop eval"],
+    route: [
+      ["看生成", "生成未来场景需要车辆、道路、交通参与者和相机几何一致。"],
+      ["看规划", "世界模型要能评估不同动作对未来风险的影响。"],
+      ["看评测", "闭环指标比离线像素质量更接近真实驾驶价值。"],
+    ],
+    misconceptions: ["把驾驶世界模型当普通 text-to-video。交通交互和安全约束才是重点。", "只看开环预测，不做闭环规划评估。"],
+    checks: [
+      ["驾驶世界模型和普通视频生成的差别是什么？", "控制和安全。", "驾驶模型需要保持道路结构、物体运动、交通规则和动作后果一致，最终服务规划和评测。"],
+      ["为什么闭环评测重要？", "动作会改变未来。", "开环预测只比较记录数据，闭环评测让策略动作影响后续状态，更能暴露累积错误和危险行为。"],
+    ],
+    labSteps: ["比较两个驾驶世界模型。", "列三个闭环指标。", "设计一个危险场景生成需求。"],
+  },
+  diffusion_video_3d: {
+    thesis: "扩散、flow matching、视频生成和 3D 表示共同构成现代生成式世界建模工具箱。",
+    frame:
+      "这一章把 DDPM、score SDE、latent diffusion、DiT、flow matching、NeRF、3D Gaussian Splatting 串起来。目标是理解生成模型如何服务视觉、视频和空间智能。",
+    concepts: ["DDPM", "Score SDE", "Latent diffusion", "DiT", "Flow matching", "NeRF", "3D Gaussian Splatting"],
+    route: [
+      ["看扩散", "从加噪/去噪、score 和采样过程理解生成。"],
+      ["看 flow", "比较 flow matching 与扩散在路径和训练目标上的差异。"],
+      ["看空间", "NeRF 和 3DGS 让场景表示从 2D 图像走向可渲染空间。"],
+    ],
+    misconceptions: ["只看生成图像质量，忽略采样速度、控制性和物理一致性。", "把 3DGS 当渲染技巧，不看它对空间理解和仿真的意义。"],
+    checks: [
+      ["latent diffusion 为什么高效？", "在压缩潜空间中扩散。", "它先用自编码器把图像压到潜空间，再在较低维空间建模扩散过程，降低计算和显存成本。"],
+      ["3D 表示对世界模型有什么价值？", "可视角变化和几何一致。", "空间表示支持新视角渲染、几何关系和场景重建，可为机器人、驾驶和视频模型提供更稳定的环境结构。"],
+    ],
+    labSteps: ["比较 DDPM 和 flow matching。", "画出 latent diffusion pipeline。", "解释 NeRF 与 3DGS 的取舍。"],
+  },
+  omni_audio_capstone: {
+    thesis: "最终目标不是收集更多模型名，而是能提出一个多模态研究问题并设计可执行评测。",
+    frame:
+      "这一章把 Qwen3-Omni、Ola、InternLM OmniLive、SLAM-LLM、SenseVoice、CosyVoice 等方向作为 capstone 起点。你需要整合模态、任务、数据、模型、评测和风险。",
+    concepts: ["Omni-modal", "Speech foundation model", "Audio LLM", "Qwen3-Omni", "SLAM-LLM", "CosyVoice", "Capstone eval"],
+    route: [
+      ["选问题", "问题要足够具体：场景、用户、模态和输出形式明确。"],
+      ["定系统", "说明输入模态、基础模型、微调数据、工具和部署约束。"],
+      ["做评测", "定义 baseline、主指标、失败模式、安全和消融实验。"],
+    ],
+    misconceptions: ["把 capstone 写成综述清单。研究计划必须有可验证假设。", "只追求多模态数量，不定义每个模态带来的增量。"],
+    checks: [
+      ["一个 capstone proposal 最少包括什么？", "问题、数据、模型、评测。", "应包括研究问题、数据来源、模型路线、baseline、评测指标、风险、计算预算和时间计划。"],
+      ["多模态系统如何证明某个模态有用？", "消融实验。", "通过去掉或替换该模态，比较任务表现、鲁棒性和失败模式，证明它带来独立增益。"],
+    ],
+    labSteps: ["写一页 capstone 题目。", "列数据和 baseline。", "设计主指标、消融和风险表。"],
+  },
 };
 
 const el = (id) => document.getElementById(id);
-const API_BASE = (
-  window.REFERENCE_LEARNING_API_BASE ||
-  (["localhost", "127.0.0.1"].includes(window.location.hostname) ? "./api" : "http://127.0.0.1:8765/api")
-).replace(/\/$/, "");
 
 function api(path, options = {}) {
   const headers = options.body ? { "Content-Type": "application/json", ...(options.headers || {}) } : options.headers || {};
-  return fetch(`${API_BASE}/${path}`, {
-    ...options,
-    headers,
-  }).then((res) => {
+  return fetch(`${API_BASE}/${path}`, { ...options, headers }).then((res) => {
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
     return res.json();
   });
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function formatNumber(value) {
+  if (typeof value !== "number") return "-";
+  return new Intl.NumberFormat("zh-CN", { notation: value > 9999 ? "compact" : "standard" }).format(value);
 }
 
 function saveDone() {
   localStorage.setItem("referenceLearningDone", JSON.stringify([...state.done]));
 }
 
-function renderModules() {
-  const list = el("moduleList");
-  list.innerHTML = "";
-  state.modules.forEach((mod) => {
-    const btn = document.createElement("button");
-    btn.className = "module-btn";
-    if (state.active && state.active.id === mod.id) btn.classList.add("active");
-    if (state.done.has(mod.id)) btn.classList.add("done");
-    btn.innerHTML = `
-      <span class="module-stage">${mod.stage}</span>
-      <span>
-        <span class="module-name">${mod.title}</span>
-      </span>
-      <span class="module-summary">${mod.summary}</span>
-    `;
-    btn.addEventListener("click", () => selectModule(mod.id));
-    list.appendChild(btn);
-  });
+function saveNotes() {
+  localStorage.setItem("referenceLearningNotes", JSON.stringify(state.notes));
 }
 
-function selectModule(id) {
-  state.active = state.modules.find((item) => item.id === id) || state.modules[0];
+function blueprintFor(module) {
+  const fallback = {
+    thesis: module.summary,
+    frame: `这一章围绕「${module.title}」建立可讲清、可检索、可实践的学习闭环。先抓住问题，再读数据库证据，最后用项目验证。`,
+    concepts: module.queries.slice(0, 7),
+    route: module.outcomes.map((item, idx) => [`第 ${idx + 1} 步`, item]),
+    misconceptions: ["不要只收藏资料，要把资料转成自己的解释。", "不要只问模型，要先定位数据库证据。"],
+    checks: [
+      [module.outcomes[0] || "本章最重要的能力是什么？", "回到本章目标和项目。", module.summary],
+      [module.project, "尝试把任务拆成输入、方法、评测。", "先定义目标，再列资料来源，最后给出可验证产物。"],
+    ],
+    labSteps: ["定位本章三条证据。", "写下一个机制解释。", "完成项目的最小版本。"],
+  };
+  return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
+}
+
+function renderProgress() {
+  const total = state.modules.length;
+  const done = state.modules.filter((item) => state.done.has(item.id)).length;
+  el("progressStatus").textContent = `进度：${done}/${total}`;
+  el("progressBar").style.width = total ? `${Math.round((done / total) * 100)}%` : "0%";
+  el("markDone").textContent = state.active && state.done.has(state.active.id) ? "取消完成" : "标记完成";
+}
+
+function renderModules() {
+  const list = el("moduleList");
+  list.innerHTML = state.modules
+    .map((mod) => {
+      const active = state.active && state.active.id === mod.id ? " active" : "";
+      const done = state.done.has(mod.id) ? " done" : "";
+      return `
+        <button class="module-btn${active}${done}" type="button" data-module="${escapeHtml(mod.id)}">
+          <span class="module-stage">${escapeHtml(mod.stage)}</span>
+          <span class="module-copy">
+            <strong>${escapeHtml(mod.title)}</strong>
+            <span>${escapeHtml(mod.summary)}</span>
+          </span>
+        </button>
+      `;
+    })
+    .join("");
+  renderProgress();
+}
+
+function renderHero() {
+  if (!state.active) return;
+  el("activeStage").textContent = `Stage ${state.active.stage}`;
   el("activeTitle").textContent = state.active.title;
   el("activeSummary").textContent = state.active.summary;
   el("projectText").textContent = state.active.project;
-  el("outcomeList").innerHTML = state.active.outcomes.map((item) => `<li>${item}</li>`).join("");
-  el("searchInput").value = state.active.queries.join(" ");
-  renderModules();
+  el("projectTitle").textContent = `${state.active.stage} 章项目`;
 }
 
-function renderResults(results) {
-  const box = el("searchResults");
-  if (!results.length) {
-    box.innerHTML = `<div class="result-item"><strong>没有结果</strong><p>换一个关键词，或先运行索引构建脚本。</p></div>`;
+function renderTeach() {
+  if (!state.active) return;
+  const bp = blueprintFor(state.active);
+  el("lectureThesis").textContent = bp.thesis;
+  el("lectureFrame").textContent = bp.frame;
+  el("conceptMap").innerHTML = bp.concepts
+    .map((concept, idx) => {
+      const tone = ["green", "blue", "amber", "red"][idx % 4];
+      return `<button class="concept-pill ${tone}" type="button" data-concept="${escapeHtml(concept)}">${escapeHtml(concept)}</button>`;
+    })
+    .join("");
+  el("lectureRoute").innerHTML = bp.route
+    .map(
+      ([title, body], idx) => `
+        <article class="route-card">
+          <span>${String(idx + 1).padStart(2, "0")}</span>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("misconceptionList").innerHTML = bp.misconceptions.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function renderPractice() {
+  if (!state.active) return;
+  const bp = blueprintFor(state.active);
+  el("checkList").innerHTML = bp.checks
+    .map(
+      ([question, hint, answer], idx) => `
+        <article class="check-card">
+          <div>
+            <span class="check-index">Check ${idx + 1}</span>
+            <h4>${escapeHtml(question)}</h4>
+            <p>${escapeHtml(hint)}</p>
+          </div>
+          <button class="secondary reveal-check" type="button" data-check="${idx}">展开讲解</button>
+          <div class="check-answer" id="checkAnswer${idx}">${escapeHtml(answer)}</div>
+        </article>
+      `
+    )
+    .join("");
+  el("labSteps").innerHTML = bp.labSteps.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function renderNotes() {
+  if (!state.active) return;
+  const bp = blueprintFor(state.active);
+  el("noteInput").value = state.notes[state.active.id] || "";
+  el("notePrompts").innerHTML = [
+    `本章一句话结论：${bp.thesis}`,
+    `我最不懂的概念：${bp.concepts.slice(0, 3).join(" / ")}`,
+    `我能否不用术语解释：${state.active.project}`,
+    "我找到的来源路径和证据片段：",
+  ]
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+}
+
+function sourcePathLabel(path) {
+  return path.replace(/^\/Users\/yin\/Documents_local\/Github\/LLM-learn\/Reference\//, "");
+}
+
+function renderEvidence(results, message = "") {
+  const box = el("evidenceResults");
+  if (message) {
+    box.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
+    return;
+  }
+  if (!results || !results.length) {
+    box.innerHTML = `<div class="empty-state">没有检索到足够相关的片段。换一个更具体的术语试试。</div>`;
     return;
   }
   box.innerHTML = results
     .map(
       (item, idx) => `
-      <div class="result-item">
-        <strong>${idx + 1}. ${item.title}</strong>
-        <code>${item.path}</code>
-        <p>${item.excerpt}</p>
-      </div>
-    `
+        <article class="evidence-card">
+          <div class="source-meta">
+            <span>Source ${idx + 1}</span>
+            <button class="text-button ask-source" type="button" data-source="${idx}">问这段</button>
+          </div>
+          <h4>${escapeHtml(item.title || "未命名资料")}</h4>
+          <code>${escapeHtml(sourcePathLabel(item.path || ""))}</code>
+          <p>${escapeHtml(item.excerpt || "")}</p>
+        </article>
+      `
     )
     .join("");
 }
 
-async function runSearch() {
-  const q = el("searchInput").value.trim();
+function renderRead() {
+  if (!state.active) return;
+  el("searchInput").value = state.active.queries.slice(0, 3).join(" ");
+  el("queryChips").innerHTML = state.active.queries
+    .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
+    .join("");
+  if (!state.lesson) {
+    renderEvidence([], "正在从本地数据库抽取本章必读证据...");
+    return;
+  }
+  renderEvidence(state.lesson.evidence || []);
+}
+
+function renderQuickPrompts() {
+  if (!state.active) return;
+  const bp = blueprintFor(state.active);
+  const prompts = [
+    `请用教授口吻讲清楚本章核心：${bp.thesis}`,
+    `我不懂 ${bp.concepts[0]}，请结合本地资料解释机制和例子。`,
+    `请把本章实践任务拆成 5 个可执行步骤：${state.active.project}`,
+  ];
+  el("quickPrompts").innerHTML = prompts
+    .map((prompt) => `<button type="button" data-prompt="${escapeHtml(prompt)}">${escapeHtml(prompt)}</button>`)
+    .join("");
+}
+
+function renderAll() {
+  renderHero();
+  renderModules();
+  renderTeach();
+  renderPractice();
+  renderNotes();
+  renderRead();
+  renderQuickPrompts();
+}
+
+async function loadLesson(moduleId) {
+  const requestId = ++state.lessonRequest;
+  state.lesson = null;
+  renderRead();
+  try {
+    const lesson = await api(`lesson?module=${encodeURIComponent(moduleId)}`);
+    if (requestId !== state.lessonRequest) return;
+    state.lesson = lesson;
+    renderRead();
+  } catch (err) {
+    if (requestId !== state.lessonRequest) return;
+    renderEvidence([], `课程证据加载失败：${err.message}`);
+  }
+}
+
+function selectModule(id) {
+  const next = state.modules.find((item) => item.id === id) || state.modules[0];
+  if (!next) return;
+  state.active = next;
+  renderAll();
+  loadLesson(next.id);
+}
+
+function setQuestion(text, submit = false) {
+  el("questionInput").value = text;
+  el("questionInput").focus();
+  if (submit) ask();
+}
+
+async function runSearch(queryOverride = "") {
+  const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
-  el("searchResults").innerHTML = `<div class="result-item"><strong>检索中</strong><p>正在查询本地 SQLite FTS 数据库。</p></div>`;
+  el("searchInput").value = q;
+  renderEvidence([], "正在查询本地 SQLite FTS 数据库...");
   const module = state.active ? `&module=${encodeURIComponent(state.active.id)}` : "";
-  const data = await api(`search?q=${encodeURIComponent(q)}&limit=8${module}`);
-  renderResults(data.results || []);
+  try {
+    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10${module}`);
+    renderEvidence(data.results || []);
+  } catch (err) {
+    renderEvidence([], `检索失败：${err.message}`);
+  }
 }
 
 async function ask() {
   const question = el("questionInput").value.trim();
   if (!question) return;
-  el("answerBox").textContent = "正在检索本地数据库并调用本地模型...";
+  el("answerBox").textContent = "正在检索本地数据库，并尝试调用可用模型...";
   const body = {
     question,
     module_id: state.active ? state.active.id : null,
     top_k: 8,
   };
-  const data = await api("ask", { method: "POST", body: JSON.stringify(body) });
-  const sources = (data.sources || [])
-    .map((item, idx) => `[${idx + 1}] ${item.path}`)
-    .join("\n");
-  el("answerBox").textContent = `${data.answer}\n\n来源：\n${sources || "无"}`;
+  try {
+    const data = await api("ask", { method: "POST", body: JSON.stringify(body) });
+    const sources = (data.sources || []).map((item, idx) => `[${idx + 1}] ${sourcePathLabel(item.path)}`).join("\n");
+    el("answerBox").textContent = `${data.answer}\n\n来源：\n${sources || "无"}`;
+  } catch (err) {
+    el("answerBox").textContent = `问答失败：${err.message}`;
+  }
+}
+
+function askAboutSource(idx) {
+  const source = state.lesson?.evidence?.[idx];
+  if (!source) return;
+  const prompt = `我读不懂这段资料，请像教授一样解释关键概念、背景和学习顺序：\n\n标题：${source.title}\n路径：${sourcePathLabel(source.path)}\n片段：${source.excerpt}`;
+  setQuestion(prompt, true);
+}
+
+function showTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
+  document.querySelectorAll(".tab-panel").forEach((panel) => panel.classList.toggle("active", panel.id === `${tab}Tab`));
 }
 
 async function load() {
   try {
     const [course, stats, model] = await Promise.all([api("course"), api("stats"), api("model/status")]);
     state.modules = course.modules || [];
-    el("statDocs").textContent = stats.documents ?? "-";
-    el("statChunks").textContent = stats.chunks ?? "-";
-    el("statModules").textContent = stats.modules ?? state.modules.length;
-    el("dbStatus").textContent = stats.ready ? `知识库：${stats.documents} 文档` : "知识库：未构建";
+    el("statDocs").textContent = formatNumber(stats.documents);
+    el("statChunks").textContent = formatNumber(stats.chunks);
+    el("statModules").textContent = formatNumber(stats.modules ?? state.modules.length);
+    el("dbStatus").textContent = stats.ready ? `知识库：${formatNumber(stats.documents)} 文档` : "知识库：未构建";
     if (!model.available) {
       el("modelStatus").textContent = `模型：${model.provider || "服务"} 离线`;
     } else if (!model.models.length) {
@@ -125,12 +604,80 @@ async function load() {
   }
 }
 
-el("searchBtn").addEventListener("click", runSearch);
+el("moduleList").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-module]");
+  if (btn) selectModule(btn.dataset.module);
+});
+
+document.querySelectorAll(".tab-btn").forEach((btn) => {
+  btn.addEventListener("click", () => showTab(btn.dataset.tab));
+});
+
+el("conceptMap").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-concept]");
+  if (!btn) return;
+  showTab("read");
+  runSearch(btn.dataset.concept);
+});
+
+el("queryChips").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-query]");
+  if (btn) runSearch(btn.dataset.query);
+});
+
+el("evidenceResults").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-source]");
+  if (btn) askAboutSource(Number(btn.dataset.source));
+});
+
+el("checkList").addEventListener("click", (event) => {
+  const btn = event.target.closest(".reveal-check");
+  if (!btn) return;
+  const answer = el(`checkAnswer${btn.dataset.check}`);
+  answer.classList.toggle("visible");
+  btn.textContent = answer.classList.contains("visible") ? "收起讲解" : "展开讲解";
+});
+
+el("quickPrompts").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-prompt]");
+  if (btn) setQuestion(btn.dataset.prompt);
+});
+
+el("searchBtn").addEventListener("click", () => runSearch());
 el("askBtn").addEventListener("click", ask);
+el("clearAnswer").addEventListener("click", () => {
+  el("questionInput").value = "";
+  el("answerBox").textContent = "导师回答会显示在这里；没有本地模型时，会先返回检索式讲解和来源。";
+});
+el("projectAskBtn").addEventListener("click", () => {
+  if (!state.active) return;
+  setQuestion(`请把这个实践任务拆成可执行计划，并指出我应该先读哪些本地资料：${state.active.project}`, true);
+});
+el("saveNote").addEventListener("click", () => {
+  if (!state.active) return;
+  state.notes[state.active.id] = el("noteInput").value;
+  saveNotes();
+  el("saveNote").textContent = "已保存";
+  setTimeout(() => {
+    el("saveNote").textContent = "保存笔记";
+  }, 1200);
+});
+el("askFromNote").addEventListener("click", () => {
+  if (!state.active) return;
+  const note = el("noteInput").value.trim();
+  if (!note) return;
+  setQuestion(`这是我学习「${state.active.title}」的笔记。请指出理解漏洞，并给我下一步阅读建议：\n\n${note}`, true);
+});
 el("markDone").addEventListener("click", () => {
   if (!state.active) return;
   if (state.done.has(state.active.id)) state.done.delete(state.active.id);
   else state.done.add(state.active.id);
+  saveDone();
+  renderModules();
+});
+el("resetProgress").addEventListener("click", () => {
+  if (!confirm("确认清空所有模块完成状态？")) return;
+  state.done.clear();
   saveDone();
   renderModules();
 });
