@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616w" />
+    <link rel="stylesheet" href="./styles.css?v=20260616x" />
   </head>
   <body>
     <header class="topbar">
@@ -244,6 +244,22 @@
               <div id="masteryChecklist" class="mastery-checklist"></div>
             </aside>
           </section>
+          <section class="exam-panel">
+            <div class="section-title">
+              <p class="eyebrow">口试与评分</p>
+              <h3>按顶级课程的作业/口试方式检查：会讲、会做、会评测</h3>
+            </div>
+            <div class="exam-layout">
+              <div>
+                <h4>本章口试题</h4>
+                <div id="oralExamCards" class="oral-exam-grid"></div>
+              </div>
+              <aside>
+                <h4>评分 Rubric</h4>
+                <div id="gradingRubric" class="grading-rubric"></div>
+              </aside>
+            </div>
+          </section>
           <section class="research-workbench">
             <div class="section-title">
               <p class="eyebrow">研究工作台</p>
@@ -304,6 +320,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616w"></script>
+    <script src="./app.js?v=20260616x"></script>
   </body>
 </html>

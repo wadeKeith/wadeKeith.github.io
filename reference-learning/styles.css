@@ -1398,6 +1398,89 @@ p {
   line-height: 1.55;
 }
 
+.exam-panel {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.exam-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.exam-layout h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.oral-exam-grid,
+.grading-rubric {
+  display: grid;
+  gap: 10px;
+}
+
+.oral-card,
+.rubric-row {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.oral-card {
+  display: grid;
+  gap: 9px;
+  padding: 14px;
+}
+
+.oral-card > span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.oral-card h4 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.oral-card p,
+.rubric-row p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.oral-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rubric-row {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+}
+
+.rubric-row strong {
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  border-radius: 7px;
+  background: #eef5fb;
+  color: var(--blue);
+  font-weight: 900;
+}
+
 .research-workbench {
   display: grid;
   gap: 14px;
@@ -1573,6 +1656,7 @@ p {
   .ladder-step,
   .workbench-grid,
   .mastery-panel,
+  .exam-layout,
   .evidence-workflow,
   .teaching-layout,
   .practice-layout,

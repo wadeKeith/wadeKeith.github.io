@@ -794,7 +794,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616w")
+    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616x")
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -1008,6 +1008,40 @@ function workbenchFor(module, bp) {
       ask: `请为「${module.title}」设计一个小型评测表：能力题、失败模式、通过标准和复盘方式。`,
     },
   ];
+}
+
+function examFor(module, bp) {
+  const concepts = bp.concepts || module.queries || [];
+  const keyConcept = concepts[0] || module.title;
+  const secondConcept = concepts[1] || module.title;
+  return {
+    oral: [
+      {
+        label: "机制口试",
+        question: `不用背定义，解释 ${keyConcept} 的输入、变换、约束、瓶颈和一个失败案例。`,
+        answer: `合格回答必须把 ${keyConcept} 放回「${module.title}」的系统链路，并能说明它如何影响 ${module.project}。`,
+        query: keyConcept,
+      },
+      {
+        label: "实验口试",
+        question: `如果只能做一个最小实验，你会怎样验证本章判断：${bp.thesis}`,
+        answer: "合格回答要包含 baseline、变量、指标、失败样例和下一步消融，而不是只描述想法。",
+        query: `${module.queries[0] || module.title} benchmark evaluation`,
+      },
+      {
+        label: "迁移口试",
+        question: `把 ${secondConcept} 迁移到一个新场景时，哪些假设最可能失效？`,
+        answer: "合格回答要指出数据分布、算力/延迟、评测协议和安全边界中至少两类风险。",
+        query: secondConcept,
+      },
+    ],
+    rubric: [
+      ["A", "能独立推导机制，能用本地证据支撑 claim，并完成可复查的小作品。"],
+      ["B", "能讲清主要概念和实验方案，但证据链或失败分析还不够完整。"],
+      ["C", "能复述术语，但无法说明输入/变换/瓶颈，也没有可靠评测。"],
+      ["Redo", "只依赖导师问答，没有保存来源、没有实验产物、没有反例或失败记录。"],
+    ],
+  };
 }
 
 function renderProgress() {
@@ -1254,6 +1288,7 @@ function renderPractice() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
   const mastery = masteryFor(state.active, bp);
+  const exam = examFor(state.active, bp);
   const checked = new Set(state.mastery[state.active.id] || []);
   el("protocolList").innerHTML = mastery.protocol.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
   el("masteryChecklist").innerHTML = mastery.rubric
@@ -1272,6 +1307,31 @@ function renderPractice() {
   const score = checked.size;
   el("masteryScore").textContent = `${score}/${mastery.rubric.length} 达标`;
   el("masteryMeterBar").style.width = `${Math.round((score / mastery.rubric.length) * 100)}%`;
+  el("oralExamCards").innerHTML = exam.oral
+    .map(
+      (item, idx) => `
+        <article class="oral-card">
+          <span>${escapeHtml(item.label)}</span>
+          <h4>${escapeHtml(item.question)}</h4>
+          <p>${escapeHtml(item.answer)}</p>
+          <div class="oral-actions">
+            <button class="secondary" type="button" data-oral-search="${escapeHtml(item.query)}">检索证据</button>
+            <button type="button" data-oral-ask="${escapeHtml(`请按严格口试官标准追问我：${item.question}\n\n章节：${state.active.title}\n本章项目：${state.active.project}`)}">导师追问</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("gradingRubric").innerHTML = exam.rubric
+    .map(
+      ([grade, body]) => `
+        <article class="rubric-row">
+          <strong>${escapeHtml(grade)}</strong>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
   el("workbenchCards").innerHTML = workbenchFor(state.active, bp)
     .map(
       (card) => `
@@ -1940,6 +2000,17 @@ el("workbenchCards").addEventListener("click", (event) => {
   }
   const askBtn = event.target.closest("[data-workbench-ask]");
   if (askBtn) setQuestion(askBtn.dataset.workbenchAsk, true);
+});
+
+el("oralExamCards").addEventListener("click", (event) => {
+  const searchBtn = event.target.closest("[data-oral-search]");
+  if (searchBtn) {
+    showTab("read");
+    runSearch(searchBtn.dataset.oralSearch);
+    return;
+  }
+  const askBtn = event.target.closest("[data-oral-ask]");
+  if (askBtn) setQuestion(askBtn.dataset.oralAsk, true);
 });
 
 el("masteryChecklist").addEventListener("change", (event) => {
