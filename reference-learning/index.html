@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ae" />
+    <link rel="stylesheet" href="./styles.css?v=20260616af" />
   </head>
   <body>
     <header class="topbar">
@@ -63,6 +63,24 @@
         </nav>
 
         <section id="teachTab" class="tab-panel active">
+          <section class="lesson-dashboard">
+            <div class="section-title">
+              <p class="eyebrow">课堂总览板</p>
+              <h3>先把本章读成一节完整课程，再把问题交给在线导师</h3>
+            </div>
+            <div id="lessonCompass" class="lesson-compass"></div>
+            <div class="lesson-flow-wrap">
+              <div>
+                <p class="eyebrow">讲授轨道</p>
+                <div id="lessonFlow" class="lesson-flow"></div>
+              </div>
+              <aside>
+                <p class="eyebrow">本章必须带走</p>
+                <div id="lessonTakeaways" class="lesson-takeaways"></div>
+              </aside>
+            </div>
+            <div id="lessonSourceSpine" class="source-spine"></div>
+          </section>
           <section class="course-reader">
             <article class="reader-main">
               <div class="section-title">
@@ -427,6 +445,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ae"></script>
+    <script src="./app.js?v=20260616af"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+const APP_VERSION = "20260616af";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -34,6 +35,7 @@ const state = {
   staticEvidencePromise: null,
   staticSearchIndex: null,
   staticSearchIndexPromise: null,
+  staticIndexReadyAt: 0,
   apiWarmupStarted: false,
   searchRequest: 0,
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
@@ -795,9 +797,17 @@ function startApiWarmup() {
   const warm = () => {
     if (!document.hidden) api("ping").catch(() => {});
   };
+  const warmStatic = () => {
+    Promise.all([loadStaticEvidence(), loadStaticSearchIndex()]).catch(() => {});
+  };
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(warmStatic, { timeout: 1200 });
+  } else {
+    setTimeout(warmStatic, 150);
+  }
   setTimeout(warm, 600);
   setTimeout(() => {
-    if (!document.hidden) loadStaticSearchIndex().catch(() => {});
+    if (!document.hidden) warmStatic();
   }, 900);
   setInterval(warm, 25000);
 }
@@ -805,7 +815,7 @@ function startApiWarmup() {
 async function loadStaticEvidence() {
   if (state.staticEvidence) return state.staticEvidence;
   if (!state.staticEvidencePromise) {
-    state.staticEvidencePromise = fetch("./course_evidence.json?v=20260616ae")
+    state.staticEvidencePromise = fetch(`./course_evidence.json?v=${APP_VERSION}`)
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
@@ -822,14 +832,18 @@ async function loadStaticEvidence() {
 async function loadStaticSearchIndex() {
   if (state.staticSearchIndex) return state.staticSearchIndex;
   if (!state.staticSearchIndexPromise) {
-    state.staticSearchIndexPromise = fetch("./search_index.json?v=20260616ae")
+    state.staticSearchIndexPromise = fetch(`./search_index.json?v=${APP_VERSION}`)
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
         return res.json();
       })
       .then((data) => {
-        state.staticSearchIndex = data;
-        return data;
+        state.staticSearchIndex = prepareStaticSearchIndex(data);
+        state.staticIndexReadyAt = performance.now();
+        if (el("retrievalStatus") && /连接中|离线|检查中/.test(el("retrievalStatus").textContent)) {
+          el("retrievalStatus").textContent = `检索：本地索引 ${state.staticSearchIndex.items.length}`;
+        }
+        return state.staticSearchIndex;
       })
       .catch(() => {
         state.staticSearchIndex = { items: [] };
@@ -837,6 +851,20 @@ async function loadStaticSearchIndex() {
       });
   }
   return state.staticSearchIndexPromise;
+}
+
+function prepareStaticSearchIndex(data) {
+  const items = data && Array.isArray(data.items) ? data.items : [];
+  items.forEach((item) => {
+    const modules = Array.isArray(item.modules) ? item.modules : [];
+    item._moduleSet = new Set(modules);
+    item._titleLower = String(item.title || "").toLowerCase();
+    item._pathLower = String(item.path || "").toLowerCase();
+    item._categoryLower = String(item.category || "").toLowerCase();
+    item._excerptLower = String(item.excerpt || "").toLowerCase();
+    item._searchText = `${item._titleLower} ${item._pathLower} ${item._categoryLower} ${item._excerptLower}`;
+  });
+  return { ...(data || {}), items };
 }
 
 async function staticLessonFor(moduleId) {
@@ -1213,6 +1241,65 @@ function sessionFor(module, bp, pack, seminar) {
   };
 }
 
+function lessonDashboardFor(module, bp, pack, manuscript, seminar, worked, brief) {
+  const anchors = COURSE_ANCHORS[module.id] || COURSE_ANCHORS.orientation;
+  const concepts = bp.concepts || module.queries || [];
+  const main = concepts[0] || module.title;
+  const second = concepts[1] || main;
+  const sourceQuery = module.queries.slice(0, 4).join(" ") || module.title;
+  return {
+    compass: [
+      {
+        label: "核心问题",
+        title: seminar.question,
+        body: `这一章先回答一个研究生课级别的问题，而不是背术语：${bp.thesis}`,
+        query: main,
+        ask: `请用一节课的开场方式解释这个核心问题：${seminar.question}`,
+      },
+      {
+        label: "机制入口",
+        title: manuscript.blackboard.title,
+        body: `${manuscript.blackboard.formula}。先能画出这条链路，再去读论文细节。`,
+        query: concepts.slice(0, 3).join(" ") || module.title,
+        ask: `请按黑板推导方式讲清楚：${manuscript.blackboard.formula}`,
+      },
+      {
+        label: "实验验证",
+        title: worked.problem,
+        body: "每章都要落到 baseline、变量、指标和失败样例；没有实验或口试，就只是看过资料。",
+        query: worked.searchQuery,
+        ask: worked.askPrompt,
+      },
+      {
+        label: "提交标准",
+        title: brief.claim,
+        body: `最终作品必须能被复查：${module.project}`,
+        query: brief.searchQuery,
+        ask: brief.askPrompt,
+      },
+    ],
+    flow: [
+      ["01", "抓问题", `先写出本章要证明或解释的判断：${bp.thesis}`],
+      ["02", "画机制", `把 ${main} 和 ${second} 放进输入、变换、约束、瓶颈、失败模式五栏。`],
+      ["03", "读证据", `优先沿「${sourceQuery}」检索本地资料，并保存支持机制与实验的来源。`],
+      ["04", "做作品", `完成：${module.project}`],
+      ["05", "过口试", "能讲清反例、baseline、指标和下一步消融，才算真正掌握。"],
+    ],
+    takeaways: [
+      ["一句话定理", bp.thesis],
+      ["黑板式", manuscript.blackboard.formula],
+      ["最小实验", worked.experiment[1] ? worked.experiment[1][1] : worked.problem],
+      ["常见误区", bp.misconceptions[0] || "只会复述术语，无法说明输入、输出、约束和失败条件。"],
+    ],
+    sourceSpine: [
+      ["课程参照", anchors[0] || "国际一线课程视角", sourceQuery],
+      ["讲义证据", pack.readings[0] || seminar.evidenceQuery, seminar.evidenceQuery],
+      ["机制证据", pack.mechanisms[0] || bp.frame, concepts.slice(0, 3).join(" ")],
+      ["评测证据", "查 baseline、benchmark、ablation 和 failure mode，再决定结论是否站得住。", `${sourceQuery} benchmark ablation failure mode`],
+    ],
+  };
+}
+
 function trackFor(moduleId) {
   return COURSE_TRACKS.find((track) => track.modules.includes(moduleId)) || COURSE_TRACKS[0];
 }
@@ -1474,6 +1561,7 @@ function renderTeach() {
   const brief = researchBriefFor(state.active, bp, pack, worked);
   const seminar = seminarFor(state.active, bp, pack);
   const session = sessionFor(state.active, bp, pack, seminar);
+  const dashboard = lessonDashboardFor(state.active, bp, pack, manuscript, seminar, worked, brief);
   const lens = TEACHING_LENSES.find((item) => item.id === state.activeLens) || TEACHING_LENSES[0];
   const track = trackFor(state.active.id);
   const activeIndex = state.modules.findIndex((item) => item.id === state.active.id);
@@ -1481,6 +1569,55 @@ function renderTeach() {
   const next = activeIndex >= 0 && activeIndex < state.modules.length - 1 ? state.modules[activeIndex + 1] : null;
   renderGlobalCourseMap();
   renderCourseAtlas();
+  el("lessonCompass").innerHTML = dashboard.compass
+    .map(
+      (item) => `
+        <article class="compass-card">
+          <span>${escapeHtml(item.label)}</span>
+          <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.body)}</p>
+          <div class="compass-actions">
+            <button class="text-button" type="button" data-briefing-search="${escapeHtml(item.query)}">证据</button>
+            <button class="text-button" type="button" data-briefing-ask="${escapeHtml(item.ask)}">请导师追问</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("lessonFlow").innerHTML = dashboard.flow
+    .map(
+      ([step, title, body]) => `
+        <article class="flow-step">
+          <span>${escapeHtml(step)}</span>
+          <div>
+            <strong>${escapeHtml(title)}</strong>
+            <p>${escapeHtml(body)}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+  el("lessonTakeaways").innerHTML = dashboard.takeaways
+    .map(
+      ([label, body]) => `
+        <article>
+          <strong>${escapeHtml(label)}</strong>
+          <p>${escapeHtml(body)}</p>
+        </article>
+      `
+    )
+    .join("");
+  el("lessonSourceSpine").innerHTML = dashboard.sourceSpine
+    .map(
+      ([label, body, query]) => `
+        <article>
+          <span>${escapeHtml(label)}</span>
+          <p>${escapeHtml(body)}</p>
+          <button class="text-button" type="button" data-briefing-search="${escapeHtml(query)}">检索这条线</button>
+        </article>
+      `
+    )
+    .join("");
   el("readerTitle").textContent = manuscript.title;
   el("readerParagraphs").innerHTML = manuscript.paragraphs
     .map((item, idx) => `<p><span>${String(idx + 1).padStart(2, "0")}</span>${escapeHtml(item)}</p>`)
@@ -2062,12 +2199,13 @@ function staticIndexResults(query, activeModuleId = "") {
     const path = item.path || "";
     const category = item.category || "";
     const excerpt = item.excerpt || "";
-    const modules = Array.isArray(item.modules) ? item.modules : [];
-    const titleLower = title.toLowerCase();
-    const pathLower = path.toLowerCase();
-    const categoryLower = category.toLowerCase();
-    const excerptLower = excerpt.toLowerCase();
-    let score = modules.includes(activeModuleId) ? 3.5 : 0;
+    const moduleSet = item._moduleSet || new Set(Array.isArray(item.modules) ? item.modules : []);
+    const titleLower = item._titleLower || title.toLowerCase();
+    const pathLower = item._pathLower || path.toLowerCase();
+    const categoryLower = item._categoryLower || category.toLowerCase();
+    const excerptLower = item._excerptLower || excerpt.toLowerCase();
+    const searchText = item._searchText || `${titleLower} ${pathLower} ${categoryLower} ${excerptLower}`;
+    let score = moduleSet.has(activeModuleId) ? 3.5 : 0;
 
     terms.forEach((term) => {
       if (titleLower.includes(term)) score += 7;
@@ -2075,12 +2213,12 @@ function staticIndexResults(query, activeModuleId = "") {
       if (categoryLower.includes(term)) score += 3;
       if (excerptLower.includes(term)) score += 1.6;
     });
-    if (wholeQuery && `${titleLower} ${pathLower} ${excerptLower}`.includes(wholeQuery)) score += 7;
+    if (wholeQuery && searchText.includes(wholeQuery)) score += 7;
     if (score <= 0) return;
     scored.push({
       ...item,
       score,
-      source_label: modules.includes(activeModuleId) ? "本章静态索引" : "浏览器静态索引",
+      source_label: moduleSet.has(activeModuleId) ? "本章静态索引" : "浏览器静态索引",
       category: category || "浏览器静态检索包",
       excerpt: excerpt.slice(0, 700),
       _rank: idx,
@@ -2473,7 +2611,7 @@ el("teachTab").addEventListener("click", (event) => {
     }
     return;
   }
-  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-session-search], [data-concept]");
+  const searchBtn = event.target.closest("[data-reader-search], [data-worked-search], [data-brief-search], [data-simulator-search], [data-lens-search], [data-ladder-search], [data-seminar-search], [data-course-map-search], [data-atlas-search], [data-briefing-search], [data-session-search], [data-concept]");
   if (searchBtn) {
     const query =
       searchBtn.dataset.readerSearch ||
@@ -2485,13 +2623,14 @@ el("teachTab").addEventListener("click", (event) => {
       searchBtn.dataset.seminarSearch ||
       searchBtn.dataset.courseMapSearch ||
       searchBtn.dataset.atlasSearch ||
+      searchBtn.dataset.briefingSearch ||
       searchBtn.dataset.sessionSearch ||
       searchBtn.dataset.concept;
     showTab("read");
     runSearch(query);
     return;
   }
-  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-session-ask]");
+  const askBtn = event.target.closest("[data-reader-ask], [data-worked-ask], [data-brief-ask], [data-simulator-ask], [data-lens-ask], [data-ladder-ask], [data-seminar-ask], [data-briefing-ask], [data-session-ask]");
   if (askBtn) {
     const prompt =
       askBtn.dataset.readerAsk ||
@@ -2501,6 +2640,7 @@ el("teachTab").addEventListener("click", (event) => {
       askBtn.dataset.lensAsk ||
       askBtn.dataset.ladderAsk ||
       askBtn.dataset.seminarAsk ||
+      askBtn.dataset.briefingAsk ||
       askBtn.dataset.sessionAsk;
     setQuestion(prompt, true);
   }

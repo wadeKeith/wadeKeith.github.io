@@ -392,6 +392,132 @@ p {
   gap: 16px;
 }
 
+.lesson-dashboard {
+  display: grid;
+  gap: 14px;
+  scroll-margin-top: 118px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fffdf8, #f7fbfa);
+  box-shadow: var(--shadow);
+}
+
+.lesson-compass {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.compass-card {
+  display: grid;
+  gap: 9px;
+  min-height: 232px;
+  padding: 15px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.compass-card > span,
+.source-spine span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.compass-card h4 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.28;
+}
+
+.compass-card p {
+  margin: 0;
+  color: #43504d;
+  line-height: 1.65;
+}
+
+.compass-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  margin-top: auto;
+}
+
+.lesson-flow-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  gap: 12px;
+}
+
+.lesson-flow,
+.lesson-takeaways,
+.source-spine {
+  display: grid;
+  gap: 10px;
+}
+
+.flow-step,
+.lesson-takeaways article,
+.source-spine article {
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+}
+
+.flow-step > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  background: var(--surface-cool);
+  color: var(--blue);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.flow-step strong,
+.lesson-takeaways strong {
+  color: var(--green);
+}
+
+.flow-step p,
+.lesson-takeaways p,
+.source-spine p {
+  margin: 5px 0 0;
+  color: #43504d;
+  line-height: 1.6;
+}
+
+.lesson-takeaways article {
+  padding: 12px;
+}
+
+.source-spine {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.source-spine article {
+  display: grid;
+  gap: 8px;
+  align-content: space-between;
+  min-height: 150px;
+  padding: 13px;
+}
+
 .course-reader {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
@@ -2441,6 +2567,9 @@ p {
   }
 
   .app-grid,
+  .lesson-compass,
+  .lesson-flow-wrap,
+  .source-spine,
   .course-reader,
   .global-course-grid,
   .course-atlas-grid,
@@ -2533,6 +2662,7 @@ p {
   }
 
   .lesson-hero,
+  .lesson-dashboard,
   .reader-main,
   .reader-side,
   .lecture-card,
