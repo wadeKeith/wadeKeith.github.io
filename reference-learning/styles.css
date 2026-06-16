@@ -692,11 +692,50 @@ p {
   background: var(--surface-cool);
 }
 
+.search-stack {
+  display: grid;
+  gap: 8px;
+  width: min(680px, 100%);
+}
+
+.mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid #cbd8d3;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.mode-btn {
+  min-height: 34px;
+  color: var(--muted);
+  background: transparent;
+  border-color: transparent;
+}
+
+.mode-btn.active {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
 .search-row {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto;
   gap: 8px;
   width: min(620px, 100%);
+}
+
+.retrieval-hint {
+  min-height: 36px;
+  padding: 10px 12px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fbfcfb;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .query-chips,
@@ -761,6 +800,57 @@ p {
 .notes-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+}
+
+.research-workbench {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.workbench-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.workbench-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-height: 230px;
+  padding: 16px;
+  border: 1px solid #dce3de;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.workbench-card > span {
+  color: var(--amber);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.workbench-card h4 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.workbench-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.workbench-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
 }
 
 .check-list {
@@ -880,6 +970,7 @@ p {
   .lecture-notes-grid,
   .lens-card,
   .ladder-step,
+  .workbench-grid,
   .teaching-layout,
   .practice-layout,
   .notes-layout,
@@ -918,6 +1009,7 @@ p {
   .syllabus-grid,
   .lecture-notes-grid,
   .lens-switch,
+  .mode-switch,
   .hero-metrics,
   .search-row,
   .check-card {

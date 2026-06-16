@@ -23,6 +23,7 @@ const state = {
   active: null,
   activeTab: "teach",
   activeLens: "intuition",
+  searchMode: "fts",
   lesson: null,
   lessonRequest: 0,
   done: new Set(JSON.parse(localStorage.getItem("llmRoadDone") || "[]")),
@@ -643,6 +644,40 @@ function blueprintFor(module) {
   return { ...fallback, ...(LESSON_BLUEPRINTS[module.id] || {}) };
 }
 
+function workbenchFor(module, bp) {
+  const queries = module.queries || [];
+  const concepts = bp.concepts || queries;
+  return [
+    {
+      id: "paper",
+      title: "论文阅读线",
+      kicker: "Paper trail",
+      body: `先用 ${concepts.slice(0, 3).join("、")} 定位核心论文或课程讲义，再写出“问题、方法、证据、局限”四格笔记。`,
+      action: "检索论文证据",
+      query: queries.slice(0, 3).join(" ") || module.title,
+      ask: `请帮我为「${module.title}」制定论文阅读顺序，并说明每篇资料要抓住什么问题。`,
+    },
+    {
+      id: "code",
+      title: "代码实验线",
+      kicker: "Code lab",
+      body: `把本章产出物拆成最小可运行实验：${module.project} 先做 baseline，再记录 shape、指标、失败样例。`,
+      action: "检索代码资料",
+      query: `${queries[0] || module.title} implementation code notebook`,
+      ask: `请把「${module.project}」拆成一个最小代码实验：文件结构、关键函数、输入输出和检查点。`,
+    },
+    {
+      id: "eval",
+      title: "评测闭环线",
+      kicker: "Eval gate",
+      body: `为本章定义至少 3 个检查项：一个概念题、一个实验指标、一个失败案例，避免只看模型回答是否顺眼。`,
+      action: "检索评测资料",
+      query: `${queries.slice(-2).join(" ") || module.title} benchmark evaluation`,
+      ask: `请为「${module.title}」设计一个小型评测表：能力题、失败模式、通过标准和复盘方式。`,
+    },
+  ];
+}
+
 function renderProgress() {
   const total = state.modules.length;
   const done = state.modules.filter((item) => state.done.has(item.id)).length;
@@ -768,6 +803,21 @@ function renderTeach() {
 function renderPractice() {
   if (!state.active) return;
   const bp = blueprintFor(state.active);
+  el("workbenchCards").innerHTML = workbenchFor(state.active, bp)
+    .map(
+      (card) => `
+        <article class="workbench-card">
+          <span>${escapeHtml(card.kicker)}</span>
+          <h4>${escapeHtml(card.title)}</h4>
+          <p>${escapeHtml(card.body)}</p>
+          <div class="workbench-actions">
+            <button class="secondary" type="button" data-workbench-search="${escapeHtml(card.query)}">${escapeHtml(card.action)}</button>
+            <button type="button" data-workbench-ask="${escapeHtml(card.ask)}">导师拆解</button>
+          </div>
+        </article>
+      `
+    )
+    .join("");
   el("checkList").innerHTML = bp.checks
     .map(
       ([question, hint, answer], idx) => `
@@ -834,6 +884,13 @@ function renderEvidence(results, message = "") {
 function renderRead() {
   if (!state.active) return;
   el("searchInput").value = state.active.queries.slice(0, 3).join(" ");
+  document.querySelectorAll("[data-search-mode]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.searchMode === state.searchMode);
+  });
+  el("retrievalHint").textContent =
+    state.searchMode === "semantic"
+      ? "语义重排会调用本地 qwen3-embedding，适合模糊问题；首次唤醒可能慢一些。"
+      : "极速 FTS 是默认模式，适合论文名、算法名、课程名和代码关键词，通常毫秒级返回。";
   el("queryChips").innerHTML = state.active.queries
     .map((query) => `<button type="button" data-query="${escapeHtml(query)}">${escapeHtml(query)}</button>`)
     .join("");
@@ -900,10 +957,15 @@ async function runSearch(queryOverride = "") {
   const q = (queryOverride || el("searchInput").value).trim();
   if (!q) return;
   el("searchInput").value = q;
-  renderEvidence([], "正在查询本地极速索引...");
+  const semantic = state.searchMode === "semantic" ? "1" : "0";
+  renderEvidence([], state.searchMode === "semantic" ? "正在语义重排本地证据..." : "正在查询本地极速索引...");
   const module = state.active ? `&module=${encodeURIComponent(state.active.id)}` : "";
   try {
-    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=0${module}`);
+    const data = await api(`search?q=${encodeURIComponent(q)}&limit=10&semantic=${semantic}${module}`);
+    el("retrievalHint").textContent =
+      data.retrieval_mode === "semantic"
+        ? "已使用语义重排：适合解释型问题，但会比极速 FTS 慢。"
+        : "已使用极速 FTS：关键词召回优先，适合快速定位原始证据。";
     renderEvidence(data.results || []);
   } catch (err) {
     renderEvidence([], `检索失败：${err.message}`);
@@ -1033,6 +1095,13 @@ el("queryChips").addEventListener("click", (event) => {
   if (btn) runSearch(btn.dataset.query);
 });
 
+el("retrievalModeSwitch").addEventListener("click", (event) => {
+  const btn = event.target.closest("[data-search-mode]");
+  if (!btn) return;
+  state.searchMode = btn.dataset.searchMode;
+  renderRead();
+});
+
 el("evidenceResults").addEventListener("click", (event) => {
   const btn = event.target.closest("[data-source]");
   if (btn) askAboutSource(Number(btn.dataset.source));
@@ -1044,6 +1113,17 @@ el("checkList").addEventListener("click", (event) => {
   const answer = el(`checkAnswer${btn.dataset.check}`);
   answer.classList.toggle("visible");
   btn.textContent = answer.classList.contains("visible") ? "收起讲解" : "展开讲解";
+});
+
+el("workbenchCards").addEventListener("click", (event) => {
+  const searchBtn = event.target.closest("[data-workbench-search]");
+  if (searchBtn) {
+    showTab("read");
+    runSearch(searchBtn.dataset.workbenchSearch);
+    return;
+  }
+  const askBtn = event.target.closest("[data-workbench-ask]");
+  if (askBtn) setQuestion(askBtn.dataset.workbenchAsk, true);
 });
 
 el("quickPrompts").addEventListener("click", (event) => {

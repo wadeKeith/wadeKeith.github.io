@@ -9,7 +9,7 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616l" />
+    <link rel="stylesheet" href="./styles.css?v=20260616m" />
   </head>
   <body>
     <header class="topbar">
@@ -139,16 +139,30 @@
               <p class="eyebrow">数据库证据</p>
               <h3>每章自动从本地知识库极速索引中抽取必读材料</h3>
             </div>
-            <div class="search-row">
-              <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
-              <button id="searchBtn" type="button">检索</button>
+            <div class="search-stack">
+              <div id="retrievalModeSwitch" class="mode-switch" aria-label="检索模式">
+                <button class="mode-btn active" type="button" data-search-mode="fts">极速 FTS</button>
+                <button class="mode-btn" type="button" data-search-mode="semantic">语义重排</button>
+              </div>
+              <div class="search-row">
+                <input id="searchInput" type="search" placeholder="检索本章资料，例如 FlashAttention / RoPE / OpenVLA" />
+                <button id="searchBtn" type="button">检索</button>
+              </div>
             </div>
           </div>
           <div id="queryChips" class="query-chips"></div>
+          <div id="retrievalHint" class="retrieval-hint"></div>
           <div id="evidenceResults" class="evidence-grid"></div>
         </section>
 
         <section id="practiceTab" class="tab-panel">
+          <section class="research-workbench">
+            <div class="section-title">
+              <p class="eyebrow">研究工作台</p>
+              <h3>按论文、代码、评测三条线把本章学成可复现作品</h3>
+            </div>
+            <div id="workbenchCards" class="workbench-grid"></div>
+          </section>
           <div class="practice-layout">
             <div>
               <p class="eyebrow">概念检查</p>
@@ -202,6 +216,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616l"></script>
+    <script src="./app.js?v=20260616m"></script>
   </body>
 </html>
