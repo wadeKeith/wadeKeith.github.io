@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616an";
+const APP_VERSION = "20260616ao";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
