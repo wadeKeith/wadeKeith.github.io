@@ -283,6 +283,41 @@ button:disabled {
   border-top: 1px solid var(--line);
 }
 
+.professor-thesis {
+  padding: 16px 18px;
+  border: 1px solid #c7ded7;
+  border-radius: 8px;
+  background: #f7fbf8;
+  color: var(--ink) !important;
+  font-weight: 750;
+}
+
+.deep-lecture {
+  display: grid;
+  gap: 18px;
+}
+
+.deep-section {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffdf8;
+}
+
+.deep-section h4 {
+  margin-bottom: 12px;
+  color: var(--blue);
+}
+
+.deep-section p:last-of-type {
+  margin-bottom: 10px;
+}
+
+.deep-section li {
+  font-size: 16px;
+  line-height: 1.75;
+}
+
 .route-list {
   display: grid;
   gap: 14px;

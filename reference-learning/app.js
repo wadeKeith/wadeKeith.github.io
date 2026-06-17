@@ -1,6 +1,7 @@
-const APP_VERSION = "20260617rich";
+const APP_VERSION = "20260617deep";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
+const DETAILED_LECTURES = window.LLM_ROAD_DETAILED_LECTURES || {};
 
 if (window.location.protocol === "https:" && SITE_HOSTS.includes(window.location.hostname)) {
   window.location.replace(`http://${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`);
@@ -299,7 +300,7 @@ const LECTURE_BLUEPRINTS = {
       ["Tool Calling", "工具调用要定义 schema、权限、错误处理和可观测日志，否则模型会把工具当普通文本猜。"],
       ["Verification", "回答后要检查证据是否支持 claim，特别是涉及路径、数值、代码和实验结论时。"],
     ],
-    example: "课程问答助手可以先用 FTS 找到候选资料，再把片段交给 StepFun 综合回答。前端不展示召回列表，但后端必须把检索作为内部证据，避免模型凭空讲。",
+    example: "课程问答助手可以先用 FTS 找到候选资料，再用 qwen3-embedding:8b 做语义重排，最后把片段交给 DeepSeek 导师综合回答。前端不展示召回列表，但后端必须把检索作为内部证据，避免模型凭空讲。",
     mistakes: ["把 RAG 等同于向量数据库。", "不做 rerank 和证据压缩。", "工具失败后没有恢复策略。"],
     protocol: ["定义一个问答任务。", "设计 chunk 和检索策略。", "记录每次召回与回答。", "用固定问题评估命中率和幻觉率。"],
   },
@@ -599,6 +600,51 @@ function lectureBlueprint(module) {
   );
 }
 
+function detailedLecture(module, blueprint) {
+  return (
+    DETAILED_LECTURES[module.id] || {
+      thesis: `本章要把「${module.title}」从概念、机制、证据和实践四个层次讲清楚。先理解核心问题，再拆解关键机制，最后用一个可检查项目证明你能把知识用起来。`,
+      sections: [
+        {
+          title: "一、问题框架",
+          paragraphs: [
+            `本章的起点是：${blueprint.question}`,
+            `学习时不要只记关键词。你要把 ${module.queries.slice(0, 4).join("、")} 放进一个问题链：它们解决什么问题，改变哪些变量，如何被实验或代码验证，什么时候会失败。`,
+          ],
+          bullets: ["先说清问题，再读材料。", "先解释机制，再背术语。", "先完成产出，再扩展资料。"],
+        },
+      ],
+      readingPlan: blueprint.protocol || [],
+      mastery: module.outcomes || [],
+    }
+  );
+}
+
+function renderDetailedSections(detail) {
+  return (detail.sections || [])
+    .map(
+      (section) => `
+        <div class="deep-section">
+          <h4>${escapeHtml(section.title)}</h4>
+          ${(section.paragraphs || []).map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+          ${
+            section.bullets?.length
+              ? `<ul>${section.bullets.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`
+              : ""
+          }
+        </div>
+      `
+    )
+    .join("");
+}
+
+function mentorLabel(provider) {
+  if (provider === "deepseek") return "DeepSeek 导师";
+  if (provider === "stepfun") return "备用导师";
+  if (provider === "ollama") return "本地导师";
+  return "导师";
+}
+
 function conceptCards(module) {
   const blueprint = lectureBlueprint(module);
   return (module.queries || []).slice(0, 6).map((concept, idx) => {
@@ -679,6 +725,7 @@ function renderTabs() {
 function renderLesson() {
   const module = activeModule();
   const blueprint = lectureBlueprint(module);
+  const detail = detailedLecture(module, blueprint);
   const route = learningRoute(module);
   const concepts = conceptCards(module);
   el("lessonView").innerHTML = `
@@ -690,7 +737,13 @@ function renderLesson() {
 
       <section class="chapter-section">
         <h3>教授讲义</h3>
+        <p class="professor-thesis">${escapeHtml(detail.thesis)}</p>
         ${blueprint.core.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+      </section>
+
+      <section class="chapter-section deep-lecture">
+        <h3>完整讲授</h3>
+        ${renderDetailedSections(detail)}
       </section>
 
       <section class="chapter-section">
@@ -747,7 +800,15 @@ function renderLesson() {
         <h3>本章必须掌握</h3>
         <ul>
           ${(module.outcomes || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          ${(detail.mastery || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
         </ul>
+      </section>
+
+      <section class="chapter-section">
+        <h3>精读顺序</h3>
+        <ol>
+          ${(detail.readingPlan || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ol>
       </section>
 
       <section class="chapter-section">
@@ -928,7 +989,7 @@ async function ask() {
   const question = el("questionInput").value.trim();
   if (!question) return;
   openDrawer("mentor");
-  el("answerBox").innerHTML = '<p class="answer-muted">正在后台检索课程资料，并调用 StepFun 导师生成回答...</p>';
+  el("answerBox").innerHTML = '<p class="answer-muted">正在后台检索课程资料，并调用 DeepSeek 导师生成回答...</p>';
   try {
     const startedAt = performance.now();
     const data = await api("ask", {
@@ -940,7 +1001,7 @@ async function ask() {
       }),
     });
     const seconds = Math.max(0.1, (performance.now() - startedAt) / 1000).toFixed(1);
-    el("answerBox").innerHTML = `<div class="answer-meta">StepFun 导师 · ${seconds}s · ${escapeHtml(data.model || "模型")}</div>${renderTutorAnswer(data.answer)}`;
+    el("answerBox").innerHTML = `<div class="answer-meta">${mentorLabel(data.provider)} · ${seconds}s · ${escapeHtml(data.model || "模型")}</div>${renderTutorAnswer(data.answer)}`;
   } catch (error) {
     el("answerBox").innerHTML = `<p class="answer-error">问答失败：${escapeHtml(error.message)}</p>`;
   }

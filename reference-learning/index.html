@@ -9,14 +9,14 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260617rich" />
+    <link rel="stylesheet" href="./styles.css?v=20260617deep" />
   </head>
   <body>
     <header class="site-header">
       <div class="header-main">
         <p class="kicker">大模型学习之路</p>
         <h1>像读教材一样学大模型</h1>
-        <p>先读课程，再用 StepFun 导师答疑；目录、问答和笔记都只在需要时出现。</p>
+        <p>先读完整讲义，再用 DeepSeek 导师答疑；目录、问答和笔记都只在需要时出现。</p>
       </div>
       <div class="header-actions">
         <button id="openCatalog" class="ghost-button" type="button" aria-controls="catalogDrawer" aria-expanded="false">目录</button>
@@ -73,10 +73,10 @@
       <button id="resetProgress" class="text-button" type="button">重置完成状态</button>
     </aside>
 
-    <aside id="mentorDrawer" class="drawer mentor-drawer" aria-label="StepFun 导师" aria-hidden="true" inert>
+    <aside id="mentorDrawer" class="drawer mentor-drawer" aria-label="DeepSeek 导师" aria-hidden="true" inert>
       <div class="drawer-head">
         <div>
-          <p class="kicker">StepFun 导师</p>
+          <p class="kicker">DeepSeek 导师</p>
           <h2>读不懂就问</h2>
         </div>
         <button id="closeMentor" class="ghost-button" type="button">关闭</button>
@@ -90,6 +90,7 @@
       <div id="answerBox" class="answer-box">导师回答会显示在这里。系统会在后台检索课程资料，但不会把召回列表展示给读者。</div>
     </aside>
 
-    <script src="./app.js?v=20260617rich"></script>
+    <script src="./lecture_details.js?v=20260617deep"></script>
+    <script src="./app.js?v=20260617deep"></script>
   </body>
 </html>
