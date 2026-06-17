@@ -9,544 +9,87 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260617drawer" />
+    <link rel="stylesheet" href="./styles.css?v=20260617reader" />
   </head>
   <body>
-    <header class="topbar">
-      <div class="brand-block">
-        <span class="brand-kicker">大模型学习之路</span>
-        <h1>从 LLM 到具身智能的交互课程</h1>
-        <p>一套可独立学习的顶级大模型课程；本地知识库检索与 StepFun 高强度导师只负责答疑和证据追踪。</p>
+    <header class="site-header">
+      <div class="header-main">
+        <p class="kicker">大模型学习之路</p>
+        <h1>像读一本好教材一样学习大模型</h1>
+        <p>先读懂课程，再用 StepFun 导师答疑；目录、问答和笔记都只在需要时出现。</p>
       </div>
-      <div class="topbar-controls">
-        <div class="drawer-actions" aria-label="学习面板">
-          <button id="openCatalog" class="utility-button" type="button" aria-controls="curriculumRail" aria-expanded="false">目录</button>
-          <button id="openMentor" class="utility-button primary" type="button" aria-controls="mentorDock" aria-expanded="false">问导师</button>
-        </div>
-        <div class="status-strip" aria-label="系统状态">
-          <span id="dbStatus">知识库：检查中</span>
-          <span id="modelStatus">模型：检查中</span>
-          <span id="retrievalStatus">检索：检查中</span>
-          <span id="progressStatus">进度：0/0</span>
-        </div>
+      <div class="header-actions">
+        <button id="openCatalog" class="ghost-button" type="button" aria-controls="catalogDrawer" aria-expanded="false">目录</button>
+        <button id="openMentor" type="button" aria-controls="mentorDrawer" aria-expanded="false">问导师</button>
       </div>
     </header>
-    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
 
-    <main class="app-grid">
-      <aside id="curriculumRail" class="curriculum-rail" aria-label="课程目录" aria-hidden="true" inert>
-        <div class="rail-head">
-          <div>
-            <p class="eyebrow">16 阶段路径</p>
-            <h2>从 LLM 到具身智能</h2>
-          </div>
-          <div class="drawer-head-actions">
-            <button id="resetProgress" class="text-button" type="button">重置</button>
-            <button id="closeCatalog" class="text-button" type="button" aria-label="关闭目录">关闭</button>
-          </div>
+    <div class="status-bar" aria-label="系统状态">
+      <span id="dbStatus">知识库：加载中</span>
+      <span id="modelStatus">模型：连接中</span>
+      <span id="retrievalStatus">检索：检查中</span>
+      <span id="progressStatus">进度：0/16</span>
+    </div>
+
+    <main class="reader-shell">
+      <section class="chapter-hero" aria-labelledby="chapterTitle">
+        <div>
+          <p id="stageLabel" class="kicker">Stage 00</p>
+          <h2 id="chapterTitle">正在加载课程</h2>
+          <p id="chapterSummary">正在读取本地课程路径和知识库状态。</p>
         </div>
-        <div class="progress-meter" aria-hidden="true">
-          <span id="progressBar"></span>
+        <div class="chapter-actions">
+          <button id="prevModule" class="ghost-button" type="button">上一章</button>
+          <button id="nextModule" class="ghost-button" type="button">下一章</button>
+          <button id="markDone" type="button">标记完成</button>
         </div>
-        <div id="moduleList" class="module-list"></div>
-      </aside>
-
-      <section class="lesson-workspace" aria-live="polite">
-        <section class="lesson-hero">
-          <div class="lesson-heading">
-            <p id="activeStage" class="eyebrow">选择一个模块开始</p>
-            <h2 id="activeTitle">正在加载课程</h2>
-            <p id="activeSummary">读取本地课程路径和知识库统计中。</p>
-          </div>
-          <div class="hero-metrics">
-            <div><strong id="statDocs">-</strong><span>文档</span></div>
-            <div><strong id="statChunks">-</strong><span>知识片段</span></div>
-            <div><strong id="statModules">-</strong><span>课程模块</span></div>
-          </div>
-        </section>
-
-        <nav class="tab-strip" aria-label="学习视图">
-          <button class="tab-btn active" data-tab="teach" type="button">教授导学</button>
-          <button class="tab-btn" data-tab="read" type="button">证据精读</button>
-          <button class="tab-btn" data-tab="practice" type="button">练习闭环</button>
-          <button class="tab-btn" data-tab="notes" type="button">学习笔记</button>
-        </nav>
-
-        <section id="teachTab" class="tab-panel active">
-          <section class="lesson-dashboard">
-            <div class="section-title">
-              <p class="eyebrow">课堂总览板</p>
-              <h3>先把本章读成一节完整课程，再把问题交给在线导师</h3>
-            </div>
-            <div id="lessonCompass" class="lesson-compass"></div>
-            <div class="lesson-flow-wrap">
-              <div>
-                <p class="eyebrow">讲授轨道</p>
-                <div id="lessonFlow" class="lesson-flow"></div>
-              </div>
-              <aside>
-                <p class="eyebrow">本章必须带走</p>
-                <div id="lessonTakeaways" class="lesson-takeaways"></div>
-              </aside>
-            </div>
-            <div id="lessonSourceSpine" class="source-spine"></div>
-          </section>
-          <section class="lecture-player">
-            <div class="section-title">
-              <p class="eyebrow">交互式教授讲授器</p>
-              <h3>像上一节课一样推进：问题、直觉、机制、证据、作品、口试</h3>
-            </div>
-            <div class="lecture-player-layout">
-              <aside id="lectureStepList" class="lecture-step-list"></aside>
-              <article id="lectureSlide" class="lecture-slide"></article>
-            </div>
-          </section>
-          <section class="textbook-chapter">
-            <div class="section-title">
-              <p class="eyebrow">章节教材页</p>
-              <h3>像读一章教材一样学习：概念、机制、工程、研究问题连成正文</h3>
-            </div>
-            <div class="textbook-layout">
-              <article class="textbook-main">
-                <p class="eyebrow">Textbook chapter</p>
-                <h3 id="textbookTitle">选择模块后显示章节教材。</h3>
-                <div id="textbookSections" class="textbook-sections"></div>
-              </article>
-              <aside class="textbook-side">
-                <div>
-                  <p class="eyebrow">课堂案例</p>
-                  <div id="textbookCase" class="textbook-case"></div>
-                </div>
-                <div>
-                  <p class="eyebrow">读完自检</p>
-                  <div id="textbookChecks" class="textbook-checks"></div>
-                </div>
-              </aside>
-            </div>
-            <div id="textbookMatrix" class="textbook-matrix"></div>
-          </section>
-          <section class="course-standard-lab">
-            <div class="section-title">
-              <p class="eyebrow">名课标准工作台</p>
-              <h3>把顶级公开课的训练方式压成本章的学习处方</h3>
-            </div>
-            <div class="standard-layout">
-              <div id="standardBenchmarks" class="standard-benchmarks"></div>
-              <aside class="diagnostic-panel">
-                <div>
-                  <p class="eyebrow">学习者诊断</p>
-                  <h3 id="diagnosticTitle">选择你的进入方式</h3>
-                </div>
-                <div class="diagnostic-tabs" id="diagnosticTabs">
-                  <button class="active" type="button" data-study-level="concept">先懂概念</button>
-                  <button type="button" data-study-level="builder">动手实现</button>
-                  <button type="button" data-study-level="research">研究推进</button>
-                </div>
-                <div id="diagnosticPrescription" class="diagnostic-prescription"></div>
-              </aside>
-            </div>
-            <div id="standardAssignment" class="standard-assignment"></div>
-          </section>
-          <section class="concept-map-lab">
-            <div class="section-title">
-              <p class="eyebrow">概念图谱与机制路径</p>
-              <h3>先看懂本章知识怎么连起来，再去读证据和问导师</h3>
-            </div>
-            <div class="concept-map-layout">
-              <div id="conceptMapNodes" class="concept-map-nodes"></div>
-              <aside class="pathway-panel">
-                <p class="eyebrow">从概念到作品</p>
-                <div id="conceptPathway" class="concept-pathway"></div>
-              </aside>
-            </div>
-            <div class="concept-debug-row">
-              <div>
-                <p class="eyebrow">黑板压缩</p>
-                <h3 id="conceptMapFormula">选择模块后显示机制式。</h3>
-              </div>
-              <div id="conceptDebugQuestions" class="concept-debug-questions"></div>
-            </div>
-          </section>
-          <section class="course-reader">
-            <article class="reader-main">
-              <div class="section-title">
-                <p class="eyebrow">教授主讲义</p>
-                <h3 id="readerTitle">先读完整讲义，再用导师追问</h3>
-              </div>
-              <div id="readerParagraphs" class="reader-paragraphs"></div>
-              <div id="readerBlackboard" class="reader-blackboard"></div>
-              <div class="reader-actions">
-                <button id="readerSearchBtn" class="secondary" type="button">让导师定位证据</button>
-                <button id="readerAskBtn" type="button">让导师按这篇讲义答疑</button>
-              </div>
-            </article>
-            <aside class="reader-side">
-              <div>
-                <p class="eyebrow">术语黑板</p>
-                <div id="readerGlossary" class="reader-glossary"></div>
-              </div>
-              <div>
-                <p class="eyebrow">课堂检查点</p>
-                <div id="readerCheckpoints" class="reader-checkpoints"></div>
-              </div>
-            </aside>
-          </section>
-          <section class="global-course-map">
-            <div class="section-title">
-              <p class="eyebrow">世界级课程地图</p>
-              <h3>这不是资料目录，而是一套按顶级课程范式重构的学习系统</h3>
-            </div>
-            <div id="globalCourseMap" class="global-course-grid"></div>
-          </section>
-          <section class="course-atlas">
-            <div class="section-title">
-              <p class="eyebrow">课程路线图</p>
-              <h3>五条轨道串起 16 章：从 LLM 核心到具身世界模型</h3>
-            </div>
-            <div id="courseAtlas" class="course-atlas-grid"></div>
-          </section>
-          <section class="roadmap-panel">
-            <div class="roadmap-main">
-              <p class="eyebrow">跨章路线</p>
-              <h3 id="trackTitle">课程轨道</h3>
-              <p id="trackSummary"></p>
-              <div id="trackModules" class="track-modules"></div>
-            </div>
-            <aside class="bridge-card">
-              <p class="eyebrow">章节桥接</p>
-              <div id="moduleBridge"></div>
-            </aside>
-          </section>
-          <div class="syllabus-grid">
-            <article class="syllabus-card">
-              <p class="eyebrow">学习目标</p>
-              <h3>本章结束时你应该能做到</h3>
-              <ul id="outcomeList"></ul>
-            </article>
-            <article class="syllabus-card">
-              <p class="eyebrow">名课参照</p>
-              <h3>对齐国际一线课程的学习视角</h3>
-              <ul id="courseAnchorList"></ul>
-            </article>
-            <article class="syllabus-card">
-              <p class="eyebrow">产出物</p>
-              <h3>把知识变成可检查的作品</h3>
-              <p id="deliverableText"></p>
-            </article>
-          </div>
-          <section class="seminar-panel">
-            <article class="seminar-lecture">
-              <div class="section-title">
-                <p class="eyebrow">教授讲义</p>
-                <h3 id="seminarQuestion">本章要解决的核心问题</h3>
-              </div>
-              <div id="seminarBody" class="seminar-body"></div>
-              <div class="seminar-actions">
-                <button id="seminarSearchBtn" class="secondary" type="button">让导师结合证据讲解</button>
-                <button id="seminarAskBtn" type="button">请导师讲这章</button>
-              </div>
-            </article>
-            <aside class="seminar-board">
-              <p class="eyebrow">黑板框架</p>
-              <div id="seminarBoard"></div>
-            </aside>
-          </section>
-          <section class="deep-lecture">
-            <div class="section-title">
-              <p class="eyebrow">核心讲义</p>
-              <h3>先读这里：本章的概念、机制、实验与阅读顺序</h3>
-            </div>
-            <div class="lecture-notes-grid">
-              <article class="lecture-note">
-                <h4>概念主线</h4>
-                <ul id="principleList"></ul>
-              </article>
-              <article class="lecture-note">
-                <h4>机制 / 推导</h4>
-                <ul id="mechanismList"></ul>
-              </article>
-              <article class="lecture-note">
-                <h4>实验 / 阅读</h4>
-                <ul id="readingList"></ul>
-              </article>
-            </div>
-          </section>
-          <section class="mechanism-lab">
-            <div class="lab-head">
-              <div class="section-title">
-                <p class="eyebrow">机制实验台</p>
-                <h3 id="simulatorTitle">调参观察机制，而不是只背概念</h3>
-              </div>
-              <div class="lab-presets" id="simulatorPresets" aria-label="实验预设"></div>
-            </div>
-            <div class="simulator-layout">
-              <article class="simulator-controls">
-                <p id="simulatorScenario" class="simulator-scenario"></p>
-                <div id="simulatorControls" class="simulator-control-grid"></div>
-              </article>
-              <aside class="simulator-readout">
-                <div id="simulatorMetrics" class="simulator-metrics"></div>
-                <div id="simulatorObservation" class="simulator-observation"></div>
-                <div class="simulator-actions">
-                  <button id="simulatorSearchBtn" class="secondary" type="button">让导师解释机制证据</button>
-                  <button id="simulatorAskBtn" type="button">让导师解释当前设置</button>
-                </div>
-              </aside>
-            </div>
-          </section>
-          <section class="worked-example">
-            <div class="section-title">
-              <p class="eyebrow">Worked Example</p>
-              <h3 id="workedExampleTitle">把本章概念推到一个可检查实验</h3>
-            </div>
-            <div class="worked-layout">
-              <article class="worked-problem">
-                <p class="eyebrow">示范题</p>
-                <h4 id="workedExampleProblem">选择模块后显示。</h4>
-                <div id="workedExampleSteps" class="worked-steps"></div>
-              </article>
-              <aside class="worked-lab">
-                <p class="eyebrow">最小实验</p>
-                <div id="workedExampleExperiment" class="worked-experiment"></div>
-                <div id="workedExampleRubric" class="worked-rubric"></div>
-                <div class="worked-actions">
-                  <button id="workedSearchBtn" class="secondary" type="button">让导师讲示范题</button>
-                  <button id="workedAskBtn" type="button">让导师审这个示范题</button>
-                </div>
-              </aside>
-            </div>
-          </section>
-          <section class="research-brief">
-            <div class="brief-head">
-              <div class="section-title">
-                <p class="eyebrow">研究任务书</p>
-                <h3 id="briefTitle">把本章学成可提交作品</h3>
-              </div>
-              <div class="brief-actions">
-                <button id="briefSearchBtn" class="secondary" type="button">让导师补足证据</button>
-                <button id="briefAskBtn" type="button">让导师审任务书</button>
-              </div>
-            </div>
-            <div class="brief-layout">
-              <article class="brief-main">
-                <p class="eyebrow">Research claim</p>
-                <h4 id="briefClaim">选择模块后显示。</h4>
-                <p id="briefContext"></p>
-              </article>
-              <aside class="brief-gates">
-                <p class="eyebrow">提交门槛</p>
-                <div id="briefGates"></div>
-              </aside>
-            </div>
-            <div id="briefSpecGrid" class="brief-spec-grid"></div>
-          </section>
-          <section class="professor-session">
-            <div class="section-title">
-              <p class="eyebrow">90 分钟教授课堂</p>
-              <h3>按真正课堂节奏学习：概念、机制、证据、作品一次闭环</h3>
-            </div>
-            <div id="sessionTimeline" class="session-timeline"></div>
-            <div id="sessionArtifacts" class="session-artifacts"></div>
-          </section>
-          <section class="course-studio">
-            <div class="section-title">
-              <p class="eyebrow">交互课堂</p>
-              <h3>换一种教授视角重讲本章，再按阶梯推进学习</h3>
-            </div>
-            <div id="lensSwitch" class="lens-switch" aria-label="讲授视角"></div>
-            <article id="lensCard" class="lens-card"></article>
-            <div id="knowledgeLadder" class="knowledge-ladder"></div>
-          </section>
-          <div class="teaching-layout">
-            <article class="lecture-card">
-              <p class="eyebrow">Professor framing</p>
-              <h3 id="lectureThesis">本章核心判断</h3>
-              <p id="lectureFrame"></p>
-            </article>
-            <div class="concept-board">
-              <div class="section-title">
-                <p class="eyebrow">概念地图</p>
-                <h3>点击任一概念，直接让导师结合资料讲解</h3>
-              </div>
-              <div id="conceptMap" class="concept-map"></div>
-            </div>
-          </div>
-          <div id="lectureRoute" class="route-grid"></div>
-          <div class="misconception-band">
-            <div>
-              <p class="eyebrow">常见误区</p>
-              <h3>先避开这些坑，学习会快很多</h3>
-            </div>
-            <ul id="misconceptionList"></ul>
-          </div>
-        </section>
-
-        <section id="readTab" class="tab-panel">
-          <div class="reading-toolbar">
-            <div>
-              <p class="eyebrow">导师导读</p>
-              <h3>读不懂时直接提问，系统在后台检索后由导师回答</h3>
-            </div>
-            <div class="reader-question-panel">
-              <div id="readerQuestionChips" class="query-chips"></div>
-            </div>
-            <div class="search-stack internal-only" aria-hidden="true" hidden>
-              <div id="retrievalModeSwitch" class="mode-switch" aria-label="检索模式">
-                <button class="mode-btn active" type="button" data-search-mode="fts">内部 FTS</button>
-                <button class="mode-btn" type="button" data-search-mode="semantic">内部语义</button>
-              </div>
-              <div class="search-row">
-                <input id="searchInput" type="search" placeholder="内部资料线索" />
-                <button id="searchBtn" type="button">内部处理</button>
-                <button id="deepSearchBtn" class="secondary" type="button">内部深查</button>
-              </div>
-            </div>
-          </div>
-          <div id="queryChips" class="query-chips internal-only" aria-hidden="true" hidden></div>
-          <div id="retrievalHint" class="retrieval-hint internal-only" aria-hidden="true" hidden></div>
-          <section class="evidence-workflow">
-            <div class="reading-protocol-card">
-              <div class="section-title">
-                <p class="eyebrow">精读流程</p>
-                <h3>先按课程协议读；具体资料由导师后台检索</h3>
-              </div>
-              <div id="readingProtocol" class="reading-protocol"></div>
-            </div>
-            <aside class="source-basket internal-only" aria-hidden="true" hidden>
-              <div class="source-basket-head">
-                <div>
-                  <p class="eyebrow">内部记录</p>
-                  <h3 id="sourceBasketTitle">0 条已保存</h3>
-                </div>
-                <button id="clearPinnedSources" class="text-button" type="button">清空</button>
-              </div>
-              <div id="pinnedSources" class="pinned-sources"></div>
-              <div class="basket-actions">
-                <button id="sendSourcesToNotes" class="secondary" type="button">写入笔记</button>
-                <button id="askSourcesBtn" type="button">检查证据链</button>
-              </div>
-            </aside>
-          </section>
-          <div id="evidenceResults" class="evidence-grid internal-only" aria-hidden="true" hidden></div>
-        </section>
-
-        <section id="practiceTab" class="tab-panel">
-          <section class="mastery-panel">
-            <div class="mastery-protocol">
-              <div class="section-title">
-                <p class="eyebrow">学习协议</p>
-                <h3>本章不是看完，而是完成一组可检查动作</h3>
-              </div>
-              <ol id="protocolList"></ol>
-            </div>
-            <aside class="mastery-rubric">
-              <div class="mastery-head">
-                <div>
-                  <p class="eyebrow">掌握度</p>
-                  <h3 id="masteryScore">0/3 达标</h3>
-                </div>
-                <button id="askMasteryBtn" class="secondary" type="button">导师检查</button>
-              </div>
-              <div class="mastery-meter" aria-hidden="true"><span id="masteryMeterBar"></span></div>
-              <div id="masteryChecklist" class="mastery-checklist"></div>
-            </aside>
-          </section>
-          <section class="classroom-quiz-panel">
-            <div class="quiz-head">
-              <div class="section-title">
-                <p class="eyebrow">离线课堂小测</p>
-                <h3>不用问模型，先用选择题检查自己是否读懂</h3>
-              </div>
-              <div class="quiz-score" id="quizScore">0/4 正确</div>
-            </div>
-            <div id="quizCards" class="quiz-cards"></div>
-          </section>
-          <section class="exam-panel">
-            <div class="section-title">
-              <p class="eyebrow">口试与评分</p>
-              <h3>按顶级课程的作业/口试方式检查：会讲、会做、会评测</h3>
-            </div>
-            <div class="exam-layout">
-              <div>
-                <h4>本章口试题</h4>
-                <div id="oralExamCards" class="oral-exam-grid"></div>
-              </div>
-              <aside>
-                <h4>评分 Rubric</h4>
-                <div id="gradingRubric" class="grading-rubric"></div>
-              </aside>
-            </div>
-          </section>
-          <section class="problem-set-panel">
-            <div class="section-title">
-              <p class="eyebrow">Problem Set</p>
-              <h3>像 CS336 一样用作业逼近真实掌握：推导、实现、实验、写作</h3>
-            </div>
-            <div id="problemSetCards" class="problem-set-grid"></div>
-          </section>
-          <section class="research-workbench">
-            <div class="section-title">
-              <p class="eyebrow">研究工作台</p>
-              <h3>按论文、代码、评测三条线把本章学成可复现作品</h3>
-            </div>
-            <div id="workbenchCards" class="workbench-grid"></div>
-          </section>
-          <div class="practice-layout">
-            <div>
-              <p class="eyebrow">概念检查</p>
-              <h3>不用模型也能自测：先答，再展开教授讲解</h3>
-              <div id="checkList" class="check-list"></div>
-            </div>
-            <aside class="lab-card">
-              <p class="eyebrow">实践任务</p>
-              <h3 id="projectTitle">本章项目</h3>
-              <p id="projectText">选择模块后显示。</p>
-              <ol id="labSteps"></ol>
-              <button id="projectAskBtn" type="button">让导师帮我拆解任务</button>
-            </aside>
-          </div>
-        </section>
-
-        <section id="notesTab" class="tab-panel">
-          <div class="notes-layout">
-            <div>
-              <p class="eyebrow">费曼笔记</p>
-              <h3>把本章用自己的话讲清楚</h3>
-              <textarea id="noteInput" rows="10" placeholder="写下你的理解、疑问、推导、代码实验记录。笔记会保存在本机浏览器。"></textarea>
-              <div class="note-actions">
-                <button id="saveNote" type="button">保存笔记</button>
-                <button id="askFromNote" class="secondary" type="button">用笔记追问导师</button>
-              </div>
-            </div>
-            <aside class="note-prompt">
-              <p class="eyebrow">写作脚手架</p>
-              <ul id="notePrompts"></ul>
-            </aside>
-          </div>
-        </section>
       </section>
 
-      <aside id="mentorDock" class="mentor-dock" aria-label="问答导师" aria-hidden="true" inert>
-        <div class="dock-head">
-          <div>
-            <p class="eyebrow">RAG 导师</p>
-            <h2>读不懂就问</h2>
-          </div>
-          <div class="drawer-head-actions">
-            <button id="markDone" class="secondary" type="button">标记完成</button>
-            <button id="closeMentor" class="text-button" type="button" aria-label="关闭导师">关闭</button>
-          </div>
-        </div>
-        <div id="quickPrompts" class="quick-prompts"></div>
-        <textarea id="questionInput" rows="6" placeholder="把你没读懂的概念、证据片段或实验任务贴在这里。"></textarea>
-        <div class="mentor-actions">
-          <button id="askBtn" type="button">提交问题</button>
-          <button id="clearAnswer" class="secondary" type="button">清空</button>
-        </div>
-        <div id="answerBox" class="answer-box">导师回答会显示在这里；系统会在后台检索课程资料，但不会把检索列表展示给读者。</div>
-      </aside>
+      <nav class="reader-tabs" aria-label="学习视图">
+        <button class="active" type="button" data-tab="lesson">讲义</button>
+        <button type="button" data-tab="map">概念图</button>
+        <button type="button" data-tab="practice">练习</button>
+        <button type="button" data-tab="notes">笔记</button>
+      </nav>
+
+      <section id="lessonView" class="reader-view active" aria-live="polite"></section>
+      <section id="mapView" class="reader-view" aria-live="polite"></section>
+      <section id="practiceView" class="reader-view" aria-live="polite"></section>
+      <section id="notesView" class="reader-view" aria-live="polite"></section>
     </main>
 
-    <script src="./app.js?v=20260617drawer"></script>
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+
+    <aside id="catalogDrawer" class="drawer catalog-drawer" aria-label="课程目录" aria-hidden="true" inert>
+      <div class="drawer-head">
+        <div>
+          <p class="kicker">16 阶段路径</p>
+          <h2>课程目录</h2>
+        </div>
+        <button id="closeCatalog" class="ghost-button" type="button">关闭</button>
+      </div>
+      <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+      <div id="moduleList" class="module-list"></div>
+      <button id="resetProgress" class="text-button" type="button">重置完成状态</button>
+    </aside>
+
+    <aside id="mentorDrawer" class="drawer mentor-drawer" aria-label="StepFun 导师" aria-hidden="true" inert>
+      <div class="drawer-head">
+        <div>
+          <p class="kicker">StepFun 导师</p>
+          <h2>读不懂就问</h2>
+        </div>
+        <button id="closeMentor" class="ghost-button" type="button">关闭</button>
+      </div>
+      <div id="quickPrompts" class="prompt-list"></div>
+      <textarea id="questionInput" rows="7" placeholder="把没读懂的概念、推导、实验任务或你的笔记贴在这里。"></textarea>
+      <div class="mentor-actions">
+        <button id="askBtn" type="button">提交问题</button>
+        <button id="clearAnswer" class="ghost-button" type="button">清空</button>
+      </div>
+      <div id="answerBox" class="answer-box">导师回答会显示在这里。系统会在后台检索课程资料，但不会把召回列表展示给读者。</div>
+    </aside>
+
+    <script src="./app.js?v=20260617reader"></script>
   </body>
 </html>
