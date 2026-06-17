@@ -32,6 +32,11 @@ body {
     "Noto Sans SC", sans-serif;
 }
 
+body.catalog-open,
+body.mentor-open {
+  overflow: hidden;
+}
+
 button,
 textarea,
 input {
@@ -129,6 +134,41 @@ p {
   backdrop-filter: blur(16px);
 }
 
+.topbar-controls {
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+  min-width: min(720px, 50vw);
+}
+
+.drawer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.utility-button {
+  min-height: 40px;
+  border-color: #c9d5d0;
+  background: #fff;
+  color: #24312e;
+  font-weight: 800;
+}
+
+.utility-button.primary {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+body.catalog-open #openCatalog,
+body.mentor-open #openMentor {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
 .brand-block h1 {
   margin: 2px 0 4px;
   font-size: clamp(24px, 3vw, 34px);
@@ -174,28 +214,72 @@ p {
 
 .app-grid {
   display: grid;
-  grid-template-columns: minmax(270px, 330px) minmax(0, 1fr) minmax(320px, 410px);
-  gap: 18px;
-  max-width: 1800px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  max-width: 1220px;
   margin: 0 auto;
-  padding: 18px;
+  padding: 22px 24px 40px;
 }
 
 .curriculum-rail,
 .mentor-dock {
-  position: sticky;
-  top: 110px;
+  position: fixed;
+  top: 112px;
   align-self: start;
-  max-height: calc(100vh - 128px);
+  z-index: 60;
+  max-height: calc(100vh - 132px);
   overflow: auto;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
 }
 
 .curriculum-rail {
+  left: 20px;
+  width: min(390px, calc(100vw - 32px));
   padding: 14px;
+  transform: translateX(calc(-100% - 32px));
+}
+
+.mentor-dock {
+  right: 20px;
+  width: min(440px, calc(100vw - 32px));
+  transform: translateX(calc(100% + 32px));
+}
+
+body.catalog-open .curriculum-rail,
+body.mentor-open .mentor-dock {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(31, 37, 40, 0.18);
+  backdrop-filter: blur(2px);
+}
+
+.drawer-backdrop[hidden] {
+  display: none;
+}
+
+.drawer-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
 }
 
 .rail-head,
@@ -305,17 +389,24 @@ p {
 
 .lesson-workspace {
   min-width: 0;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
   display: grid;
   gap: 16px;
 }
 
 .lesson-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   justify-content: space-between;
   align-items: stretch;
-  padding: 20px;
+  padding: 24px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--paper);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(236, 244, 246, 0.84)),
+    var(--paper);
   box-shadow: var(--shadow);
 }
 
@@ -361,13 +452,18 @@ p {
 }
 
 .tab-strip {
+  position: sticky;
+  top: 93px;
+  z-index: 16;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   padding: 6px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 32px rgba(34, 44, 40, 0.06);
+  backdrop-filter: blur(12px);
 }
 
 .tab-btn {
@@ -1089,7 +1185,7 @@ p {
 
 .course-reader {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px;
   scroll-margin-top: 118px;
 }
@@ -1105,11 +1201,12 @@ p {
 .reader-main {
   display: grid;
   gap: 16px;
-  padding: 22px;
+  padding: 30px 34px;
 }
 
 .reader-side {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   align-content: start;
   padding: 18px;
@@ -1118,18 +1215,19 @@ p {
 
 .reader-paragraphs {
   display: grid;
-  gap: 12px;
-  max-width: 920px;
+  gap: 14px;
+  max-width: 820px;
+  margin: 0 auto;
 }
 
 .reader-paragraphs p {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 14px;
   margin: 0;
   color: #34413e;
-  font-size: 16px;
-  line-height: 1.82;
+  font-size: 17px;
+  line-height: 1.9;
 }
 
 .reader-paragraphs span {
@@ -1148,6 +1246,9 @@ p {
 .reader-blackboard {
   display: grid;
   gap: 8px;
+  max-width: 820px;
+  width: 100%;
+  margin: 2px auto 0;
   padding: 16px;
   border: 1px solid #cbd8d3;
   border-radius: 8px;
@@ -1181,6 +1282,7 @@ p {
 .reader-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -3254,18 +3356,18 @@ p {
 
 @media (max-width: 1320px) {
   .app-grid {
-    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 1160px;
   }
 
   .mentor-dock {
-    position: static;
-    grid-column: 1 / -1;
-    max-height: none;
+    position: fixed;
+    max-height: calc(100vh - 132px);
   }
 
   .quick-prompts button {
-    width: auto;
-    max-width: 360px;
+    width: 100%;
+    max-width: none;
   }
 }
 
@@ -3274,6 +3376,16 @@ p {
     position: static;
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .topbar-controls {
+    justify-items: start;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .drawer-actions {
+    justify-content: flex-start;
   }
 
   .status-strip {
@@ -3332,12 +3444,22 @@ p {
   }
 
   .curriculum-rail {
-    position: static;
-    max-height: 520px;
+    position: fixed;
+    top: 14px;
+    max-height: calc(100vh - 28px);
   }
 
   .lesson-workspace {
-    order: -1;
+    order: 0;
+  }
+
+  .mentor-dock {
+    top: 14px;
+    max-height: calc(100vh - 28px);
+  }
+
+  .tab-strip {
+    position: static;
   }
 
   .route-grid,
@@ -3428,6 +3550,10 @@ p {
 
   .concept-node-actions {
     grid-column: 1;
+  }
+
+  .reader-side {
+    grid-template-columns: 1fr;
   }
 
   .brief-actions {

@@ -1,4 +1,4 @@
-const APP_VERSION = "20260616ap";
+const APP_VERSION = "20260617drawer";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 
@@ -807,6 +807,43 @@ const SEMINAR_GUIDES = {
 };
 
 const el = (id) => document.getElementById(id);
+
+const DRAWERS = {
+  catalog: { bodyClass: "catalog-open", panel: "curriculumRail", open: "openCatalog", close: "closeCatalog" },
+  mentor: { bodyClass: "mentor-open", panel: "mentorDock", open: "openMentor", close: "closeMentor" },
+};
+
+function syncDrawers() {
+  const isCatalogOpen = document.body.classList.contains(DRAWERS.catalog.bodyClass);
+  const isMentorOpen = document.body.classList.contains(DRAWERS.mentor.bodyClass);
+  const anyOpen = isCatalogOpen || isMentorOpen;
+  el("drawerBackdrop").hidden = !anyOpen;
+  Object.entries(DRAWERS).forEach(([name, config]) => {
+    const panel = el(config.panel);
+    const openButton = el(config.open);
+    const isOpen = name === "catalog" ? isCatalogOpen : isMentorOpen;
+    panel.toggleAttribute("inert", !isOpen);
+    panel.setAttribute("aria-hidden", String(!isOpen));
+    openButton.setAttribute("aria-expanded", String(isOpen));
+  });
+}
+
+function openDrawer(name, focusId = "") {
+  Object.values(DRAWERS).forEach((config) => document.body.classList.remove(config.bodyClass));
+  document.body.classList.add(DRAWERS[name].bodyClass);
+  syncDrawers();
+  if (focusId) setTimeout(() => el(focusId).focus(), 0);
+}
+
+function closeDrawers() {
+  Object.values(DRAWERS).forEach((config) => document.body.classList.remove(config.bodyClass));
+  syncDrawers();
+}
+
+function closeDrawer(name) {
+  document.body.classList.remove(DRAWERS[name].bodyClass);
+  syncDrawers();
+}
 
 async function api(path, options = {}) {
   const { timeoutMs = 0, ...fetchOptions } = options;
@@ -3016,8 +3053,8 @@ function selectModule(id) {
 }
 
 function setQuestion(text, submit = false) {
+  openDrawer("mentor", "questionInput");
   el("questionInput").value = text;
-  el("questionInput").focus();
   if (submit) ask();
 }
 
@@ -3041,6 +3078,7 @@ async function runSearch(queryOverride = "", options = {}) {
 async function ask() {
   const question = el("questionInput").value.trim();
   if (!question) return;
+  openDrawer("mentor");
   el("answerBox").textContent = "正在后台检索课程资料，并调用导师模型生成回答...";
   const body = {
     question,
@@ -3119,9 +3157,22 @@ async function load() {
   }
 }
 
+el("openCatalog").addEventListener("click", () => openDrawer("catalog", "moduleList"));
+el("openMentor").addEventListener("click", () => openDrawer("mentor", "questionInput"));
+el("closeCatalog").addEventListener("click", () => closeDrawer("catalog"));
+el("closeMentor").addEventListener("click", () => closeDrawer("mentor"));
+el("drawerBackdrop").addEventListener("click", closeDrawers);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeDrawers();
+});
+
 el("moduleList").addEventListener("click", (event) => {
   const btn = event.target.closest("[data-module]");
-  if (btn) selectModule(btn.dataset.module);
+  if (btn) {
+    selectModule(btn.dataset.module);
+    closeDrawer("catalog");
+  }
 });
 
 document.querySelectorAll(".tab-btn").forEach((btn) => {

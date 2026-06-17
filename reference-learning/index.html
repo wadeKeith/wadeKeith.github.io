@@ -9,31 +9,41 @@
         location.replace(`http://${location.host}${location.pathname}${location.search}${location.hash}`);
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260616ap" />
+    <link rel="stylesheet" href="./styles.css?v=20260617drawer" />
   </head>
   <body>
     <header class="topbar">
       <div class="brand-block">
         <span class="brand-kicker">大模型学习之路</span>
         <h1>从 LLM 到具身智能的交互课程</h1>
-        <p>一套可独立学习的顶级大模型课程；本地知识库检索与 DeepSeek 导师只负责答疑和证据追踪。</p>
+        <p>一套可独立学习的顶级大模型课程；本地知识库检索与 StepFun 高强度导师只负责答疑和证据追踪。</p>
       </div>
-      <div class="status-strip" aria-label="系统状态">
-        <span id="dbStatus">知识库：检查中</span>
-        <span id="modelStatus">模型：检查中</span>
-        <span id="retrievalStatus">检索：检查中</span>
-        <span id="progressStatus">进度：0/0</span>
+      <div class="topbar-controls">
+        <div class="drawer-actions" aria-label="学习面板">
+          <button id="openCatalog" class="utility-button" type="button" aria-controls="curriculumRail" aria-expanded="false">目录</button>
+          <button id="openMentor" class="utility-button primary" type="button" aria-controls="mentorDock" aria-expanded="false">问导师</button>
+        </div>
+        <div class="status-strip" aria-label="系统状态">
+          <span id="dbStatus">知识库：检查中</span>
+          <span id="modelStatus">模型：检查中</span>
+          <span id="retrievalStatus">检索：检查中</span>
+          <span id="progressStatus">进度：0/0</span>
+        </div>
       </div>
     </header>
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
 
     <main class="app-grid">
-      <aside class="curriculum-rail" aria-label="课程目录">
+      <aside id="curriculumRail" class="curriculum-rail" aria-label="课程目录" aria-hidden="true" inert>
         <div class="rail-head">
           <div>
             <p class="eyebrow">16 阶段路径</p>
             <h2>从 LLM 到具身智能</h2>
           </div>
-          <button id="resetProgress" class="text-button" type="button">重置</button>
+          <div class="drawer-head-actions">
+            <button id="resetProgress" class="text-button" type="button">重置</button>
+            <button id="closeCatalog" class="text-button" type="button" aria-label="关闭目录">关闭</button>
+          </div>
         </div>
         <div class="progress-meter" aria-hidden="true">
           <span id="progressBar"></span>
@@ -516,13 +526,16 @@
         </section>
       </section>
 
-      <aside class="mentor-dock" aria-label="问答导师">
+      <aside id="mentorDock" class="mentor-dock" aria-label="问答导师" aria-hidden="true" inert>
         <div class="dock-head">
           <div>
             <p class="eyebrow">RAG 导师</p>
             <h2>读不懂就问</h2>
           </div>
-          <button id="markDone" class="secondary" type="button">标记完成</button>
+          <div class="drawer-head-actions">
+            <button id="markDone" class="secondary" type="button">标记完成</button>
+            <button id="closeMentor" class="text-button" type="button" aria-label="关闭导师">关闭</button>
+          </div>
         </div>
         <div id="quickPrompts" class="quick-prompts"></div>
         <textarea id="questionInput" rows="6" placeholder="把你没读懂的概念、证据片段或实验任务贴在这里。"></textarea>
@@ -534,6 +547,6 @@
       </aside>
     </main>
 
-    <script src="./app.js?v=20260616ap"></script>
+    <script src="./app.js?v=20260617drawer"></script>
   </body>
 </html>
