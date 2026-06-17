@@ -559,7 +559,6 @@ body.mentor-open .mentor-drawer {
   min-height: 260px;
   max-height: 46vh;
   overflow: auto;
-  white-space: pre-wrap;
   padding: 15px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -567,6 +566,59 @@ body.mentor-open .mentor-drawer {
   color: #303733;
   font-size: 15px;
   line-height: 1.75;
+}
+
+.answer-box h3 {
+  margin: 18px 0 8px;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.answer-box h3:first-child {
+  margin-top: 0;
+}
+
+.answer-box p {
+  margin: 0 0 12px;
+}
+
+.answer-box ul,
+.answer-box ol {
+  margin: 8px 0 14px;
+  padding-left: 22px;
+}
+
+.answer-box li {
+  margin: 6px 0;
+}
+
+.answer-box strong {
+  color: var(--green);
+}
+
+.answer-box code {
+  border-radius: 5px;
+  background: #eef3ef;
+  padding: 1px 5px;
+  color: #1d3f36;
+}
+
+.answer-meta {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.answer-muted {
+  color: var(--muted);
+}
+
+.answer-error {
+  color: var(--red);
 }
 
 .empty-state {
