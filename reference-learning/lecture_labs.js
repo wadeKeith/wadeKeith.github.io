@@ -1,0 +1,418 @@
+window.LLM_ROAD_LAB_GUIDE = {
+  orientation: {
+    mission: "先学会使用资料库：知道资料从哪里来、按什么阶段组织、每周应该读什么、跑什么、产出什么。",
+    labs: [
+      {
+        title: "资料库全景盘点",
+        localPath: "Reference/REFERENCE_CONTENTS.md",
+        upstream: "本地整理的 Reference 目录快照",
+        run: "先读 Top-Level Inventory，再把四类资料写成自己的学习地图。",
+        output: "交付一张个人学习地图：中文实战材料、CS336/公开课、前沿 repo、评测/机器人资料分别承担什么角色。",
+      },
+      {
+        title: "课程证据索引",
+        localPath: "reference_learning/static/course_evidence.json",
+        upstream: "由 SQLite/FTS 自动抽取的 16 章证据包",
+        run: "打开 JSON，任选一章看 module、evidence、path、excerpt 四类字段。",
+        output: "能解释：讲义不是凭空写的，而是由数据库中的课程路径和证据片段支撑。",
+      },
+      {
+        title: "下载清单与 repo 来源",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/00_index/download_manifest.csv",
+        upstream: "Frontier AI curriculum download manifest",
+        run: "按 slug 搜索 cs336_assignment1_basics、openvla_repo、maniskill、qwen3_omni。",
+        output: "列出 5 个你本学期一定会跑的 repo：本地路径、上游 URL、为什么要跑。",
+      },
+    ],
+  },
+  math_pytorch_nlp: {
+    mission: "把张量、自动微分、NLP 数据和训练循环打通。初学者不需要先背完数学，而要能看懂一个 batch 如何从文本流到 loss。",
+    labs: [
+      {
+        title: "PyTorch 入门 notebook",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/stanford_cs231n/cs231n_github_pages/pytorch.ipynb",
+        upstream: "https://github.com/cs231n/cs231n.github.io.git",
+        run: "打开 notebook，重点跑 tensor、autograd、nn.Module、optimizer 四段。",
+        output: "写出一个最小训练循环：forward、loss、backward、step、zero_grad。",
+      },
+      {
+        title: "CMU ANLP 词表示与分类",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/cmu_anlp/cmu_anlp_spring2026_code",
+        upstream: "https://github.com/cmu-l3/anlp-spring2026-code.git",
+        run: "从 02_wordrep_classification 开始，跑通 train.jsonl 到分类器训练的流程。",
+        output: "能说明 embedding、batch、label、loss、accuracy 分别对应什么。",
+      },
+      {
+        title: "手撕 Attention 热身",
+        localPath: "Reference/手撕LLM2.0-MAC/1章_手撕LLM_LLM综述/transformer_xiaodongguaAIGC/手撕Attention.ipynb",
+        upstream: "本地中文手撕 LLM 课程材料",
+        run: "逐格执行，记录 Q/K/V、softmax、mask 的 shape。",
+        output: "交付一页 shape 流程图，作为下一章 Transformer 的地基。",
+      },
+    ],
+  },
+  transformer_gpt_llama: {
+    mission: "从 attention 走到 decoder-only GPT，再走到 LLaMA 组件。目标不是会说 Transformer，而是能调试最小实现。",
+    labs: [
+      {
+        title: "CS336 Assignment 1: Basics",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment1_basics",
+        upstream: "https://github.com/stanford-cs336/assignment1-basics.git",
+        run: "按 README 配环境，依次完成 tokenizer、Transformer LM、AdamW、training loop。",
+        output: "一个能训练、能采样、能解释 loss 下降的最小语言模型。",
+      },
+      {
+        title: "中文 nanoGPT 实战",
+        localPath: "Reference/手撕LLM2.0-MAC/3章_手撕LLM_手撕GPT/nanoGPT-xiaodongguaAIGC",
+        upstream: "本地中文 nanoGPT 改写课程代码",
+        run: "先读 model.py，再跑 train_debug.py 或 config/train_shakespeare_char_baby.py。",
+        output: "能指出 token embedding、block、attention、MLP、lm_head 在源码中的位置。",
+      },
+      {
+        title: "LLaMA 组件 notebook",
+        localPath: "Reference/手撕LLM2.0-MAC/4章_手撕LLM_手撕LLaMA/lc4_llama",
+        upstream: "本地中文 LLaMA 机制 notebook",
+        run: "按顺序跑 RMSNorm.ipynb、RoPE.ipynb、SwiGLU.ipynb、GroupedQueryAttention.ipynb。",
+        output: "写一张表：每个 LLaMA 组件解决什么问题、改变哪个张量、影响什么系统成本。",
+      },
+    ],
+  },
+  llm_training_scaling_data: {
+    mission: "理解预训练是一套数据、规模、架构和预算共同优化的问题。先做小实验，再读 DeepSeek 架构。",
+    labs: [
+      {
+        title: "CS336 Assignment 3: Scaling",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment3_scaling",
+        upstream: "https://github.com/stanford-cs336/assignment3-scaling.git",
+        run: "按 README 跑 scaling law assignment，记录模型规模、token、loss 的关系。",
+        output: "交付一张小型 scaling 实验表：参数量、训练 token、验证 loss、结论。",
+      },
+      {
+        title: "CS336 Assignment 4: Data",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment4_data",
+        upstream: "https://github.com/stanford-cs336/assignment4-data.git",
+        run: "重点跑 filtering、deduplication、data mixture 相关任务。",
+        output: "写出一个数据流水线：收集、清洗、去重、混合、评测污染检查。",
+      },
+      {
+        title: "DeepSeek-V3 机制手撕",
+        localPath: "Reference/手撕LLM2.0-MAC/5章_手撕 DeepSeek-V3(New)/lc5_deepseek_v3",
+        upstream: "本地中文 DeepSeek-V3 机制 notebook",
+        run: "依次跑 Mixture-of-Experts、Multi_Latent_Attention、Load_Balance、YaRN。",
+        output: "解释 MoE、MLA、长上下文和负载均衡分别解决哪类训练/推理瓶颈。",
+      },
+    ],
+  },
+  sft_peft_lora: {
+    mission: "把预训练模型变成可用助手：先理解 SFT 数据和 loss mask，再掌握 LoRA/QLoRA 的低成本适配。",
+    labs: [
+      {
+        title: "SFT by PyTorch",
+        localPath: "Reference/手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/lc6_sft/Supervised_Finetuning_PyTorch.ipynb",
+        upstream: "本地中文 SFT notebook",
+        run: "从 dataset 构造开始跑到训练与生成，特别标注 assistant loss 区间。",
+        output: "能画出 instruction/input/output 到 labels/loss mask 的转换。",
+      },
+      {
+        title: "LoRA 与 Embedding/RAG 小实验",
+        localPath: "Reference/手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/lc6_sft",
+        upstream: "本地中文 LoRA/SFT/RAG notebook 集合",
+        run: "跑 LoRA.ipynb、Embedding.ipynb、RAG.ipynb，理解适配与检索的区别。",
+        output: "写出什么时候该微调、什么时候该 RAG、什么时候只需要 prompt。",
+      },
+      {
+        title: "CS336 Assignment 5: Alignment",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment5_alignment",
+        upstream: "https://github.com/stanford-cs336/assignment5-alignment.git",
+        run: "先做 SFT 部分，再读 GRPO/alignment 部分。",
+        output: "建立一个小型指令调优评测表：格式遵循、事实性、任务成功、失败样例。",
+      },
+    ],
+  },
+  inference_systems: {
+    mission: "把模型变成服务：理解 prefill/decode、KV cache、FlashAttention、batching、profiling 与分布式约束。",
+    labs: [
+      {
+        title: "CS336 Assignment 2: Systems",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/01_llm_core/stanford_cs336/cs336_assignment2_systems",
+        upstream: "https://github.com/stanford-cs336/assignment2-systems.git",
+        run: "按 README 完成 profiling、FlashAttention、DDP/systems 任务。",
+        output: "交付一张性能诊断表：瓶颈是计算、显存、通信还是调度。",
+      },
+      {
+        title: "中文推理系统 notebook",
+        localPath: "Reference/手撕LLM2.0-MAC/10章_手撕 Inference(New)/lc10_inference/Continue_Batching.ipynb",
+        upstream: "本地中文 inference 课程材料",
+        run: "跑 continuous batching 的核心单元，观察不同请求长度如何合批。",
+        output: "解释为什么服务系统不能只优化单请求延迟。",
+      },
+      {
+        title: "vLLM 推理脚本参考",
+        localPath: "Reference/手撕LLM2.0-MAC/实操2：7B70B DeepSpeed分布式训练实操/ma-rlhf/inference_vllm.py",
+        upstream: "本地中文 DeepSpeed/RLHF 实操代码",
+        run: "先读脚本参数，不必直接跑 70B；把模型名、tensor parallel、batch 参数标出来。",
+        output: "写一份 7B/70B 推理部署预算：权重显存、KV cache、吞吐、延迟、降级策略。",
+      },
+    ],
+  },
+  alignment_rlhf_eval: {
+    mission: "让模型可比较、可控、可回归：评测先行，再做偏好学习、奖励模型、DPO/PPO。",
+    labs: [
+      {
+        title: "OpenAI Evals 框架",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/evals/openai_evals",
+        upstream: "https://github.com/openai/evals.git",
+        run: "阅读 README，定义一个最小 eval：输入、理想答案、评分函数。",
+        output: "为本课程导师写 20 道固定回归题。",
+      },
+      {
+        title: "HELM 评测框架",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/evals/stanford_crfm_helm",
+        upstream: "https://github.com/stanford-crfm/helm.git",
+        run: "读 scenarios/metrics 思路，理解为什么评测要拆维度。",
+        output: "把能力、事实性、安全、格式、成本拆成 5 个评分维度。",
+      },
+      {
+        title: "RLHF/PPO/DPO 中文实操",
+        localPath: "Reference/手撕LLM2.0-MAC/实操2：7B70B DeepSpeed分布式训练实操/ma-rlhf",
+        upstream: "本地中文 RLHF/DeepSpeed 实操代码",
+        run: "阅读 sft.py、reward_model.py、dpo.py、ppo.py，不必一开始跑大模型。",
+        output: "能画出 SFT -> Reward Model -> PPO/DPO -> Eval 的后训练闭环。",
+      },
+    ],
+  },
+  rag_agents: {
+    mission: "把大模型接入资料与工具：先做可靠 RAG，再做有状态、有工具、有日志的 Agent。",
+    labs: [
+      {
+        title: "本项目 RAG 数据库",
+        localPath: "reference_learning/server.py",
+        upstream: "本项目本地 SQLite/FTS/RAG server",
+        run: "阅读 search_db、ask_sources、ask_openai 三个函数，理解召回、上下文、回答如何连接。",
+        output: "能解释本网页如何从 SQLite/FTS 召回课程资料并交给导师回答。",
+      },
+      {
+        title: "Berkeley LLM Agents MOOC",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/02_llm_systems_alignment_agents/berkeley_llm_agents/berkeley_llm_agents_mooc_repo",
+        upstream: "https://github.com/rdi-berkeley/llm-agents-mooc.git",
+        run: "先读 slides，再选择 ReAct、code agents、tool use 相关材料。",
+        output: "画出 Agent 状态机：state、action、tool、observation、stop condition。",
+      },
+      {
+        title: "中文 RAG 和 ReAct notebook",
+        localPath: "Reference/手撕LLM2.0-MAC/6章_手撕LLM_手撕LoRA/lc6_sft/RAG.ipynb",
+        upstream: "本地中文 RAG notebook",
+        run: "先跑 RAG.ipynb，再读 ReAct.ipynb 与 SimpleEval.ipynb。",
+        output: "建立 5 个固定问题，记录检索命中、回答质量、失败原因。",
+      },
+    ],
+  },
+  vlm_multimodal: {
+    mission: "从视觉编码器走到 VLM：先学 CLIP/ViT，再学 projector、image token、LLaVA 式训练和多模态评测。",
+    labs: [
+      {
+        title: "CS231n PyTorch/视觉基础",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/stanford_cs231n/cs231n_github_pages",
+        upstream: "https://github.com/cs231n/cs231n.github.io.git",
+        run: "跑 pytorch.ipynb、backprop.ipynb，补齐视觉模型训练基础。",
+        output: "能解释 image tensor、CNN/ViT 特征和分类 loss 的关系。",
+      },
+      {
+        title: "CMU 多模态课程 repo",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/03_vlm_multimodal_video/cmu_mmml/cmu_mmml_course_repo",
+        upstream: "https://github.com/CMU-MultiComp-Lab/mmml-course.git",
+        run: "阅读课程 README 和站点材料，建立多模态任务分类。",
+        output: "区分 fusion、alignment、grounding、multimodal reasoning 四类问题。",
+      },
+      {
+        title: "LLaVA/CLIP 本地证据",
+        localPath: "Reference/手撕LLM2.0-MAC/十三章手撕多模态VLM/CLIP-main.zip",
+        upstream: "本地中文 VLM 课程材料 + CLIP/LLaVA 论文证据",
+        run: "先读 CLIP paper 和 LLaVA paper，再打开中文手撕多模态材料。",
+        output: "画出 LLaVA 流程：image encoder -> projector -> LLM -> answer。",
+      },
+    ],
+  },
+  streaming_video_vlm: {
+    mission: "把 VLM 推向时间维度：理解帧采样、流式记忆、事件时间线、实时问答和视频评测。",
+    labs: [
+      {
+        title: "VideoLLM-online",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/videollm_online_repo",
+        upstream: "https://github.com/showlab/videollm-online.git",
+        run: "阅读 README 和 index.html，理解 online video understanding 的系统接口。",
+        output: "写出流式视频问答系统的输入、memory、输出和延迟指标。",
+      },
+      {
+        title: "StreamingBench",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/streamingbench_repo",
+        upstream: "https://github.com/thunlp-mt/StreamingBench.git",
+        run: "阅读 benchmark 任务设计，找出时间定位、顺序、因果问题。",
+        output: "为一段第一视角视频设计 10 道 streaming VLM 评测题。",
+      },
+      {
+        title: "Video MLLM 资料库",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/04_streaming_vlm/repos/awesome_streaming_video_understanding",
+        upstream: "本地 awesome streaming video understanding 列表",
+        run: "整理 3 条路线：长视频、在线视频、机器人/第一视角。",
+        output: "写一页：视频理解为什么不是抽帧图片问答。",
+      },
+    ],
+  },
+  vla_robotics: {
+    mission: "从看图说话走到输出动作：理解 VLA 的 observation、action、trajectory、fine-tuning 与机器人评测。",
+    labs: [
+      {
+        title: "OpenVLA 官方 repo",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_repo",
+        upstream: "https://github.com/openvla/openvla.git",
+        run: "读 README、vla-scripts/finetune.py、prismatic/models/backbones/vision/clip_vit.py。",
+        output: "解释 OpenVLA 如何把视觉、语言和动作连起来。",
+      },
+      {
+        title: "OpenVLA-OFT + LIBERO",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/openvla_oft_repo",
+        upstream: "https://github.com/moojink/openvla-oft.git",
+        run: "先读 SETUP.md 与 LIBERO.md，标出 run_libero_eval.py 和 finetune.py。",
+        output: "草拟一个新操作任务上的 VLA fine-tuning 方案。",
+      },
+      {
+        title: "LeRobot / OpenPI 对照",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/05_vla_robotics/repos/lerobot_repo",
+        upstream: "本地 LeRobot repo，另见 openpi_repo",
+        run: "阅读 README，比较 policy、dataset、eval 的接口风格。",
+        output: "写一张表：OpenVLA、LeRobot、OpenPI 在数据和动作表示上的差异。",
+      },
+    ],
+  },
+  robot_sim_data: {
+    mission: "把机器人实验变得可复现：先跑模拟器 quickstart，再理解数据集、benchmark、seed、失败日志。",
+    labs: [
+      {
+        title: "ManiSkill 3",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/maniskill",
+        upstream: "https://github.com/mani-skill/ManiSkill.git",
+        run: "读 README 和 docs quickstart；优先跑一个轻量 demo 或查看 examples/baselines。",
+        output: "记录任务名、观察空间、动作空间、成功条件和 seed。",
+      },
+      {
+        title: "Isaac Lab",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos/isaac_lab",
+        upstream: "https://github.com/isaac-sim/IsaacLab.git",
+        run: "阅读 docs 和 pyproject，理解 GPU 仿真、任务配置和训练接口。",
+        output: "说明 Isaac Lab 与 ManiSkill 的适用差异。",
+      },
+      {
+        title: "DROID / BridgeData / Habitat",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/10_robotics_simulators_datasets/repos",
+        upstream: "DROID, BridgeData V2, Habitat-Lab 本地 repo 集合",
+        run: "分别读 droid、bridgedata_v2、habitat_lab 的 README。",
+        output: "写一张机器人数据卡：传感器、动作、任务、采集方式、限制。",
+      },
+    ],
+  },
+  world_models: {
+    mission: "学会用模型预测未来：从 latent dynamics 到 imagined rollout，再到规划和 model-based RL。",
+    labs: [
+      {
+        title: "DreamerV3",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/repos/dreamerv3_repo",
+        upstream: "https://github.com/danijar/dreamerv3.git",
+        run: "读 README 和 configs，理解 world model、actor、critic 三部分。",
+        output: "画出 observation -> latent state -> imagined rollout -> action 的闭环。",
+      },
+      {
+        title: "LightZero / MuZero 系列",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/repos/lightzero_repo",
+        upstream: "https://github.com/opendilab/LightZero.git",
+        run: "读 README，关注 MCTS、policy/value/reward model 的接口。",
+        output: "比较 Dreamer 式 latent imagination 和 MuZero 式 search 的差异。",
+      },
+      {
+        title: "TinyWorlds / V-JEPA2 参考",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/06_world_models_model_based_rl/repos",
+        upstream: "本地 world model repo 集合",
+        run: "阅读 tinyworlds_repo、vjepa2_repo、jepa_wms_repo 的 README。",
+        output: "写一页：重建式世界模型与 joint-embedding predictive model 的区别。",
+      },
+    ],
+  },
+  driving_world_models: {
+    mission: "把 world model 放进自动驾驶：理解场景表示、闭环仿真、轨迹预测和长尾安全评测。",
+    labs: [
+      {
+        title: "Waymax",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/waymax",
+        upstream: "https://github.com/waymo-research/waymax.git",
+        run: "读 README 与 docs/notebooks/wosac_submission_via_waymax.ipynb。",
+        output: "解释 open-loop 和 closed-loop driving eval 的差异。",
+      },
+      {
+        title: "DriveLM",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/drivelm",
+        upstream: "https://github.com/opendrivelab/drivelm.git",
+        run: "读 README、docs/data_details.md、docs/gvqa.md。",
+        output: "设计 5 道驾驶 VLM 问答：感知、预测、规划、反事实、风险。",
+      },
+      {
+        title: "CarDreamer / DriveDreamer",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/11_autonomous_driving_world_models/repos/cardreamer",
+        upstream: "本地 CarDreamer 与 DriveDreamer repo",
+        run: "阅读 README，关注场景生成、CARLA、intent sharing 和仿真接口。",
+        output: "比较视频生成式 world model 与驾驶闭环仿真的目标差异。",
+      },
+    ],
+  },
+  diffusion_video_3d: {
+    mission: "掌握生成模型和空间表示：从 diffusion/flow matching 到 video，再到 NeRF/3D Gaussian/空间智能。",
+    labs: [
+      {
+        title: "Hugging Face Diffusion Course",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/courses/huggingface_diffusion_course_linked_files",
+        upstream: "Hugging Face diffusion course notebooks",
+        run: "跑 01_introduction_to_diffusers.ipynb 和 02_diffusion_models_from_scratch.ipynb。",
+        output: "能解释 forward noise、denoise、scheduler、pipeline 四个概念。",
+      },
+      {
+        title: "Flow Matching",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/08_generative_models_diffusion_video/repos/facebook_flow_matching",
+        upstream: "https://github.com/facebookresearch/flow_matching.git",
+        run: "跑 examples/2d_flow_matching.ipynb 或阅读对应 examples。",
+        output: "比较 diffusion 与 flow matching 的训练目标和采样路径。",
+      },
+      {
+        title: "3D 空间表示",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/09_3d_spatial_intelligence/repos",
+        upstream: "pytorch3d, nerfstudio, gaussian_splatting, vlm_3r 本地 repo",
+        run: "阅读 nerfstudio、gaussian_splatting、pytorch3d 的 README。",
+        output: "写出 NeRF、3D Gaussian、mesh/point cloud 各自如何表示空间。",
+      },
+    ],
+  },
+  omni_audio_capstone: {
+    mission: "把所有能力整合成项目：多模态输入、实时交互、工具调用、评测、风险和部署计划必须同时出现。",
+    labs: [
+      {
+        title: "Qwen3-Omni cookbooks",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/qwen3_omni",
+        upstream: "https://github.com/QwenLM/Qwen3-Omni.git",
+        run: "优先阅读 README 与 cookbooks/audio_visual_dialogue.ipynb、audio_visual_interaction.ipynb。",
+        output: "画出音频、视觉、文本共同进入模型的交互流程。",
+      },
+      {
+        title: "CosyVoice",
+        localPath: "Reference/Frontier-AI-PhD-Curriculum/13_audio_omnimodal_foundation_models/repos/cosyvoice",
+        upstream: "https://github.com/FunAudioLLM/CosyVoice.git",
+        run: "读 README 和 runtime/triton_trtllm 目录，理解语音生成与服务化。",
+        output: "说明语音模型的延迟、音色、文本前处理和部署风险。",
+      },
+      {
+        title: "Capstone 总工程",
+        localPath: "reference_learning",
+        upstream: "本项目“大模型学习之路”网页与 RAG 后端",
+        run: "把本网页作为最终项目骨架：讲义、检索、导师问答、笔记、评测题。",
+        output: "提交 Capstone 提案：问题、数据、模型、工具、评测、baseline、风险、算力计划。",
+      },
+    ],
+  },
+};

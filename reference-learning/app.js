@@ -1,7 +1,8 @@
-const APP_VERSION = "20260617deep";
+const APP_VERSION = "20260619lecture";
 const PUBLIC_API_BASE = "http://47.111.133.184:61135/api";
 const SITE_HOSTS = ["yincheng429.cn", "www.yincheng429.cn"];
 const DETAILED_LECTURES = window.LLM_ROAD_DETAILED_LECTURES || {};
+const LAB_GUIDE = window.LLM_ROAD_LAB_GUIDE || {};
 
 if (window.location.protocol === "https:" && SITE_HOSTS.includes(window.location.hostname)) {
   window.location.replace(`http://${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`);
@@ -638,6 +639,58 @@ function renderDetailedSections(detail) {
     .join("");
 }
 
+function labGuide(module) {
+  return (
+    LAB_GUIDE[module.id] || {
+      mission: `把「${module.title}」落到一个可运行实验里。`,
+      labs: [
+        {
+          title: "本章最小实验",
+          localPath: "Reference/",
+          upstream: "本地 Reference 资料库",
+          run: `围绕 ${module.queries?.[0] || module.title} 找到一个 notebook 或 README，先跑最小路径。`,
+          output: module.project,
+        },
+      ],
+    }
+  );
+}
+
+function renderLabGuide(module) {
+  const guide = labGuide(module);
+  return `
+    <section class="chapter-section lab-section">
+      <p class="kicker">代码实验室</p>
+      <h3>这一章要跑什么</h3>
+      <p class="lab-mission">${escapeHtml(guide.mission)}</p>
+      <div class="lab-list">
+        ${(guide.labs || [])
+          .map(
+            (lab, idx) => `
+              <article class="lab-card">
+                <span class="lab-index">${String(idx + 1).padStart(2, "0")}</span>
+                <div class="lab-body">
+                  <h4>${escapeHtml(lab.title)}</h4>
+                  <dl>
+                    <dt>本地路径</dt>
+                    <dd><code>${escapeHtml(lab.localPath)}</code></dd>
+                    <dt>上游来源</dt>
+                    <dd>${escapeHtml(lab.upstream)}</dd>
+                    <dt>先做什么</dt>
+                    <dd>${escapeHtml(lab.run)}</dd>
+                    <dt>验收产出</dt>
+                    <dd>${escapeHtml(lab.output)}</dd>
+                  </dl>
+                </div>
+              </article>
+            `
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
 function mentorLabel(provider) {
   if (provider === "deepseek") return "DeepSeek 导师";
   if (provider === "stepfun") return "备用导师";
@@ -810,6 +863,8 @@ function renderLesson() {
           ${(detail.readingPlan || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
         </ol>
       </section>
+
+      ${renderLabGuide(module)}
 
       <section class="chapter-section">
         <h3>阅读协议与交付</h3>
